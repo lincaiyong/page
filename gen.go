@@ -27,15 +27,25 @@ func sortedKeys(m map[string]string) []string {
 	return keys
 }
 
-func getAllInstances(comp com.Component, result []com.Component) []com.Component {
-	result = append(result, comp)
+func getAllInstances(comp com.Component, compMap map[string]com.Component) map[string]com.Component {
+	if compMap == nil {
+		compMap = make(map[string]com.Component)
+	}
+	struct_ := reflect.TypeOf(comp).Elem()
+	name := struct_.Name()
+	if name == "Component" {
+		name = struct_.String()
+		name = name[:strings.Index(name, ".")]
+		name = fmt.Sprintf("%sComponent", utils.PascalCase(name))
+	}
+	compMap[name] = comp
 	for _, tmp := range comp.Slots() {
-		result = getAllInstances(tmp, result)
+		getAllInstances(tmp, compMap)
 	}
 	for _, tmp := range comp.Children() {
-		result = getAllInstances(tmp, result)
+		getAllInstances(tmp, compMap)
 	}
-	return result
+	return compMap
 }
 
 type StructInfo struct {
@@ -110,27 +120,19 @@ func defaultValue(type_, default_ string) string {
 }
 
 func buildClasses(page com.Component, mm map[string]string) string {
-	result := getAllInstances(page, nil)
-	result2 := map[string]reflect.Type{}
-	for _, tmp := range result {
-		t := reflect.ValueOf(tmp).Type().Elem()
-		s := t.Name()
-		if s == "Component" {
-			s = t.String()
-			s = s[:strings.Index(s, ".")]
-			s = fmt.Sprintf("%sComponent", utils.PascalCase(s))
-		}
-		result2[s] = t
-	}
-	result3 := map[string]StructInfo{}
-	for n, t := range result2 {
+	compMap := getAllInstances(page, nil)
+	infoMap := make(map[string]StructInfo)
+	keys := make([]string, 0, len(compMap))
+	for n, comp := range compMap {
+		keys = append(keys, n)
 		info := StructInfo{
 			name:         n,
 			bindJs:       map[string]string{},
 			defaultValue: map[string]string{},
 		}
-		for i := 0; i < t.NumField(); i++ {
-			field := t.Field(i)
+		struct_ := reflect.TypeOf(comp).Elem()
+		for i := 0; i < struct_.NumField(); i++ {
+			field := struct_.Field(i)
 			if !field.Anonymous {
 				tn := field.Type.Name()
 				switch tn {
@@ -165,16 +167,12 @@ func buildClasses(page com.Component, mm map[string]string) string {
 				}
 			}
 		}
-		result3[n] = info
-	}
-	keys := make([]string, 0, len(result3))
-	for k := range result3 {
-		keys = append(keys, k)
+		infoMap[n] = info
 	}
 	sort.Strings(keys)
 	pr := printer.NewPrinter()
 	for _, k := range keys {
-		info := result3[k]
+		info := infoMap[k]
 		info.GenClass(pr)
 	}
 	return pr.Code()
