@@ -27,10 +27,7 @@ func sortedKeys(m map[string]string) []string {
 	return keys
 }
 
-func getAllInstances(comp com.Component, compMap map[string]com.Component) map[string]com.Component {
-	if compMap == nil {
-		compMap = make(map[string]com.Component)
-	}
+func getAllInstances(comp com.Component, comps []com.Component) []com.Component {
 	struct_ := reflect.TypeOf(comp).Elem()
 	name := struct_.Name()
 	if name == "Component" {
@@ -38,59 +35,50 @@ func getAllInstances(comp com.Component, compMap map[string]com.Component) map[s
 		name = name[:strings.Index(name, ".")]
 		name = fmt.Sprintf("%sComponent", utils.PascalCase(name))
 	}
-	compMap[name] = comp
+	comp.ExtraInfo().SetName(name)
+	comps = append(comps, comp)
 	for _, tmp := range comp.Slots() {
-		getAllInstances(tmp, compMap)
+		comps = getAllInstances(tmp, comps)
 	}
 	for _, tmp := range comp.Children() {
-		getAllInstances(tmp, compMap)
+		comps = getAllInstances(tmp, comps)
 	}
-	return compMap
+	return comps
 }
 
-type StructInfo struct {
-	name             string
-	properties       []string
-	staticProperties []string
-	methods          []string
-	staticMethods    []string
-	bindJs           map[string]string
-	defaultValue     map[string]string
-}
-
-func (info *StructInfo) readFunction(name, code string) string {
+func readFunction(name, code string) string {
 	if !strings.HasPrefix(code, fmt.Sprintf("function %s(", name)) {
 		log.FatalLog("invalid function code: %s", code)
 	}
 	return code[9:]
 }
 
-func (info *StructInfo) GenClass(pr *printer.Printer) {
-	pr.Put("class %s extends Component {", utils.PascalCase(info.name)).Push()
+func genClassCode(info *com.ExtraInfo, pr *printer.Printer) {
+	pr.Put("class %s extends Component {", utils.PascalCase(info.Name())).Push()
 	{
 		pr.Put("constructor(parent, model) {").Push()
 		{
-			if len(info.properties) == 0 {
+			if len(info.Properties()) == 0 {
 				pr.Put("model.properties = Object.assign({}, model.properties);")
 			} else {
 				pr.Put("model.properties = Object.assign({").Push()
-				for _, property := range info.properties {
-					pr.Put("%s: [e => %s, []],", property, info.defaultValue[property])
+				for _, property := range info.Properties() {
+					pr.Put("%s: [e => %s, []],", property, info.DefaultValue()[property])
 				}
 				pr.Pop().Put("}, model.properties);")
 			}
 			pr.Put("super(parent, model);")
 		}
 		pr.Pop().Put("}")
-		for _, method := range info.methods {
-			code := info.readFunction(method, info.bindJs[method])
+		for _, method := range info.Methods() {
+			code := readFunction(method, info.BindJs()[method])
 			pr.Put(code)
 		}
-		for _, method := range info.staticMethods {
-			code := info.readFunction(method, info.bindJs[method])
+		for _, method := range info.StaticMethods() {
+			code := readFunction(method, info.BindJs()[method])
 			pr.Put("static " + code)
 		}
-		for _, property := range info.properties {
+		for _, property := range info.Properties() {
 			pr.Put("get %s() { return this._properties.%s.value; }", property, property)
 			pr.Put("set %s(v) { this._properties.%s.value = v; }", property, property)
 		}
@@ -120,16 +108,20 @@ func defaultValue(type_, default_ string) string {
 }
 
 func buildClasses(page com.Component, mm map[string]string) string {
-	compMap := getAllInstances(page, nil)
-	infoMap := make(map[string]StructInfo)
+	comps := getAllInstances(page, nil)
+	compMap := make(map[string]com.Component)
+	for _, comp := range comps {
+		name := comp.ExtraInfo().Name()
+		if _, ok := compMap[name]; !ok {
+			compMap[name] = comp
+		}
+	}
 	keys := make([]string, 0, len(compMap))
 	for n, comp := range compMap {
 		keys = append(keys, n)
-		info := StructInfo{
-			name:         n,
-			bindJs:       map[string]string{},
-			defaultValue: map[string]string{},
-		}
+		info := comp.ExtraInfo()
+		info.SetBindJs(map[string]string{})
+		info.SetDefaultValue(map[string]string{})
 		struct_ := reflect.TypeOf(comp).Elem()
 		for i := 0; i < struct_.NumField(); i++ {
 			field := struct_.Field(i)
@@ -137,13 +129,13 @@ func buildClasses(page com.Component, mm map[string]string) string {
 				tn := field.Type.Name()
 				switch tn {
 				case "Property":
-					info.properties = append(info.properties, field.Name)
-					info.defaultValue[field.Name] = defaultValue(field.Tag.Get("type"), field.Tag.Get("default"))
+					info.SetProperties(append(info.Properties(), field.Name))
+					info.DefaultValue()[field.Name] = defaultValue(field.Tag.Get("type"), field.Tag.Get("default"))
 				case "StaticProperty":
-					info.staticProperties = append(info.staticProperties, field.Name)
-					info.defaultValue[field.Name] = defaultValue(field.Tag.Get("type"), field.Tag.Get("default"))
+					info.SetStaticProperties(append(info.StaticProperties(), field.Name))
+					info.DefaultValue()[field.Name] = defaultValue(field.Tag.Get("type"), field.Tag.Get("default"))
 				case "Method":
-					info.methods = append(info.methods, field.Name)
+					info.SetMethods(append(info.Methods(), field.Name))
 					code := mm[fmt.Sprintf("%s_%s", n, field.Name)]
 					if code == "" {
 						code = js.Get(n, field.Name)
@@ -151,9 +143,9 @@ func buildClasses(page com.Component, mm map[string]string) string {
 							log.FatalLog("fail to get js code: %s %s", n, field.Name)
 						}
 					}
-					info.bindJs[field.Name] = code
+					info.BindJs()[field.Name] = code
 				case "StaticMethod":
-					info.staticMethods = append(info.staticMethods, field.Name)
+					info.SetStaticMethods(append(info.StaticMethods(), field.Name))
 					code := mm[fmt.Sprintf("%s_%s", n, field.Name)]
 					if code == "" {
 						code = js.Get(n, field.Name)
@@ -161,19 +153,17 @@ func buildClasses(page com.Component, mm map[string]string) string {
 							log.FatalLog("fail to get js code: %s %s", n, field.Name)
 						}
 					}
-					info.bindJs[field.Name] = code
+					info.BindJs()[field.Name] = code
 				default:
 					log.FatalLog("invalid field type: %s", tn)
 				}
 			}
 		}
-		infoMap[n] = info
 	}
 	sort.Strings(keys)
 	pr := printer.NewPrinter()
 	for _, k := range keys {
-		info := infoMap[k]
-		info.GenClass(pr)
+		genClassCode(compMap[k].ExtraInfo(), pr)
 	}
 	return pr.Code()
 }

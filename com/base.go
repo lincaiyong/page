@@ -22,6 +22,7 @@ func NewBaseComponent(tag string, self Component, children ...Component) *BaseCo
 }
 
 type BaseComponent struct {
+	extraInfo       ExtraInfo
 	self            Component
 	name            string
 	tag             string
@@ -41,6 +42,10 @@ func (b *BaseComponent) Name() string {
 		return b.name
 	}
 	return b.tag
+}
+
+func (b *BaseComponent) ExtraInfo() *ExtraInfo {
+	return &b.extraInfo
 }
 
 func (b *BaseComponent) Tag() string {
