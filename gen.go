@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lincaiyong/log"
 	"github.com/lincaiyong/page/com"
+	"github.com/lincaiyong/page/js"
 	"github.com/lincaiyong/page/parser"
 	"github.com/lincaiyong/page/printer"
 	"github.com/lincaiyong/page/visit"
@@ -146,24 +147,30 @@ func buildClasses(page com.Component, mm map[string]string) string {
 					info.defaultValue[field.Name] = defaultValue(field.Tag.Get("type"), field.Tag.Get("default"))
 				case "Method":
 					info.methods = append(info.methods, field.Name)
-					js := field.Tag.Get("bind")
-					if js == "" {
-						js = mm[fmt.Sprintf("%s_%s.js", n, field.Name)]
-						if js == "" {
-							log.FatalLog("xx")
+					code := field.Tag.Get("bind")
+					if code == "" {
+						code = mm[fmt.Sprintf("%s_%s.js", n, field.Name)]
+						if code == "" {
+							code = js.Get(n, field.Name)
+							if code == "" {
+								log.FatalLog("xx")
+							}
 						}
 					}
-					info.bindJs[field.Name] = js
+					info.bindJs[field.Name] = code
 				case "StaticMethod":
 					info.staticMethods = append(info.staticMethods, field.Name)
-					js := field.Tag.Get("bind")
-					if js == "" {
-						js = mm[fmt.Sprintf("%s_%s.js", n, field.Name)]
-						if js == "" {
-							log.FatalLog("xx")
+					code := field.Tag.Get("bind")
+					if code == "" {
+						code = mm[fmt.Sprintf("%s_%s.js", n, field.Name)]
+						if code == "" {
+							code = js.Get(n, field.Name)
+							if code == "" {
+								log.FatalLog("xx")
+							}
 						}
 					}
-					info.bindJs[field.Name] = js
+					info.bindJs[field.Name] = code
 				default:
 					log.FatalLog("xx")
 				}

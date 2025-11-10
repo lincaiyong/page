@@ -30,3 +30,8 @@ function handleMouseDown(ele, mouseDownEvent) {
         cancelMouseMoveListener();
     });
 }
+
+function onUpdated(k, v) {
+    switch (k) {
+    }
+}

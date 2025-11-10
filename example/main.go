@@ -6,6 +6,7 @@ import (
 	"github.com/lincaiyong/daemon/common"
 	"github.com/lincaiyong/page"
 	"github.com/lincaiyong/page/com"
+	"github.com/lincaiyong/page/com/bar"
 	"net/http"
 )
 
@@ -52,7 +53,7 @@ func debug3Page(c *gin.Context) {
 		com.Div().H_(34).BackgroundColor("'black'"),
 		com.Div().Y("prev.y2").H("parent.h - prev.h - next.h").Contains(
 			ExplorerPane().W("next.x").BackgroundColor("page.theme.grayPaneColor"),
-			com.VBar().X("prev.v ? 200 : - .w").BackgroundColor("'red'").Opacity("0.1"),
+			bar.VBar().X("prev.v ? 200 : - .w").BackgroundColor("'red'").Opacity("0.1"),
 			com.Editor().X("prev.x2").W("parent.w - prev.x2"),
 		),
 		com.Div().Y("prev.y2").H_(24).BorderColor("page.theme.grayBorderColor").BorderTop("1").BackgroundColor("page.theme.grayPaneColor"),
@@ -88,7 +89,7 @@ func debug2Page(c *gin.Context) {
 func debugPage(c *gin.Context) {
 	comp := com.Div().Contains(
 		com.Editor().X_(20).Y_(20).W_(800).H("next.y - .y").BackgroundColor("'blue'"),
-		com.HBar().Y_(200).W("parent.w").H_(20).Opacity("0.1"),
+		bar.HBar().Y_(200).W("parent.w").H_(20).Opacity("0.1"),
 		com.Div().X_(20).Y("prev.y2").W_(800).H_(400).BackgroundColor("'yellow'").Contains(
 			com.Text("'hello world!'").H_(200),
 		),
