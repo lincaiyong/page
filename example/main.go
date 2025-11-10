@@ -25,6 +25,7 @@ func main() {
 			router.GET("/debug3", debug3Page)
 			router.GET("/debug4", debug4Page)
 			router.GET("/debug5", debug5Page)
+			router.GET("/debug6", debug6Page)
 			router.GET("/code/get", getCode)
 			router.GET("/code/get2", getCode2)
 			return nil
@@ -171,6 +172,16 @@ func debug5Page(c *gin.Context) {
 		"": `setTimeout(function() {
 	const container = page.root.children[0];
 	container.items = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+}, 1000);`,
+	})
+}
+
+func debug6Page(c *gin.Context) {
+	comp := com.Tree().Contains().BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2")
+	page.MakePage(c, "debug6", comp, baseUrl, map[string]string{
+		"": `setTimeout(function() {
+	const tree = page.root.children[0];
+	tree.items = ['foo.py'];
 }, 1000);`,
 	})
 }
