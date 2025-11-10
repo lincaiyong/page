@@ -1,7 +1,5 @@
 package com
 
-import "strconv"
-
 func NewBaseComponent(tag string, self Component, children ...Component) *BaseComponent {
 	return &BaseComponent{
 		self:     self,
@@ -71,26 +69,6 @@ func (b *BaseComponent) Contains(s ...Component) Component {
 	} else {
 		b.slots = append(b.slots, s...)
 	}
-	return b.self
-}
-
-func (b *BaseComponent) X_(i int) Component {
-	b.Props()["x"] = strconv.Itoa(i)
-	return b.self
-}
-
-func (b *BaseComponent) Y_(i int) Component {
-	b.Props()["y"] = strconv.Itoa(i)
-	return b.self
-}
-
-func (b *BaseComponent) W_(i int) Component {
-	b.Props()["w"] = strconv.Itoa(i)
-	return b.self
-}
-
-func (b *BaseComponent) H_(i int) Component {
-	b.Props()["h"] = strconv.Itoa(i)
 	return b.self
 }
 

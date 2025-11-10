@@ -14,14 +14,14 @@ func create() *Component {
 func VBar() *Component {
 	ret := create()
 	ret.Props()["leftRight"] = "[prev, next]"
-	ret.Cursor("'col-resize'").W_(20)
+	ret.Cursor("'col-resize'").W("20")
 	return ret
 }
 
 func HBar() *Component {
 	ret := create()
 	ret.Props()["topBottom"] = "[prev, next]"
-	ret.Cursor("'row-resize'").H_(20)
+	ret.Cursor("'row-resize'").H("20")
 	return ret
 }
 

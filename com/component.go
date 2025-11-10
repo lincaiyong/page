@@ -8,10 +8,6 @@ type Component interface {
 	Children() []Component
 	Slots() []Component
 	Contains(s ...Component) Component
-	X_(i int) Component
-	Y_(i int) Component
-	W_(i int) Component
-	H_(i int) Component
 	Position(s string) Component
 	X(s string) Component
 	Y(s string) Component

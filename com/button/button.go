@@ -10,10 +10,10 @@ import (
 func Button() *Component {
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent("div", ret,
-		img.Svg().Src("parent.icon").X_(4).Y(".x").W("parent.w - 2 * .x").H(".w").Color("parent.color"),
-		div.Div().X("prev.x2 - .w + 1").Y("prev.y - 1").W_(6).H(".w").V("0").BorderRadius("3"),
+		img.Svg().Src("parent.icon").X("4").Y(".x").W("parent.w - 2 * .x").H(".w").Color("parent.color"),
+		div.Div().X("prev.x2 - .w + 1").Y("prev.y - 1").W("6").H(".w").V("0").BorderRadius("3"),
 	)
-	ret.W_(24).H(".w").BorderRadius("6").
+	ret.W("24").H(".w").BorderRadius("6").
 		BackgroundColor(".selected ? page.theme.ComponentSelectedBgColor : page.theme.ComponentBgColor").
 		Color(".selected ? page.theme.ComponentSelectedColor : page.theme.ComponentColor").
 		OnHover("e.handleHover").
