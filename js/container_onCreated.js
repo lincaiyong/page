@@ -13,9 +13,9 @@ function onCreated() {
     }
 
     if (this.scrollable) {
-        this.hBar = new Scrollbar(this, 'h');
-        this.vBar = new Scrollbar(this, 'v');
-        const bars = [this.hBar, this.vBar];
+        this.hBarEle = new Scrollbar(this, 'h');
+        this.vBarEle = new Scrollbar(this, 'v');
+        const bars = [this.hBarEle, this.vBarEle];
         bars.forEach(bar => bar.initDraggable());
         this.onWheel = (_, ev) => {
             ev.preventDefault();

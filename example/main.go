@@ -112,7 +112,7 @@ func getCode2(c *gin.Context) {
 
 func debug4Page(c *gin.Context) {
 	comp := com.Container().Scrollable(true).Contains(
-		com.Text("'hello world!'").W("400").H("400"),
-	).BackgroundColor("'blue'").W("200").H("200")
+		com.Text("'hello world!'").H("400"),
+	).BackgroundColor("'blue'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2")
 	page.MakePage(c, "debug4", comp, baseUrl, nil)
 }

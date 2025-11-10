@@ -123,7 +123,7 @@ function _updateList() {
         if (mh - scrollTop < this.ch) {
             this.scrollTop = Math.max(mh - this.ch, 0);
         }
-        this.hBar?.show(true);
-        this.vBar?.show(true);
+        this.hBarEle?.show(true);
+        this.vBarEle?.show(true);
     }
 }
