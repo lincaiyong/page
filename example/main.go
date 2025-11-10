@@ -121,10 +121,13 @@ func debug4Page(c *gin.Context) {
 func DemoContainerItem() *DemoContainerItemComponent {
 	ret := &DemoContainerItemComponent{}
 	ret.BaseComponent = com.NewBaseComponent("div", ret,
-		com.Text("''").OnHover(`(ele, hovered) => {
+		com.Div().OnHover(`(ele, hovered) => {
 	ele.backgroundColor = hovered ? '#888' : '#eee'; 
-}`),
+}`).Contains(
+			com.Text("''"),
+		),
 	)
+	ret.Y("0").X("0")
 	return ret
 }
 
@@ -162,7 +165,7 @@ func debug5Page(c *gin.Context) {
 }`,
 		"DemoContainerItemComponent_onUpdated.js": `function onUpdated(k, v) {
 	if (k === 'data') {
-		this.children[0].text = v.text;
+		this.children[0].children[0].text = v.text;
 	}
 }`,
 		"": `setTimeout(function() {
