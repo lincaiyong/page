@@ -17,7 +17,6 @@ func NewBaseComponent(tag string, self Component, children ...Component) *BaseCo
 			"x2":      ".x + .w",
 			"y2":      ".y + .h",
 		},
-		staticProps: map[string]string{},
 	}
 }
 
@@ -29,7 +28,6 @@ type BaseComponent struct {
 	children        []Component
 	slots           []Component
 	props           map[string]string
-	staticProps     map[string]string
 	slotsAsChildren bool
 }
 
@@ -66,10 +64,6 @@ func (b *BaseComponent) Slots() []Component {
 
 func (b *BaseComponent) Props() map[string]string {
 	return b.props
-}
-
-func (b *BaseComponent) StaticProps() map[string]string {
-	return b.staticProps
 }
 
 func (b *BaseComponent) NameAs(name string) Component {

@@ -1,4 +1,4 @@
-class Scrollbar {
+class ScrollbarWrapper {
     constructor(container, vh) {
         this.vertical = vh === 'v';
         this.container = container;
@@ -14,8 +14,8 @@ class Scrollbar {
         const _fade = () => this.active = false;
         this.debouncedFade = page.util.debounce(_fade, container.scrollBarFadeTime);
 
-        page.util.assert(container instanceof ContainerComponent);
-        page.util.assert(this.bar instanceof ScrollbarComponent);
+        page.util.assert(container instanceof Container);
+        page.util.assert(this.bar instanceof Scrollbar);
     }
     get contentLen() {
         return this.vertical ? this.container.childHeight : this.container.childWidth;

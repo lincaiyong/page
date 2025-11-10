@@ -9,13 +9,17 @@ function compute(container, idx, prev) {
     }
 }
 
-function onUpdated(k, v) {
+function onUpdated(ele, k, v) {
     if (k === 'data') {
-        this.children[0].children[0].text = v.text;
+        ele.children[0].children[0].text = v.text;
     }
 }
 
 function onCreated() {
     const container = this.containerEle;
     container.items = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+}
+
+function onHover(ele, hovered) {
+    ele.backgroundColor = hovered ? '#888' : '#eee';
 }

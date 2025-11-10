@@ -34,7 +34,7 @@ func getAllInstances(comp com.Component, comps []com.Component, thisComp com.Com
 	if name == "Component" {
 		name = struct_.String()
 		name = name[:strings.Index(name, ".")]
-		name = fmt.Sprintf("%sComponent", utils.PascalCase(name))
+		name = utils.PascalCase(name)
 	}
 	info := comp.ExtraInfo()
 	info.SetName(name)
@@ -104,7 +104,7 @@ func genClassCode(info *com.ExtraInfo, namedChildren map[string]map[string][]int
 			}
 		}
 	}
-	if info.Name() == "RootComponent" {
+	if info.Name() == "Root" {
 		m := js.GetAll(info.Name())
 		keys := make([]string, 0, len(m))
 		for k := range m {
@@ -186,9 +186,6 @@ func buildClasses(page com.Component, mm map[string]string) string {
 				case "Property":
 					info.SetProperties(append(info.Properties(), field.Name))
 					info.DefaultValue()[field.Name] = defaultValue(field.Tag.Get("type"), field.Tag.Get("default"))
-				case "StaticProperty":
-					info.SetStaticProperties(append(info.StaticProperties(), field.Name))
-					info.DefaultValue()[field.Name] = defaultValue(field.Tag.Get("type"), field.Tag.Get("default"))
 				case "Method":
 					info.SetMethods(append(info.Methods(), field.Name))
 					code := mm[fmt.Sprintf("%s_%s", n, field.Name)]
@@ -248,7 +245,7 @@ func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) 
 		if s == "Component" {
 			s = t.String()
 			s = s[:strings.Index(s, ".")]
-			s = fmt.Sprintf("%sComponent", utils.PascalCase(s))
+			s = utils.PascalCase(s)
 		}
 		pr.Put("Component: %s,", s)
 		pr.Put("tag: '%s',", comp.Tag())
@@ -274,15 +271,6 @@ func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) 
 			for _, k := range sortedKeys(props) {
 				v1, v2 := convertExpr(props[k])
 				pr.Put("%s: [e => %s, %s],", k, v1, v2)
-			}
-			pr.Pop().Put("},")
-		}
-		if len(comp.StaticProps()) == 0 {
-			pr.Put("staticProperties: {},")
-		} else {
-			pr.Put("staticProperties: {").Push()
-			for _, k := range sortedKeys(comp.StaticProps()) {
-				pr.Put("%s: %s,", k, comp.StaticProps()[k])
 			}
 			pr.Pop().Put("},")
 		}

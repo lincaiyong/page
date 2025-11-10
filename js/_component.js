@@ -1,8 +1,7 @@
 class Component {
     constructor(parent, model) {
-        const {properties, staticProperties, children} = model;
+        const {properties, children} = model;
         this._properties = {};
-        this._staticProperties = {};
         this._parent = parent;
         this._model = model;
         this._id = parent ? `${parent.id}.${model.name}` : model.name;
@@ -26,9 +25,6 @@ class Component {
                 this._defaultOnUpdated(k, v);
                 this.onUpdated(k, v);
             });
-        }
-        for (const k in staticProperties) {
-            this[k] = staticProperties[k];
         }
     }
 

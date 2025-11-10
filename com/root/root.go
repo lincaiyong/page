@@ -6,7 +6,7 @@ import (
 )
 
 func Root(code string, comp com.Component) *Component {
-	js.Set("RootComponent", code)
+	js.Set("Root", code)
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent("div", ret, comp)
 	return ret

@@ -9,8 +9,8 @@ func ContainerItem(compute, onUpdated string) *Component {
 	ret.BaseComponent = com.NewBaseComponent("div", ret)
 	ret.BaseComponent.SetSlotsAsChildren()
 	ret.Y("0").X("0")
-	ret.StaticProps()["computeFn"] = compute
-	ret.StaticProps()["onUpdatedFn"] = onUpdated
+	ret.Props()["computeFn"] = compute
+	ret.Props()["onUpdatedFn"] = onUpdated
 	return ret
 }
 

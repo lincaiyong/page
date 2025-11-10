@@ -7,7 +7,6 @@ type Component interface {
 	Tag() string
 	Name() string
 	Props() map[string]string
-	StaticProps() map[string]string
 	Children() []Component
 	Slots() []Component
 	Contains(s ...Component) Component
@@ -72,15 +71,14 @@ type Component interface {
 }
 
 type ExtraInfo struct {
-	name             string
-	properties       []string
-	staticProperties []string
-	methods          []string
-	staticMethods    []string
-	bindJs           map[string]string
-	defaultValue     map[string]string
-	thisComponent    Component
-	selfIndex        []int
+	name          string
+	properties    []string
+	methods       []string
+	staticMethods []string
+	bindJs        map[string]string
+	defaultValue  map[string]string
+	thisComponent Component
+	selfIndex     []int
 }
 
 func (e *ExtraInfo) Name() string {
@@ -97,14 +95,6 @@ func (e *ExtraInfo) Properties() []string {
 
 func (e *ExtraInfo) SetProperties(properties []string) {
 	e.properties = properties
-}
-
-func (e *ExtraInfo) StaticProperties() []string {
-	return e.staticProperties
-}
-
-func (e *ExtraInfo) SetStaticProperties(staticProperties []string) {
-	e.staticProperties = staticProperties
 }
 
 func (e *ExtraInfo) Methods() []string {

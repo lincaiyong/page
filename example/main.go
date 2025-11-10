@@ -135,10 +135,8 @@ var rootJs string
 func debug5Page(c *gin.Context) {
 	comp := root.Root(rootJs,
 		container.Container().List(true).Virtual(true).Scrollable(true).NameAs("containerEle").Contains(
-			containeritem.ContainerItem("RootComponent.compute", "RootComponent.onUpdated").Contains(
-				div.Div().OnHover(`(ele, hovered) => {
-	ele.backgroundColor = hovered ? '#888' : '#eee'; 
-}`).Contains(
+			containeritem.ContainerItem("Root.compute", "Root.onUpdated").Contains(
+				div.Div().OnHover("Root.onHover").Contains(
 					text.Text("''"),
 				),
 			),

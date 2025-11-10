@@ -2,7 +2,6 @@ package page
 
 import (
 	"embed"
-	"fmt"
 	"github.com/lincaiyong/log"
 	"github.com/lincaiyong/page/js"
 	"github.com/lincaiyong/page/utils"
@@ -26,7 +25,7 @@ func init() {
 			return err
 		}
 		comName := filepath.Base(filepath.Dir(path))
-		comName = fmt.Sprintf("%sComponent", utils.PascalCase(comName))
+		comName = utils.PascalCase(comName)
 		js.Set(comName, string(b))
 		return nil
 	})

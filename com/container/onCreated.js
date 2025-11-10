@@ -13,8 +13,8 @@ function onCreated() {
     }
 
     if (this.scrollable) {
-        this.hBar = new Scrollbar(this, 'h');
-        this.vBar = new Scrollbar(this, 'v');
+        this.hBar = new ScrollbarWrapper(this, 'h');
+        this.vBar = new ScrollbarWrapper(this, 'v');
         const bars = [this.hBar, this.vBar];
         bars.forEach(bar => bar.initDraggable());
         this.onWheel = (_, ev) => {
