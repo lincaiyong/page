@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"reflect"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -27,7 +28,7 @@ func sortedKeys(m map[string]string) []string {
 	return keys
 }
 
-func getAllInstances(comp com.Component, comps []com.Component) []com.Component {
+func getAllInstances(comp com.Component, comps []com.Component, thisComp com.Component, selfIndex []int) []com.Component {
 	struct_ := reflect.TypeOf(comp).Elem()
 	name := struct_.Name()
 	if name == "Component" {
@@ -35,13 +36,19 @@ func getAllInstances(comp com.Component, comps []com.Component) []com.Component 
 		name = name[:strings.Index(name, ".")]
 		name = fmt.Sprintf("%sComponent", utils.PascalCase(name))
 	}
-	comp.ExtraInfo().SetName(name)
-	comps = append(comps, comp)
-	for _, tmp := range comp.Slots() {
-		comps = getAllInstances(tmp, comps)
+	info := comp.ExtraInfo()
+	info.SetName(name)
+	if thisComp == nil {
+		thisComp = comp
 	}
-	for _, tmp := range comp.Children() {
-		comps = getAllInstances(tmp, comps)
+	info.SetThisComponent(thisComp)
+	info.SetSelfIndex(selfIndex)
+	comps = append(comps, comp)
+	for i, tmp := range comp.Slots() {
+		comps = getAllInstances(tmp, comps, thisComp, append(selfIndex, i))
+	}
+	for i, tmp := range comp.Children() {
+		comps = getAllInstances(tmp, comps, comp, []int{i})
 	}
 	return comps
 }
@@ -53,8 +60,8 @@ func readFunction(name, code string) string {
 	return code[9:]
 }
 
-func genClassCode(info *com.ExtraInfo, pr *printer.Printer) {
-	pr.Put("class %s extends Component {", utils.PascalCase(info.Name())).Push()
+func genClassCode(info *com.ExtraInfo, namedChildren map[string]map[string][]int, pr *printer.Printer) {
+	pr.Put("class %s extends Component {", info.Name()).Push()
 	{
 		pr.Put("constructor(parent, model) {").Push()
 		{
@@ -82,6 +89,20 @@ func genClassCode(info *com.ExtraInfo, pr *printer.Printer) {
 			pr.Put("get %s() { return this._properties.%s.value; }", property, property)
 			pr.Put("set %s(v) { this._properties.%s.value = v; }", property, property)
 		}
+		if m, ok := namedChildren[info.Name()]; ok {
+			keys := make([]string, 0, len(m))
+			for k := range m {
+				keys = append(keys, k)
+			}
+			sort.Strings(keys)
+			for _, k := range keys {
+				items := make([]string, 0, len(m[k]))
+				for _, i := range m[k] {
+					items = append(items, strconv.Itoa(i))
+				}
+				pr.Put("get %s() { return [%s].reduce((prev, i) => prev.children[i], this); }", k, strings.Join(items, ", "))
+			}
+		}
 	}
 	pr.Pop().Put("}")
 }
@@ -108,7 +129,20 @@ func defaultValue(type_, default_ string) string {
 }
 
 func buildClasses(page com.Component, mm map[string]string) string {
-	comps := getAllInstances(page, nil)
+	comps := getAllInstances(page, nil, nil, nil)
+	namedChildren := make(map[string]map[string][]int)
+	for _, comp := range comps {
+		if strings.HasSuffix(comp.Name(), "Ele") {
+			thisCompName := comp.ExtraInfo().ThisComponent().ExtraInfo().Name()
+			if m, ok := namedChildren[thisCompName]; ok {
+				m[comp.Name()] = comp.ExtraInfo().SelfIndex()
+			} else {
+				m = make(map[string][]int)
+				m[comp.Name()] = comp.ExtraInfo().SelfIndex()
+				namedChildren[thisCompName] = m
+			}
+		}
+	}
 	compMap := make(map[string]com.Component)
 	for _, comp := range comps {
 		name := comp.ExtraInfo().Name()
@@ -163,7 +197,7 @@ func buildClasses(page com.Component, mm map[string]string) string {
 	sort.Strings(keys)
 	pr := printer.NewPrinter()
 	for _, k := range keys {
-		genClassCode(compMap[k].ExtraInfo(), pr)
+		genClassCode(compMap[k].ExtraInfo(), namedChildren, pr)
 	}
 	return pr.Code()
 }

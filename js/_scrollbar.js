@@ -2,7 +2,7 @@ class Scrollbar {
     constructor(container, vh) {
         this.vertical = vh === 'v';
         this.container = container;
-        this.bar = this.vertical ? container.children[1] : container.children[0];
+        this.bar = this.vertical ? container.vBarEle : container.hBarEle;
         if (this.vertical) {
             this.bar._properties.y.reset();
             this.bar._properties.h.reset();

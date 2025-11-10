@@ -7,7 +7,7 @@ import (
 func create() *Component {
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent("div", ret)
-	ret.OnMouseDown("Bar.handleMouseDown").ZIndex("1")
+	ret.OnMouseDown("BarComponent.handleMouseDown").ZIndex("1")
 	return ret
 }
 

@@ -32,8 +32,6 @@ type Component struct {
 	scrollBarMargin    com.Property `type:"number"`
 	scrollable         com.Property `default:"true"`
 	virtual            com.Property `type:"bool"`
-	hBarEle            com.Property `type:"element"`
-	vBarEle            com.Property `type:"element"`
 	onCreated          com.Method
 	_updateList        com.Method
 	onUpdated          com.Method
