@@ -45,7 +45,7 @@ type TreeComponent struct {
 	nodeToItems      com.Method
 	selectChild      com.Method
 	handleClick      com.Method
-	sortChildren     com.StaticMethod
+	//sortChildren     com.StaticMethod
 }
 
 func (b *TreeComponent) Focus(v bool) *TreeComponent {

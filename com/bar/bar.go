@@ -7,7 +7,7 @@ import (
 func create() *Component {
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent("div", ret)
-	ret.OnMouseDown("Bar.handleMouseDown").ZIndex("1")
+	ret.OnMouseDown("e.handleMouseDown").ZIndex("1")
 	return ret
 }
 
@@ -30,5 +30,5 @@ type Component struct {
 	leftRight       com.Property `default:"[undefined, undefined]"`
 	topBottom       com.Property `default:"[undefined, undefined]"`
 	onUpdated       com.Method
-	handleMouseDown com.StaticMethod
+	handleMouseDown com.Method
 }

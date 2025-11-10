@@ -18,6 +18,6 @@ func treeItem() *ItemComponent {
 
 type ItemComponent struct {
 	*com.BaseComponent
-	data    com.Property `type:"object"`
-	compute com.StaticMethod
+	data com.Property `type:"object"`
+	//compute com.StaticMethod
 }
