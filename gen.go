@@ -104,6 +104,19 @@ func genClassCode(info *com.ExtraInfo, namedChildren map[string]map[string][]int
 			}
 		}
 	}
+	if info.Name() == "RootComponent" {
+		m := js.GetAll(info.Name())
+		keys := make([]string, 0, len(m))
+		for k := range m {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			if strings.HasPrefix(m[k], "function ") {
+				pr.Put("static " + m[k][9:])
+			}
+		}
+	}
 	pr.Pop().Put("}")
 }
 
@@ -219,8 +232,8 @@ func convertExpr(s string) (string, string) {
 	return s1, s2
 }
 
-func buildModel(page com.Component, depth, modelDepth int, pr *printer.Printer) {
-	t := reflect.ValueOf(page).Type().Elem()
+func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) {
+	t := reflect.ValueOf(comp).Type().Elem()
 	pr.Put("{").Push()
 	{
 		s := t.Name()
@@ -230,9 +243,9 @@ func buildModel(page com.Component, depth, modelDepth int, pr *printer.Printer) 
 			s = fmt.Sprintf("%sComponent", utils.PascalCase(s))
 		}
 		pr.Put("Component: %s,", s)
-		pr.Put("tag: '%s',", page.Tag())
+		pr.Put("tag: '%s',", comp.Tag())
 		pr.Put("overflow: 'hidden',")
-		pr.Put("name: '%s',", page.Name())
+		pr.Put("name: '%s',", comp.Name())
 		pr.Put("depth: %d,", depth)
 		props := make(map[string]string)
 		if modelDepth > 0 {
@@ -243,7 +256,7 @@ func buildModel(page com.Component, depth, modelDepth int, pr *printer.Printer) 
 			props["y"] = "-parent.scrollTop"
 			props["zIndex"] = "parent.zIndex"
 		}
-		for k, v := range page.Props() {
+		for k, v := range comp.Props() {
 			props[k] = v
 		}
 		if len(props) == 0 {
@@ -256,29 +269,35 @@ func buildModel(page com.Component, depth, modelDepth int, pr *printer.Printer) 
 			}
 			pr.Pop().Put("},")
 		}
-		if len(page.StaticProps()) == 0 {
+		if len(comp.StaticProps()) == 0 {
 			pr.Put("staticProperties: {},")
 		} else {
 			pr.Put("staticProperties: {").Push()
-			for _, k := range sortedKeys(page.StaticProps()) {
-				pr.Put("%s: [e => %s, []],", k, page.StaticProps()[k])
+			for _, k := range sortedKeys(comp.StaticProps()) {
+				pr.Put("%s: %s,", k, comp.StaticProps()[k])
 			}
 			pr.Pop().Put("},")
 		}
-		if len(page.Children()) == 0 {
+		children := comp.Children()
+		slots := comp.Slots()
+		if comp.SlotsAsChildren() {
+			children = slots
+			slots = nil
+		}
+		if len(children) == 0 {
 			pr.Put("children: [],")
 		} else {
 			pr.Put("children: [").Push()
-			for _, tmp := range page.Children() {
+			for _, tmp := range children {
 				buildModel(tmp, depth+1, modelDepth+1, pr)
 			}
 			pr.Pop().Put("],")
 		}
-		if len(page.Slots()) == 0 {
+		if len(slots) == 0 {
 			pr.Put("slot: null,")
 		} else {
 			pr.Put("slot: [").Push()
-			for _, tmp := range page.Slots() {
+			for _, tmp := range slots {
 				buildModel(tmp, depth+1, modelDepth+1, pr)
 			}
 			pr.Pop().Put("],")

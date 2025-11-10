@@ -33,8 +33,12 @@ type BaseComponent struct {
 	slotsAsChildren bool
 }
 
-func (b *BaseComponent) SlotsAsChildren(v bool) {
-	b.slotsAsChildren = v
+func (b *BaseComponent) SetSlotsAsChildren() {
+	b.slotsAsChildren = true
+}
+
+func (b *BaseComponent) SlotsAsChildren() bool {
+	return b.slotsAsChildren
 }
 
 func (b *BaseComponent) Name() string {
@@ -77,11 +81,7 @@ func (b *BaseComponent) NameAs(name string) Component {
 }
 
 func (b *BaseComponent) Contains(s ...Component) Component {
-	if b.slotsAsChildren {
-		b.children = append(b.children, s...)
-	} else {
-		b.slots = append(b.slots, s...)
-	}
+	b.slots = append(b.slots, s...)
 	return b.self
 }
 

@@ -5,7 +5,7 @@ function _updateList() {
     const data = this.items;
 
     page.util.assert(data instanceof Array);
-    const computeFunc = this.model.slot[0].Component.compute;
+    const computeFunc = this.model.slot[0].staticProperties.computeFn;
     page.util.assert(computeFunc instanceof Function);
 
     const scrollLeft = this.scrollLeft || 0;
@@ -123,7 +123,7 @@ function _updateList() {
         if (mh - scrollTop < this.ch) {
             this.scrollTop = Math.max(mh - this.ch, 0);
         }
-        this.hBarEle?.show(true);
-        this.vBarEle?.show(true);
+        this.hBar?.show(true);
+        this.vBar?.show(true);
     }
 }

@@ -52,11 +52,6 @@ func (b *Component) ChildWidth(v int) *Component {
 	return b
 }
 
-func (b *Component) Items(s string) *Component {
-	b.Props()["items"] = s
-	return b
-}
-
 func (b *Component) List(v bool) *Component {
 	b.Props()["list"] = fmt.Sprintf("%v", v)
 	return b

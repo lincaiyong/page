@@ -10,8 +10,10 @@ import (
 	"github.com/lincaiyong/page/com/button"
 	"github.com/lincaiyong/page/com/compare"
 	"github.com/lincaiyong/page/com/container"
+	"github.com/lincaiyong/page/com/containeritem"
 	"github.com/lincaiyong/page/com/div"
 	"github.com/lincaiyong/page/com/editor"
+	"github.com/lincaiyong/page/com/root"
 	"github.com/lincaiyong/page/com/text"
 	"github.com/lincaiyong/page/com/tree"
 	"net/http"
@@ -127,58 +129,24 @@ func debug4Page(c *gin.Context) {
 	page.MakePage(c, "debug4", comp, baseUrl, nil)
 }
 
-func DemoContainerItem() *DemoContainerItemComponent {
-	ret := &DemoContainerItemComponent{}
-	ret.BaseComponent = com.NewBaseComponent("div", ret,
-		div.Div().OnHover(`(ele, hovered) => {
-	ele.backgroundColor = hovered ? '#888' : '#eee'; 
-}`).Contains(
-			text.Text("''"),
-		),
-	)
-	ret.Y("0").X("0")
-	return ret
-}
-
-type DemoContainerItemComponent struct {
-	*com.BaseComponent
-	data      com.Property `type:"object"`
-	compute   com.StaticMethod
-	onUpdated com.Method `method:"onUpdated"`
-}
-
-func (b *DemoContainerItemComponent) Data(s string) *DemoContainerItemComponent {
-	b.Props()["data"] = s
-	return b
-}
-
-func (b *DemoContainerItemComponent) Compute(s string) *DemoContainerItemComponent {
-	b.Props()["compute"] = s
-	return b
-}
+//go:embed root.js
+var rootJs string
 
 func debug5Page(c *gin.Context) {
-	comp := container.Container().List(true).Virtual(true).Scrollable(true).Contains(
-		DemoContainerItem(),
-	).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2")
+	comp := root.Root(rootJs).Contains(
+		container.Container().List(true).Virtual(true).Scrollable(true).NameAs("containerEle").Contains(
+			containeritem.ContainerItem("RootComponent.compute", "RootComponent.onUpdated").Contains(
+				div.Div().OnHover(`(ele, hovered) => {
+	ele.backgroundColor = hovered ? '#888' : '#eee'; 
+}`).Contains(
+					text.Text("''"),
+				),
+			),
+		).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"),
+	)
 	page.MakePage(c, "debug5", comp, baseUrl, map[string]string{
-		"DemoContainerItemComponent_compute": `function compute(container, idx, prev) {
-	return {
-		key: ''+idx,
-		x: 0,
-		y: 20 * idx,
-		w: 200,
-		h: 20,
-		text: 'hello world!' + idx,
-	}
-}`,
-		"DemoContainerItemComponent_onUpdated": `function onUpdated(k, v) {
-	if (k === 'data') {
-		this.children[0].children[0].text = v.text;
-	}
-}`,
 		"": `setTimeout(function() {
-	const container = page.root.children[0];
+	const container = page.root.containerEle;
 	container.items = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
 }, 1000);`,
 	})

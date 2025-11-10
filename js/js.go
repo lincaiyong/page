@@ -30,3 +30,7 @@ func Get(comName, funName string) string {
 	}
 	return data[comName][funName]
 }
+
+func GetAll(comName string) map[string]string {
+	return data[comName]
+}

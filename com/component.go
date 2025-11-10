@@ -1,6 +1,8 @@
 package com
 
 type Component interface {
+	SetSlotsAsChildren()
+	SlotsAsChildren() bool
 	ExtraInfo() *ExtraInfo
 	Tag() string
 	Name() string
