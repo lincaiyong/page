@@ -65,7 +65,7 @@ func (info *StructInfo) readFunction(name, code string) string {
 }
 
 func (info *StructInfo) GenClass(pr *printer.Printer) {
-	pr.Put("class %sComponent extends Component {", capitalizeFirstLetter(info.name)).Push()
+	pr.Put("class %s extends Component {", capitalizeFirstLetter(info.name)).Push()
 	{
 		pr.Put("constructor(parent, model) {").Push()
 		{
@@ -216,7 +216,7 @@ func buildModel(page com.Component, depth, modelDepth int, pr *printer.Printer) 
 			s = s[:strings.Index(s, ".")]
 			s = fmt.Sprintf("%sComponent", capitalizeFirstLetter(s))
 		}
-		pr.Put("Component: %sComponent,", s)
+		pr.Put("Component: %s,", s)
 		pr.Put("tag: '%s',", page.Tag())
 		pr.Put("overflow: 'hidden',")
 		pr.Put("name: '%s',", page.Name())
