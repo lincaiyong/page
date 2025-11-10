@@ -10,12 +10,12 @@ import (
 	"github.com/lincaiyong/page/js"
 	"github.com/lincaiyong/page/parser"
 	"github.com/lincaiyong/page/printer"
+	"github.com/lincaiyong/page/utils"
 	"github.com/lincaiyong/page/visit"
 	"net/http"
 	"reflect"
 	"sort"
 	"strings"
-	"unicode"
 )
 
 func sortedKeys(m map[string]string) []string {
@@ -48,15 +48,6 @@ type StructInfo struct {
 	defaultValue     map[string]string
 }
 
-func capitalizeFirstLetter(s string) string {
-	if s == "" {
-		return ""
-	}
-	r := []rune(s)
-	r[0] = unicode.ToUpper(r[0])
-	return string(r)
-}
-
 func (info *StructInfo) readFunction(name, code string) string {
 	if !strings.HasPrefix(code, fmt.Sprintf("function %s(", name)) {
 		log.FatalLog("xx")
@@ -65,7 +56,7 @@ func (info *StructInfo) readFunction(name, code string) string {
 }
 
 func (info *StructInfo) GenClass(pr *printer.Printer) {
-	pr.Put("class %s extends Component {", capitalizeFirstLetter(info.name)).Push()
+	pr.Put("class %s extends Component {", utils.PascalCase(info.name)).Push()
 	{
 		pr.Put("constructor(parent, model) {").Push()
 		{
@@ -127,7 +118,7 @@ func buildClasses(page com.Component, mm map[string]string) string {
 		if s == "Component" {
 			s = t.String()
 			s = s[:strings.Index(s, ".")]
-			s = fmt.Sprintf("%sComponent", capitalizeFirstLetter(s))
+			s = fmt.Sprintf("%sComponent", utils.PascalCase(s))
 		}
 		result2[s] = t
 	}
@@ -214,7 +205,7 @@ func buildModel(page com.Component, depth, modelDepth int, pr *printer.Printer) 
 		if s == "Component" {
 			s = t.String()
 			s = s[:strings.Index(s, ".")]
-			s = fmt.Sprintf("%sComponent", capitalizeFirstLetter(s))
+			s = fmt.Sprintf("%sComponent", utils.PascalCase(s))
 		}
 		pr.Put("Component: %s,", s)
 		pr.Put("tag: '%s',", page.Tag())

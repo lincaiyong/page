@@ -1,5 +1,10 @@
 package com
 
+import (
+	"github.com/lincaiyong/log"
+	"strings"
+)
+
 func NewBaseComponent(tag string, self Component, children ...Component) *BaseComponent {
 	return &BaseComponent{
 		self:     self,
@@ -59,6 +64,9 @@ func (b *BaseComponent) StaticProps() map[string]string {
 }
 
 func (b *BaseComponent) NameAs(name string) Component {
+	if !strings.HasSuffix(name, "Ele") {
+		log.FatalLog("invalid element name: %s", name)
+	}
 	b.name = name
 	return b.self
 }

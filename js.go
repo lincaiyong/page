@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/lincaiyong/log"
 	"github.com/lincaiyong/page/js"
+	"github.com/lincaiyong/page/utils"
 	"io/fs"
 	"path/filepath"
-	"unicode"
 )
 
 //go:embed com/**/*.js
@@ -26,7 +26,7 @@ func init() {
 			return err
 		}
 		comName := filepath.Base(filepath.Dir(path))
-		comName = fmt.Sprintf("%sComponent", string(unicode.ToUpper(rune(comName[0])))+comName[1:])
+		comName = fmt.Sprintf("%sComponent", utils.PascalCase(comName))
 		js.Set(comName, string(b))
 		return nil
 	})
