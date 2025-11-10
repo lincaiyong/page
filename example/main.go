@@ -9,21 +9,21 @@ import (
 	"net/http"
 )
 
-var baseUrl string
+const baseUrl = "http://127.0.0.1:9123"
 
 func main() {
 	common.StartServer(
 		"page",
 		"v1.0.1",
-		"BASE_URL",
+		"",
 		func(envs []string, router *gin.RouterGroup) error {
-			baseUrl = envs[0]
 			//router.Use(corsMiddleware())
 			//router.Use(cacheMiddleware(""))
 			router.GET("/res/*filepath", page.HandleRes(baseUrl))
 			router.GET("/debug", debugPage)
 			router.GET("/debug2", debug2Page)
 			router.GET("/debug3", debug3Page)
+			router.GET("/debug4", debug4Page)
 			router.GET("/code/get", getCode)
 			router.GET("/code/get2", getCode2)
 			return nil
@@ -108,4 +108,11 @@ func getCode2(c *gin.Context) {
 	c.String(http.StatusOK, `{
 	"test.txt": "hello world!"
 }`)
+}
+
+func debug4Page(c *gin.Context) {
+	comp := com.Container().Scrollable(true).Contains(
+		com.Text("'hello world!'").W("400").H("400"),
+	).BackgroundColor("'blue'").W("200").H("200")
+	page.MakePage(c, "debug4", comp, baseUrl, nil)
 }

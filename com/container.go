@@ -28,13 +28,11 @@ func (b *ContainerItemComponent) Compute(s string) *ContainerItemComponent {
 }
 
 func Container() *ContainerComponent {
-	ret := &ContainerComponent{
-		BaseComponent: NewBaseComponent(
-			"div",
-			HScrollbar().NameAs("hBarEle"),
-			VScrollbar().NameAs("vBarEle"),
-		),
-	}
+	ret := &ContainerComponent{}
+	ret.BaseComponent = NewBaseComponent("div", ret,
+		HScrollbar().NameAs("hBarEle"),
+		VScrollbar().NameAs("vBarEle"),
+	)
 	ret.ScrollLeft("0").ScrollTop("0")
 	return ret
 }
@@ -56,8 +54,9 @@ type ContainerComponent struct {
 	onCreated          Method   `bind:"container_onCreated.js"`
 	_updateList        Method   `bind:"container__updateList.js"`
 	onUpdated          Method   `bind:"container_onUpdated.js"`
-	hBarEle            Element
-	vBarEle            Element
+	hBarEle            Property `type:"element"`
+	vBarEle            Property `type:"element"`
+	scrollBarMargin    Property `type:"number"`
 }
 
 func (b *ContainerComponent) Align(s string) *ContainerComponent {
@@ -110,7 +109,7 @@ func (b *ContainerComponent) ScrollBarWidth(v int) *ContainerComponent {
 	return b
 }
 
-func (b *ContainerComponent) Scrollable(v string) *ContainerComponent {
+func (b *ContainerComponent) Scrollable(v bool) *ContainerComponent {
 	b.props["scrollable"] = fmt.Sprintf("%v", v)
 	return b
 }

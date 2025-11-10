@@ -9,7 +9,7 @@ func Scrollbar() *ScrollbarComponent {
 		BackgroundColor("page.theme.scrollbarBgColor").
 		Opacity("0.5").
 		BorderRadius(".w / 2").
-		Cursor("default").
+		Cursor("'default'").
 		X(".vertical ? parent.cw - parent.scrollBarMargin - parent.scrollBarWidth : 0").
 		Y(".vertical ? 0 : parent.ch - parent.scrollBarMargin - parent.scrollBarWidth").
 		W(".vertical ? parent.scrollBarWidth : 0").

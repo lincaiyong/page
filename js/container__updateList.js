@@ -5,7 +5,7 @@ function _updateList() {
     const data = this.items;
 
     page.util.assert(data instanceof Array);
-    const computeFunc = this.model.slot.staticProperties.compute;
+    const computeFunc = this.model.slot[0].staticProperties.compute;
     page.util.assert(computeFunc instanceof Function);
 
     const scrollLeft = this.scrollLeft || 0;
@@ -68,7 +68,7 @@ function _updateList() {
             if (!child) {
                 child = other.shift();
                 if (!child) {
-                    child = page.createElement(this.model.slot, this);
+                    child = page.createElement(this.model.slot[0], this);
                     ['x', 'y', 'w', 'h'].forEach(k => child._properties[k].reset());
                 }
                 nonHitKey.push(child);
@@ -93,7 +93,7 @@ function _updateList() {
             page.removeElement(child);
         }
         while (this.children.length < visible.length + 2) {
-            page.createElement(this.model.slot, this);
+            page.createElement(this.model.slot[0], this);
         }
         for (let i = 0; i < visible.length; i++) {
             const child = this.children[i+RESERVED_COUNT];

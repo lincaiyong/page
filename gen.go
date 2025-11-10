@@ -136,7 +136,8 @@ func buildClasses(page com.Component, mm map[string]string) string {
 		for i := 0; i < t.NumField(); i++ {
 			field := t.Field(i)
 			if !field.Anonymous {
-				switch field.Type.Name() {
+				tn := field.Type.Name()
+				switch tn {
 				case "Property":
 					info.properties = append(info.properties, field.Name)
 					info.defaultValue[field.Name] = defaultValue(field.Tag.Get("type"), field.Tag.Get("default"))
