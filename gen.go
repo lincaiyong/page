@@ -113,7 +113,12 @@ func genClassCode(info *com.ExtraInfo, namedChildren map[string]map[string][]int
 		sort.Strings(keys)
 		for _, k := range keys {
 			if strings.HasPrefix(m[k], "function ") {
-				pr.Put("static " + m[k][9:])
+				code := m[k][9:]
+				if strings.HasPrefix(code, "onCreated") {
+					pr.Put(code)
+				} else {
+					pr.Put("static " + code)
+				}
 			}
 		}
 	}
@@ -146,13 +151,16 @@ func buildClasses(page com.Component, mm map[string]string) string {
 	namedChildren := make(map[string]map[string][]int)
 	for _, comp := range comps {
 		if strings.HasSuffix(comp.Name(), "Ele") {
-			thisCompName := comp.ExtraInfo().ThisComponent().ExtraInfo().Name()
-			if m, ok := namedChildren[thisCompName]; ok {
-				m[comp.Name()] = comp.ExtraInfo().SelfIndex()
-			} else {
-				m = make(map[string][]int)
-				m[comp.Name()] = comp.ExtraInfo().SelfIndex()
-				namedChildren[thisCompName] = m
+			thisComp := comp.ExtraInfo().ThisComponent()
+			if thisComp != comp {
+				thisCompName := thisComp.ExtraInfo().Name()
+				if m, ok := namedChildren[thisCompName]; ok {
+					m[comp.Name()] = comp.ExtraInfo().SelfIndex()
+				} else {
+					m = make(map[string][]int)
+					m[comp.Name()] = comp.ExtraInfo().SelfIndex()
+					namedChildren[thisCompName] = m
+				}
 			}
 		}
 	}

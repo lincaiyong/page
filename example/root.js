@@ -14,3 +14,8 @@ function onUpdated(k, v) {
         this.children[0].children[0].text = v.text;
     }
 }
+
+function onCreated() {
+    const container = this.containerEle;
+    container.items = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+}

@@ -5,11 +5,10 @@ import (
 	"github.com/lincaiyong/page/js"
 )
 
-func Root(code string) *Component {
+func Root(code string, comp com.Component) *Component {
 	js.Set("RootComponent", code)
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent("div", ret)
-	ret.BaseComponent.SetSlotsAsChildren()
+	ret.BaseComponent = com.NewBaseComponent("div", ret, comp)
 	return ret
 }
 

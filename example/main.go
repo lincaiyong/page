@@ -133,7 +133,7 @@ func debug4Page(c *gin.Context) {
 var rootJs string
 
 func debug5Page(c *gin.Context) {
-	comp := root.Root(rootJs).Contains(
+	comp := root.Root(rootJs,
 		container.Container().List(true).Virtual(true).Scrollable(true).NameAs("containerEle").Contains(
 			containeritem.ContainerItem("RootComponent.compute", "RootComponent.onUpdated").Contains(
 				div.Div().OnHover(`(ele, hovered) => {
@@ -144,12 +144,7 @@ func debug5Page(c *gin.Context) {
 			),
 		).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"),
 	)
-	page.MakePage(c, "debug5", comp, baseUrl, map[string]string{
-		"": `setTimeout(function() {
-	const container = page.root.containerEle;
-	container.items = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
-}, 1000);`,
-	})
+	page.MakePage(c, "debug5", comp, baseUrl, map[string]string{})
 }
 
 func debug6Page(c *gin.Context) {
