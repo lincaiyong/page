@@ -5,7 +5,7 @@ function _updateList() {
     const data = this.items;
 
     page.util.assert(data instanceof Array);
-    const computeFunc = this.model.slot[0].staticProperties.compute;
+    const computeFunc = this.model.slot[0].Component.compute;
     page.util.assert(computeFunc instanceof Function);
 
     const scrollLeft = this.scrollLeft || 0;

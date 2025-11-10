@@ -5,28 +5,6 @@ import (
 	"strconv"
 )
 
-func ContainerItem() *ContainerItemComponent {
-	ret := &ContainerItemComponent{}
-	ret.BaseComponent = NewBaseComponent("div", ret)
-	return ret
-}
-
-type ContainerItemComponent struct {
-	*BaseComponent
-	data    Property       `type:"object"`
-	compute StaticProperty `type:"function"`
-}
-
-func (b *ContainerItemComponent) Data(s string) *ContainerItemComponent {
-	b.props["data"] = s
-	return b
-}
-
-func (b *ContainerItemComponent) Compute(s string) *ContainerItemComponent {
-	b.props["compute"] = s
-	return b
-}
-
 func Container() *ContainerComponent {
 	ret := &ContainerComponent{}
 	ret.BaseComponent = NewBaseComponent("div", ret,
@@ -49,6 +27,7 @@ type ContainerComponent struct {
 	scrollBarFadeTime  Property `default:"500"`
 	scrollBarMinLength Property `default:"20"`
 	scrollBarWidth     Property `default:"6"`
+	scrollBarMargin    Property `type:"number"`
 	scrollable         Property `default:"true"`
 	virtual            Property `type:"bool"`
 	onCreated          Method   `bind:"container_onCreated.js"`
@@ -56,7 +35,6 @@ type ContainerComponent struct {
 	onUpdated          Method   `bind:"container_onUpdated.js"`
 	hBarEle            Property `type:"element"`
 	vBarEle            Property `type:"element"`
-	scrollBarMargin    Property `type:"number"`
 }
 
 func (b *ContainerComponent) Align(s string) *ContainerComponent {

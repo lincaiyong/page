@@ -187,7 +187,8 @@ func buildClasses(page com.Component, mm map[string]string) string {
 func convertExpr(s string) (string, string) {
 	tokens, err := parser.Tokenize(s)
 	if err != nil {
-		log.FatalLog("invalid expr: %s, %v", s, err)
+		log.WarnLog("invalid expr: %s, %v", s, err)
+		return s, "[]"
 	}
 	node, err := parser.Parse(tokens)
 	if err != nil {
@@ -310,13 +311,15 @@ func MakePage(c *gin.Context, title string, page com.Component, baseUrl string, 
 <body>
     <script>
         <xxx>
-        page.create()
+        page.create();
+		<xxx2>
     </script>
 </body>
 </html>`
 	}
 	template = strings.ReplaceAll(template, "<ttt>", title)
 	ss = strings.ReplaceAll(template, "<xxx>", ss)
+	ss = strings.ReplaceAll(ss, "<xxx2>", mm[""])
 	html := strings.ReplaceAll(ss, "<base_url>", baseUrl)
 	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(html))
 }

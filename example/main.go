@@ -24,6 +24,7 @@ func main() {
 			router.GET("/debug2", debug2Page)
 			router.GET("/debug3", debug3Page)
 			router.GET("/debug4", debug4Page)
+			router.GET("/debug5", debug5Page)
 			router.GET("/code/get", getCode)
 			router.GET("/code/get2", getCode2)
 			return nil
@@ -113,6 +114,60 @@ func getCode2(c *gin.Context) {
 func debug4Page(c *gin.Context) {
 	comp := com.Container().Scrollable(true).Contains(
 		com.Text("'hello world!'").H("400"),
-	).BackgroundColor("'blue'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2")
+	).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2")
 	page.MakePage(c, "debug4", comp, baseUrl, nil)
+}
+
+func DemoContainerItem() *DemoContainerItemComponent {
+	ret := &DemoContainerItemComponent{}
+	ret.BaseComponent = com.NewBaseComponent("div", ret,
+		com.Text("''").OnHover(`(ele, hovered) => {
+	ele.backgroundColor = hovered ? '#888' : '#eee'; 
+}`),
+	)
+	return ret
+}
+
+type DemoContainerItemComponent struct {
+	*com.BaseComponent
+	data      com.Property `type:"object"`
+	compute   com.StaticMethod
+	onUpdated com.Method `method:"onUpdated"`
+}
+
+func (b *DemoContainerItemComponent) Data(s string) *DemoContainerItemComponent {
+	b.Props()["data"] = s
+	return b
+}
+
+func (b *DemoContainerItemComponent) Compute(s string) *DemoContainerItemComponent {
+	b.Props()["compute"] = s
+	return b
+}
+
+func debug5Page(c *gin.Context) {
+	comp := com.Container().List(true).Virtual(true).Scrollable(true).Contains(
+		DemoContainerItem(),
+	).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2")
+	page.MakePage(c, "debug5", comp, baseUrl, map[string]string{
+		"DemoContainerItemComponent_compute.js": `function compute(container, idx, prev) {
+	return {
+		key: ''+idx,
+		x: 0,
+		y: 20 * idx,
+		w: 200,
+		h: 20,
+		text: 'hello world!' + idx,
+	}
+}`,
+		"DemoContainerItemComponent_onUpdated.js": `function onUpdated(k, v) {
+	if (k === 'data') {
+		this.children[0].text = v.text;
+	}
+}`,
+		"": `setTimeout(function() {
+	const container = page.root.children[0];
+	container.items = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+}, 1000);`,
+	})
 }
