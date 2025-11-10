@@ -50,7 +50,7 @@ type StructInfo struct {
 
 func (info *StructInfo) readFunction(name, code string) string {
 	if !strings.HasPrefix(code, fmt.Sprintf("function %s(", name)) {
-		log.FatalLog("xx")
+		log.FatalLog("invalid function code: %s", code)
 	}
 	return code[9:]
 }
@@ -104,7 +104,7 @@ func defaultValue(type_, default_ string) string {
 	case "object":
 		return "{}"
 	default:
-		log.FatalLog("xx")
+		log.FatalLog("invalid property type: %s", type_)
 		return ""
 	}
 }
@@ -146,7 +146,7 @@ func buildClasses(page com.Component, mm map[string]string) string {
 					if code == "" {
 						code = js.Get(n, field.Name)
 						if code == "" {
-							log.FatalLog("xx")
+							log.FatalLog("fail to get js code: %s %s", n, field.Name)
 						}
 					}
 					info.bindJs[field.Name] = code
@@ -156,12 +156,12 @@ func buildClasses(page com.Component, mm map[string]string) string {
 					if code == "" {
 						code = js.Get(n, field.Name)
 						if code == "" {
-							log.FatalLog("xx")
+							log.FatalLog("fail to get js code: %s %s", n, field.Name)
 						}
 					}
 					info.bindJs[field.Name] = code
 				default:
-					log.FatalLog("xx")
+					log.FatalLog("invalid field type: %s", tn)
 				}
 			}
 		}
