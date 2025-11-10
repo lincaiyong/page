@@ -29,6 +29,10 @@ type BaseComponent struct {
 	slotsAsChildren bool
 }
 
+func (b *BaseComponent) SlotsAsChildren(v bool) {
+	b.slotsAsChildren = v
+}
+
 func (b *BaseComponent) Name() string {
 	if b.name != "" {
 		return b.name
@@ -71,311 +75,311 @@ func (b *BaseComponent) Contains(s ...Component) Component {
 }
 
 func (b *BaseComponent) X_(i int) Component {
-	b.props["x"] = strconv.Itoa(i)
+	b.Props()["x"] = strconv.Itoa(i)
 	return b.self
 }
 
 func (b *BaseComponent) Y_(i int) Component {
-	b.props["y"] = strconv.Itoa(i)
+	b.Props()["y"] = strconv.Itoa(i)
 	return b.self
 }
 
 func (b *BaseComponent) W_(i int) Component {
-	b.props["w"] = strconv.Itoa(i)
+	b.Props()["w"] = strconv.Itoa(i)
 	return b.self
 }
 
 func (b *BaseComponent) H_(i int) Component {
-	b.props["h"] = strconv.Itoa(i)
+	b.Props()["h"] = strconv.Itoa(i)
 	return b.self
 }
 
 func (b *BaseComponent) Position(s string) Component {
-	b.props["position"] = s
+	b.Props()["position"] = s
 	return b.self
 }
 
 func (b *BaseComponent) X(s string) Component {
-	b.props["x"] = s
+	b.Props()["x"] = s
 	return b.self
 }
 
 func (b *BaseComponent) Y(s string) Component {
-	b.props["y"] = s
+	b.Props()["y"] = s
 	return b.self
 }
 
 func (b *BaseComponent) W(s string) Component {
-	b.props["w"] = s
+	b.Props()["w"] = s
 	return b.self
 }
 
 func (b *BaseComponent) H(s string) Component {
-	b.props["h"] = s
+	b.Props()["h"] = s
 	return b.self
 }
 
 func (b *BaseComponent) V(s string) Component {
-	b.props["v"] = s
+	b.Props()["v"] = s
 	return b.self
 }
 
 func (b *BaseComponent) X2(s string) Component {
-	b.props["x2"] = s
+	b.Props()["x2"] = s
 	return b.self
 }
 
 func (b *BaseComponent) Y2(s string) Component {
-	b.props["y2"] = s
+	b.Props()["y2"] = s
 	return b.self
 }
 
 func (b *BaseComponent) Cw(s string) Component {
-	b.props["cw"] = s
+	b.Props()["cw"] = s
 	return b.self
 }
 
 func (b *BaseComponent) Ch(s string) Component {
-	b.props["ch"] = s
+	b.Props()["ch"] = s
 	return b.self
 }
 
 func (b *BaseComponent) BorderRadius(s string) Component {
-	b.props["borderRadius"] = s
+	b.Props()["borderRadius"] = s
 	return b.self
 }
 
 func (b *BaseComponent) Color(s string) Component {
-	b.props["color"] = s
+	b.Props()["color"] = s
 	return b.self
 }
 
 func (b *BaseComponent) BackgroundColor(s string) Component {
-	b.props["backgroundColor"] = s
+	b.Props()["backgroundColor"] = s
 	return b.self
 }
 
 func (b *BaseComponent) BorderColor(s string) Component {
-	b.props["borderColor"] = s
+	b.Props()["borderColor"] = s
 	return b.self
 }
 
 func (b *BaseComponent) BoxShadow(s string) Component {
-	b.props["boxShadow"] = s
+	b.Props()["boxShadow"] = s
 	return b.self
 }
 
 func (b *BaseComponent) Background(s string) Component {
-	b.props["background"] = s
+	b.Props()["background"] = s
 	return b.self
 }
 
 func (b *BaseComponent) CaretColor(s string) Component {
-	b.props["caretColor"] = s
+	b.Props()["caretColor"] = s
 	return b.self
 }
 
 func (b *BaseComponent) UserSelect(s string) Component {
-	b.props["userSelect"] = s
+	b.Props()["userSelect"] = s
 	return b.self
 }
 
 func (b *BaseComponent) Cursor(s string) Component {
-	b.props["cursor"] = s
+	b.Props()["cursor"] = s
 	return b.self
 }
 
 func (b *BaseComponent) ZIndex(s string) Component {
-	b.props["zIndex"] = s
+	b.Props()["zIndex"] = s
 	return b.self
 }
 
 func (b *BaseComponent) Opacity(s string) Component {
-	b.props["opacity"] = s
+	b.Props()["opacity"] = s
 	return b.self
 }
 
 func (b *BaseComponent) BorderStyle(s string) Component {
-	b.props["borderStyle"] = s
+	b.Props()["borderStyle"] = s
 	return b.self
 }
 
 func (b *BaseComponent) FontFamily(s string) Component {
-	b.props["fontFamily"] = s
+	b.Props()["fontFamily"] = s
 	return b.self
 }
 
 func (b *BaseComponent) FontSize(s string) Component {
-	b.props["fontSize"] = s
+	b.Props()["fontSize"] = s
 	return b.self
 }
 
 func (b *BaseComponent) Outline(s string) Component {
-	b.props["outline"] = s
+	b.Props()["outline"] = s
 	return b.self
 }
 
 func (b *BaseComponent) LineHeight(s string) Component {
-	b.props["lineHeight"] = s
+	b.Props()["lineHeight"] = s
 	return b.self
 }
 
 func (b *BaseComponent) FontVariantLigatures(s string) Component {
-	b.props["fontVariantLigatures"] = s
+	b.Props()["fontVariantLigatures"] = s
 	return b.self
 }
 
 func (b *BaseComponent) InnerText(s string) Component {
-	b.props["innerText"] = s
+	b.Props()["innerText"] = s
 	return b.self
 }
 
 func (b *BaseComponent) ScrollTop(s string) Component {
-	b.props["scrollTop"] = s
+	b.Props()["scrollTop"] = s
 	return b.self
 }
 
 func (b *BaseComponent) ScrollLeft(s string) Component {
-	b.props["scrollLeft"] = s
+	b.Props()["scrollLeft"] = s
 	return b.self
 }
 
 func (b *BaseComponent) BorderLeft(s string) Component {
-	b.props["borderLeft"] = s
+	b.Props()["borderLeft"] = s
 	return b.self
 }
 
 func (b *BaseComponent) BorderRight(s string) Component {
-	b.props["borderRight"] = s
+	b.Props()["borderRight"] = s
 	return b.self
 }
 
 func (b *BaseComponent) BorderTop(s string) Component {
-	b.props["borderTop"] = s
+	b.Props()["borderTop"] = s
 	return b.self
 }
 
 func (b *BaseComponent) BorderBottom(s string) Component {
-	b.props["borderBottom"] = s
+	b.Props()["borderBottom"] = s
 	return b.self
 }
 
 func (b *BaseComponent) Hovered(s string) Component {
-	b.props["hovered"] = s
+	b.Props()["hovered"] = s
 	return b.self
 }
 
 func (b *BaseComponent) HoveredByMouse(s string) Component {
-	b.props["hoveredByMouse"] = s
+	b.Props()["hoveredByMouse"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnClick(s string) Component {
-	b.props["onClick"] = s
+	b.Props()["onClick"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnDoubleClick(s string) Component {
-	b.props["onDoubleClick"] = s
+	b.Props()["onDoubleClick"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnContextMenu(s string) Component {
-	b.props["onContextMenu"] = s
+	b.Props()["onContextMenu"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnMouseDown(s string) Component {
-	b.props["onMouseDown"] = s
+	b.Props()["onMouseDown"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnMouseMove(s string) Component {
-	b.props["onMouseMove"] = s
+	b.Props()["onMouseMove"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnMouseUp(s string) Component {
-	b.props["onMouseUp"] = s
+	b.Props()["onMouseUp"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnWheel(s string) Component {
-	b.props["onWheel"] = s
+	b.Props()["onWheel"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnInput(s string) Component {
-	b.props["onInput"] = s
+	b.Props()["onInput"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnKeyUp(s string) Component {
-	b.props["onKeyUp"] = s
+	b.Props()["onKeyUp"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnKeyDown(s string) Component {
-	b.props["onKeyDown"] = s
+	b.Props()["onKeyDown"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnCompositionStart(s string) Component {
-	b.props["onCompositionStart"] = s
+	b.Props()["onCompositionStart"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnCompositionUpdate(s string) Component {
-	b.props["onCompositionUpdate"] = s
+	b.Props()["onCompositionUpdate"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnCompositionEnd(s string) Component {
-	b.props["onCompositionEnd"] = s
+	b.Props()["onCompositionEnd"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnPaste(s string) Component {
-	b.props["onPaste"] = s
+	b.Props()["onPaste"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnCopy(s string) Component {
-	b.props["onCopy"] = s
+	b.Props()["onCopy"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnCut(s string) Component {
-	b.props["onCut"] = s
+	b.Props()["onCut"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnActive(s string) Component {
-	b.props["onActive"] = s
+	b.Props()["onActive"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnFocus(s string) Component {
-	b.props["onFocus"] = s
+	b.Props()["onFocus"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnHover(s string) Component {
-	b.props["onHover"] = s
+	b.Props()["onHover"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnClickOutside(s string) Component {
-	b.props["onClickOutside"] = s
+	b.Props()["onClickOutside"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnScrollTop(s string) Component {
-	b.props["onScrollTop"] = s
+	b.Props()["onScrollTop"] = s
 	return b.self
 }
 
 func (b *BaseComponent) OnScrollLeft(s string) Component {
-	b.props["onScrollLeft"] = s
+	b.Props()["onScrollLeft"] = s
 	return b.self
 }

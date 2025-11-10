@@ -1,0 +1,25 @@
+package text
+
+import "github.com/lincaiyong/page/com"
+
+func Text(text string) *Component {
+	ret := &Component{}
+	ret.BaseComponent = com.NewBaseComponent("span", ret)
+	ret.Props()["text"] = text
+	ret.FontSize("Math.floor(.h * 2 / 3)").
+		LineHeight(".h").
+		W("page.util.textWidth(.text, .fontFamily, .fontSize)")
+	return ret
+}
+
+type Component struct {
+	*com.BaseComponent
+	align     com.Property `default:"'left'"`
+	text      com.Property `type:"string"`
+	onUpdated com.Method
+}
+
+func (b *Component) Align(s string) *Component {
+	b.Props()["align"] = s
+	return b
+}

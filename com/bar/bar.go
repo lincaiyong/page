@@ -1,40 +1,31 @@
 package bar
 
 import (
-	_ "embed"
 	"github.com/lincaiyong/page/com"
-	"github.com/lincaiyong/page/js"
 )
 
-//go:embed bar.js
-var barJs string
-
-func init() {
-	js.Set("Bar", barJs)
-}
-
-func create() *Bar {
-	ret := &Bar{}
+func create() *Component {
+	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent("div", ret)
 	ret.OnMouseDown("Bar.handleMouseDown").ZIndex("1")
 	return ret
 }
 
-func VBar() *Bar {
+func VBar() *Component {
 	ret := create()
 	ret.Props()["leftRight"] = "[prev, next]"
 	ret.Cursor("'col-resize'").W_(20)
 	return ret
 }
 
-func HBar() *Bar {
+func HBar() *Component {
 	ret := create()
 	ret.Props()["topBottom"] = "[prev, next]"
 	ret.Cursor("'row-resize'").H_(20)
 	return ret
 }
 
-type Bar struct {
+type Component struct {
 	*com.BaseComponent
 	leftRight       com.Property `default:"[undefined, undefined]"`
 	topBottom       com.Property `default:"[undefined, undefined]"`

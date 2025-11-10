@@ -1,0 +1,36 @@
+package page
+
+import (
+	"embed"
+	"fmt"
+	"github.com/lincaiyong/log"
+	"github.com/lincaiyong/page/js"
+	"io/fs"
+	"path/filepath"
+	"unicode"
+)
+
+//go:embed com/**/*.js
+var allJs embed.FS
+
+func init() {
+	err := fs.WalkDir(allJs, ".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+		b, err := allJs.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		comName := filepath.Base(filepath.Dir(path))
+		comName = fmt.Sprintf("%sComponent", string(unicode.ToUpper(rune(comName[0])))+comName[1:])
+		js.Set(comName, string(b))
+		return nil
+	})
+	if err != nil {
+		log.FatalLog("fail to walk all js: %v", err)
+	}
+}

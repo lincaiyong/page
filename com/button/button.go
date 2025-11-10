@@ -1,0 +1,46 @@
+package button
+
+import (
+	"fmt"
+	"github.com/lincaiyong/page/com"
+	"github.com/lincaiyong/page/com/div"
+	"github.com/lincaiyong/page/com/img"
+)
+
+func Button() *Component {
+	ret := &Component{}
+	ret.BaseComponent = com.NewBaseComponent("div", ret,
+		img.Svg().Src("parent.icon").X_(4).Y(".x").W("parent.w - 2 * .x").H(".w").Color("parent.color"),
+		div.Div().X("prev.x2 - .w + 1").Y("prev.y - 1").W_(6).H(".w").V("0").BorderRadius("3"),
+	)
+	ret.W_(24).H(".w").BorderRadius("6").
+		BackgroundColor(".selected ? page.theme.ComponentSelectedBgColor : page.theme.ComponentBgColor").
+		Color(".selected ? page.theme.ComponentSelectedColor : page.theme.ComponentColor").
+		OnHover("e.handleHover").
+		OnActive("e.handleActive")
+	return ret
+}
+
+type Component struct {
+	*com.BaseComponent
+	flag         com.Property `type:"string"`
+	icon         com.Property `default:"'svg/el/folder.svg'"`
+	selected     com.Property `type:"bool"`
+	handleHover  com.Method
+	handleActive com.Method
+}
+
+func (b *Component) Flag(s string) *Component {
+	b.Props()["flag"] = s
+	return b
+}
+
+func (b *Component) Icon(s string) *Component {
+	b.Props()["icon"] = s
+	return b
+}
+
+func (b *Component) Selected(v bool) *Component {
+	b.Props()["selected"] = fmt.Sprintf("%v", v)
+	return b
+}

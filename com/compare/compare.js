@@ -13,3 +13,12 @@ function onCreated() {
         });
     }).catch(err => page.log.error(err));
 }
+
+function _destroy() {
+    this._editor.dispose();
+    super._destroy();
+}
+
+function setValue(v) {
+    this._editor.setValue(v);
+}

@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lincaiyong/log"
 	"github.com/lincaiyong/page/com"
+	"github.com/lincaiyong/page/com/div"
 	"github.com/lincaiyong/page/js"
 	"github.com/lincaiyong/page/parser"
 	"github.com/lincaiyong/page/printer"
@@ -14,10 +15,8 @@ import (
 	"reflect"
 	"sort"
 	"strings"
+	"unicode"
 )
-
-//go:embed js/*
-var jsEmbed embed.FS
 
 func sortedKeys(m map[string]string) []string {
 	keys := make([]string, 0, len(m))
@@ -49,17 +48,16 @@ type StructInfo struct {
 	defaultValue     map[string]string
 }
 
-func (info *StructInfo) readFunction(name, source string) string {
-	var code string
-	if strings.HasPrefix(source, "function ") {
-		code = source
-	} else {
-		b, err := jsEmbed.ReadFile(fmt.Sprintf("js/%s", source))
-		if err != nil {
-			log.FatalLog("xx")
-		}
-		code = strings.TrimSpace(string(b))
+func capitalizeFirstLetter(s string) string {
+	if s == "" {
+		return ""
 	}
+	r := []rune(s)
+	r[0] = unicode.ToUpper(r[0])
+	return string(r)
+}
+
+func (info *StructInfo) readFunction(name, code string) string {
 	if !strings.HasPrefix(code, fmt.Sprintf("function %s(", name)) {
 		log.FatalLog("xx")
 	}
@@ -67,7 +65,7 @@ func (info *StructInfo) readFunction(name, source string) string {
 }
 
 func (info *StructInfo) GenClass(pr *printer.Printer) {
-	pr.Put("class %s extends Component {", info.name).Push()
+	pr.Put("class %sComponent extends Component {", capitalizeFirstLetter(info.name)).Push()
 	{
 		pr.Put("constructor(parent, model) {").Push()
 		{
@@ -125,7 +123,13 @@ func buildClasses(page com.Component, mm map[string]string) string {
 	result2 := map[string]reflect.Type{}
 	for _, tmp := range result {
 		t := reflect.ValueOf(tmp).Type().Elem()
-		result2[t.Name()] = t
+		s := t.Name()
+		if s == "Component" {
+			s = t.String()
+			s = s[:strings.Index(s, ".")]
+			s = fmt.Sprintf("%sComponent", capitalizeFirstLetter(s))
+		}
+		result2[s] = t
 	}
 	result3 := map[string]StructInfo{}
 	for n, t := range result2 {
@@ -147,27 +151,21 @@ func buildClasses(page com.Component, mm map[string]string) string {
 					info.defaultValue[field.Name] = defaultValue(field.Tag.Get("type"), field.Tag.Get("default"))
 				case "Method":
 					info.methods = append(info.methods, field.Name)
-					code := field.Tag.Get("bind")
+					code := mm[fmt.Sprintf("%s_%s", n, field.Name)]
 					if code == "" {
-						code = mm[fmt.Sprintf("%s_%s.js", n, field.Name)]
+						code = js.Get(n, field.Name)
 						if code == "" {
-							code = js.Get(n, field.Name)
-							if code == "" {
-								log.FatalLog("xx")
-							}
+							log.FatalLog("xx")
 						}
 					}
 					info.bindJs[field.Name] = code
 				case "StaticMethod":
 					info.staticMethods = append(info.staticMethods, field.Name)
-					code := field.Tag.Get("bind")
+					code := mm[fmt.Sprintf("%s_%s", n, field.Name)]
 					if code == "" {
-						code = mm[fmt.Sprintf("%s_%s.js", n, field.Name)]
+						code = js.Get(n, field.Name)
 						if code == "" {
-							code = js.Get(n, field.Name)
-							if code == "" {
-								log.FatalLog("xx")
-							}
+							log.FatalLog("xx")
 						}
 					}
 					info.bindJs[field.Name] = code
@@ -212,7 +210,13 @@ func buildModel(page com.Component, depth, modelDepth int, pr *printer.Printer) 
 	t := reflect.ValueOf(page).Type().Elem()
 	pr.Put("{").Push()
 	{
-		pr.Put("Component: %s,", t.Name())
+		s := t.Name()
+		if s == "Component" {
+			s = t.String()
+			s = s[:strings.Index(s, ".")]
+			s = fmt.Sprintf("%sComponent", capitalizeFirstLetter(s))
+		}
+		pr.Put("Component: %sComponent,", s)
 		pr.Put("tag: '%s',", page.Tag())
 		pr.Put("overflow: 'hidden',")
 		pr.Put("name: '%s',", page.Name())
@@ -278,11 +282,14 @@ func buildPageModel(page com.Component) string {
 	return "page.model = " + code + ";"
 }
 
+//go:embed js/*.js
+var jsEmbed embed.FS
+
 func MakePage(c *gin.Context, title string, page com.Component, baseUrl string, mm map[string]string) {
 	if mm == nil {
 		mm = make(map[string]string)
 	}
-	page = com.Div().Contains(page)
+	page = div.Div().Contains(page)
 	eventJs, _ := jsEmbed.ReadFile("js/_event.js")
 	propertyJs, _ := jsEmbed.ReadFile("js/_property.js")
 	scrollbarJs, _ := jsEmbed.ReadFile("js/_scrollbar.js")
