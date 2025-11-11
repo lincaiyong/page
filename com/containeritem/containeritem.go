@@ -8,8 +8,12 @@ func ContainerItem(compute, update string, children ...com.Component) *Component
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret, children...)
 	ret.Y("0").X("0")
-	ret.SetProp("compute", compute)
-	ret.SetProp("update", update)
+	if compute != "" {
+		ret.SetProp("compute", compute)
+	}
+	if update != "" {
+		ret.SetProp("update", update)
+	}
 	return ret
 }
 

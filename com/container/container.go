@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func Container(compute, update string, children ...com.Component) *Component {
+func VListContainer(compute, update string, children ...com.Component) *Component {
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
 		scrollbar.HScrollbar().NameAs("hBarEle"),
@@ -16,6 +16,31 @@ func Container(compute, update string, children ...com.Component) *Component {
 	)
 	ret.ScrollLeft("0").ScrollTop("0")
 	ret.Contains(containeritem.ContainerItem(compute, update, children...))
+	ret.List(true).Virtual(true).Scrollable(true)
+	return ret
+}
+
+func ListContainer(compute, update string, children ...com.Component) *Component {
+	ret := &Component{}
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
+		scrollbar.HScrollbar().NameAs("hBarEle"),
+		scrollbar.VScrollbar().NameAs("vBarEle"),
+	)
+	ret.ScrollLeft("0").ScrollTop("0")
+	ret.Contains(containeritem.ContainerItem(compute, update, children...))
+	ret.List(true).Virtual(false).Scrollable(true)
+	return ret
+}
+
+func Container(child com.Component) *Component {
+	ret := &Component{}
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
+		scrollbar.HScrollbar().NameAs("hBarEle"),
+		scrollbar.VScrollbar().NameAs("vBarEle"),
+	)
+	ret.ScrollLeft("0").ScrollTop("0")
+	ret.Contains(child)
+	ret.List(false).Virtual(false).Scrollable(false)
 	return ret
 }
 
