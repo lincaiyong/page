@@ -117,7 +117,7 @@ function test() {
 function test() {
 	setTimeout(function() {
 		const treeEle = page.root.treeEle;
-		treeEle.items = ['test/test.go'];
+		treeEle.items = ['test/test.go', 'test/test.js', 'test/test.py', 'test/test.txt', 'go.mod'];
 	}, 1000);
 }
 `))

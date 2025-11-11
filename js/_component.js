@@ -229,7 +229,7 @@ class Component {
             color: [() => '', []],
             cursor: [() => 'inherit', []],
             cw: [() => 0, []],
-            fontFamily: [() => 'Roboto, SourceHanSans, NotoColorEmoji', []],
+            fontFamily: [() => 'SF Pro Display', []],
             fontSize: [() => 0, []],
             fontVariantLigatures: [() => 'none', []],
             h: [() => 0, []],
