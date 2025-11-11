@@ -9,6 +9,7 @@ import (
 	"github.com/lincaiyong/page/com/compare"
 	"github.com/lincaiyong/page/com/div"
 	"github.com/lincaiyong/page/com/editor"
+	"github.com/lincaiyong/page/com/root"
 	"github.com/lincaiyong/page/com/text"
 	"testing"
 )
@@ -19,7 +20,7 @@ func TestBar(t *testing.T) {
 			baseUrl := "http://127.0.0.1:9123"
 			r.GET("/res/*filepath", page.HandleRes(baseUrl))
 			r.GET("/", func(c *gin.Context) {
-				comp := div.Div().Contains(
+				comp := root.Root("", div.Div().Contains(
 					editor.Editor().X("20").Y("20").W("800").H("next.y - .y").BackgroundColor("'blue'"),
 					bar.HBar().Y("200").W("parent.w").H("20").Opacity("0.1"),
 					div.Div().X("20").Y("prev.y2").W("800").H("400").BackgroundColor("'yellow'").Contains(
@@ -28,7 +29,7 @@ func TestBar(t *testing.T) {
 					compare.Compare().X("800").Y("20").W("400").H("400").BackgroundColor("'red'"),
 					div.Div().X("prev.x2").Y("prev.y2").W("40").H("40").BackgroundColor("'green'"),
 					button.Button().Icon("'svg/el/folder.svg'").X("prev.x2").Y("prev.y2 + 100").W("40").H("40"),
-				)
+				))
 				page.MakePage(c, "debug", comp, baseUrl, nil)
 			})
 			return nil

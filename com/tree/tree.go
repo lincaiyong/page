@@ -3,8 +3,6 @@ package tree
 import (
 	"fmt"
 	"github.com/lincaiyong/page/com"
-	"github.com/lincaiyong/page/com/container"
-	"github.com/lincaiyong/page/com/div"
 )
 
 func Tree() *Component {
@@ -21,13 +19,10 @@ func Tree() *Component {
 	   }
 	*/
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
-		div.Div().X("10").Y("this.selectedChildTop-next.scrollTop").W("parent.w-20").H("this.itemHeight").BorderRadius("4").
-			BackgroundColor("this.focus ? page.theme.treeFocusSelectedBgColor : page.theme.treeSelectedBgColor"),
-		container.Container().List(true).Virtual(true).Align("'fill'").X("10").W("parent.w - .x").Contains(
-			treeItem(),
-		),
-	)
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret)//div.Div().X("10").Y("this.selectedChildTop-next.scrollTop").W("parent.w-20").H("this.itemHeight").BorderRadius("4").
+	//	BackgroundColor("this.focus ? page.theme.treeFocusSelectedBgColor : page.theme.treeSelectedBgColor"),
+	//container.Container(treeItem()).List(true).Virtual(true).Align("'fill'").X("10").W("parent.w - .x")
+
 	return ret
 }
 

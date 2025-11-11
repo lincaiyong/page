@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lincaiyong/log"
 	"github.com/lincaiyong/page/com"
-	"github.com/lincaiyong/page/com/div"
+	"github.com/lincaiyong/page/com/root"
 	"github.com/lincaiyong/page/js"
 	"github.com/lincaiyong/page/parser"
 	"github.com/lincaiyong/page/printer"
@@ -114,11 +114,7 @@ func genClassCode(info *com.ExtraInfo, namedChildren map[string]map[string][]int
 		for _, k := range keys {
 			if strings.HasPrefix(m[k], "function ") {
 				code := m[k][9:]
-				if strings.HasPrefix(code, "onCreated") {
-					pr.Put(code)
-				} else {
-					pr.Put("static " + code)
-				}
+				pr.Put("static " + code)
 			}
 		}
 	}
@@ -313,11 +309,10 @@ func buildPageModel(page com.Component) string {
 //go:embed js/*.js
 var jsEmbed embed.FS
 
-func MakePage(c *gin.Context, title string, page com.Component, baseUrl string, mm map[string]string) {
+func MakePage(c *gin.Context, title string, page *root.Component, baseUrl string, mm map[string]string) {
 	if mm == nil {
 		mm = make(map[string]string)
 	}
-	page = div.Div().Contains(page)
 	eventJs, _ := jsEmbed.ReadFile("js/_event.js")
 	propertyJs, _ := jsEmbed.ReadFile("js/_property.js")
 	scrollbarJs, _ := jsEmbed.ReadFile("js/_scrollbar.js")

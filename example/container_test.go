@@ -23,22 +23,26 @@ func TestContainer(t *testing.T) {
 			r.GET("/res/*filepath", page.HandleRes(baseUrl))
 			r.GET("/1", func(c *gin.Context) {
 				comp := root.Root(rootJs,
-					container.Container().NameAs("containerEle").List(true).Virtual(true).Scrollable(true).Contains(
+					container.Container(
 						containeritem.ContainerItem("Root.compute").OnUpdated("Root.onUpdated").Contains(
 							div.Div().OnHover("Root.onHover").Contains(
 								text.Text("''"),
 							),
 						),
-					).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"),
-				)
+					).NameAs("containerEle").
+						List(true).
+						Virtual(true).
+						Scrollable(true).Contains().BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"),
+				).OnCreated("Root.onCreated")
 				page.MakePage(c, "debug5", comp, baseUrl, map[string]string{})
 			})
-			r.GET("/2", func(c *gin.Context) {
-				comp := container.Container().Scrollable(true).Contains(
-					text.Text("'hello world!'").H("400"),
-				).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2")
-				page.MakePage(c, "debug4", comp, baseUrl, nil)
-			})
+			//r.GET("/2", func(c *gin.Context) {
+			//	comp := root.Root("", container.Container().Scrollable(true).Contains(
+			//		text.Text("'hello world!'").H("400"),
+			//	).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"),
+			//	)
+			//	page.MakePage(c, "debug4", comp, baseUrl, nil)
+			//})
 			return nil
 		},
 	)

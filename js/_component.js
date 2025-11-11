@@ -36,9 +36,21 @@ class Component {
     get ref() { return this._ref; }
     get root() { return [...Array(this.model.depth).keys()].reduce(prev => prev?.parent, this); }
 
+
+    onCreated() {}
+    onUpdated(k, v) {}
+
+    _defaultOnCreated() {
+        if (this.onCreatedFn instanceof Function) {
+            this.onCreatedFn();
+        }
+    }
     _defaultOnUpdated(k, v) {
         if (k === 'hovered') {
             this.onHover?.(this, v);
+        }
+        if (this.onUpdatedFn instanceof Function) {
+            this.onUpdatedFn(k, v);
         }
     }
 
@@ -59,6 +71,7 @@ class Component {
     _initAll() {
         Object.values(this._properties).forEach(p => p.update());
         this.children.forEach(child => child._initAll());
+        this._defaultOnCreated();
         this.onCreated();
     }
 
@@ -175,63 +188,65 @@ class Component {
 
     get _defaultProperties() {
         return {
-            background: [e => '', []],
-            backgroundColor: [e => '', []],
-            borderBottom: [e => 0, []],
-            borderColor: [e => '', []],
-            borderLeft: [e => 0, []],
-            borderRadius: [e => 0, []],
-            borderRight: [e => 0, []],
-            borderStyle: [e => 'solid', []],
-            borderTop: [e => 0, []],
-            boxShadow: [e => '', []],
-            caretColor: [e => '', []],
-            ch: [e => 0, []],
-            color: [e => '', []],
-            cursor: [e => 'inherit', []],
-            cw: [e => 0, []],
-            fontFamily: [e => 'Roboto, SourceHanSans, NotoColorEmoji', []],
-            fontSize: [e => 0, []],
-            fontVariantLigatures: [e => 'none', []],
-            h: [e => 0, []],
-            hovered: [e => false, []],
-            hoveredByMouse: [e => false, []],
-            innerText: [e => '', []],
-            lineHeight: [e => 0, []],
-            onActive: [e => undefined, []],
-            onClick: [e => undefined, []],
-            onClickOutside: [e => undefined, []],
-            onCompositionEnd: [e => undefined, []],
-            onCompositionStart: [e => undefined, []],
-            onCompositionUpdate: [e => undefined, []],
-            onCopy: [e => undefined, []],
-            onCut: [e => undefined, []],
-            onDoubleClick: [e => undefined, []],
-            onFocus: [e => undefined, []],
-            onHover: [e => undefined, []],
-            onInput: [e => undefined, []],
-            onKeyDown: [e => undefined, []],
-            onKeyUp: [e => undefined, []],
-            onMouseDown: [e => undefined, []],
-            onMouseMove: [e => undefined, []],
-            onMouseUp: [e => undefined, []],
-            onPaste: [e => undefined, []],
-            onScrollLeft: [e => undefined, []],
-            onScrollTop: [e => undefined, []],
-            onWheel: [e => undefined, []],
-            opacity: [e => 1, []],
-            outline: [e => 'none', []],
-            position: [e => 'absolute', []],
-            scrollLeft: [e => 0, []],
-            scrollTop: [e => 0, []],
-            userSelect: [e => 'none', []],
-            v: [e => 0, []],
-            w: [e => 0, []],
-            x: [e => 0, []],
-            x2: [e => 0, []],
-            y: [e => 0, []],
-            y2: [e => 0, []],
-            zIndex: [e => 0, []],
+            onUpdatedFn: [() => null, []],
+            onCreatedFn: [() => null, []],
+            background: [() => '', []],
+            backgroundColor: [() => '', []],
+            borderBottom: [() => 0, []],
+            borderColor: [() => '', []],
+            borderLeft: [() => 0, []],
+            borderRadius: [() => 0, []],
+            borderRight: [() => 0, []],
+            borderStyle: [() => 'solid', []],
+            borderTop: [() => 0, []],
+            boxShadow: [() => '', []],
+            caretColor: [() => '', []],
+            ch: [() => 0, []],
+            color: [() => '', []],
+            cursor: [() => 'inherit', []],
+            cw: [() => 0, []],
+            fontFamily: [() => 'Roboto, SourceHanSans, NotoColorEmoji', []],
+            fontSize: [() => 0, []],
+            fontVariantLigatures: [() => 'none', []],
+            h: [() => 0, []],
+            hovered: [() => false, []],
+            hoveredByMouse: [() => false, []],
+            innerText: [() => '', []],
+            lineHeight: [() => 0, []],
+            onActive: [() => undefined, []],
+            onClick: [() => undefined, []],
+            onClickOutside: [() => undefined, []],
+            onCompositionEnd: [() => undefined, []],
+            onCompositionStart: [() => undefined, []],
+            onCompositionUpdate: [() => undefined, []],
+            onCopy: [() => undefined, []],
+            onCut: [() => undefined, []],
+            onDoubleClick: [() => undefined, []],
+            onFocus: [() => undefined, []],
+            onHover: [() => undefined, []],
+            onInput: [() => undefined, []],
+            onKeyDown: [() => undefined, []],
+            onKeyUp: [() => undefined, []],
+            onMouseDown: [() => undefined, []],
+            onMouseMove: [() => undefined, []],
+            onMouseUp: [() => undefined, []],
+            onPaste: [() => undefined, []],
+            onScrollLeft: [() => undefined, []],
+            onScrollTop: [() => undefined, []],
+            onWheel: [() => undefined, []],
+            opacity: [() => 1, []],
+            outline: [() => 'none', []],
+            position: [() => 'absolute', []],
+            scrollLeft: [() => 0, []],
+            scrollTop: [() => 0, []],
+            userSelect: [() => 'none', []],
+            v: [() => 0, []],
+            w: [() => 0, []],
+            x: [() => 0, []],
+            x2: [() => 0, []],
+            y: [() => 0, []],
+            y2: [() => 0, []],
+            zIndex: [() => 0, []],
         };
     };
 
@@ -293,6 +308,8 @@ class Component {
     get y() { return this._properties.y.value; }
     get y2() { return this._properties.y2.value; }
     get zIndex() { return this._properties.zIndex.value; }
+    get onCreatedFn() { return this._properties.onCreatedFn.value; }
+    get onUpdatedFn() { return this._properties.onUpdatedFn.value; }
 
     set background(v) {
         if (this.background !== v) {
@@ -489,8 +506,8 @@ class Component {
     set onHover(v) {
         if (v instanceof Function) {
             this._properties.onHover.value = v;
-            this._addSideEffect('mouseenter', page.event.addListener(this.ref, 'mouseenter', ev => {
-                page.event.onceListener(this.ref, 'mouseleave', ev => this.hoveredByMouse = false);
+            this._addSideEffect('mouseenter', page.event.addListener(this.ref, 'mouseenter', () => {
+                page.event.onceListener(this.ref, 'mouseleave', () => this.hoveredByMouse = false);
                 this.hoveredByMouse = true;
             }));
         }
@@ -621,7 +638,14 @@ class Component {
             this.ref.style.zIndex = v;
         }
     }
-
-    onCreated() {}
-    onUpdated() {}
+    set onCreatedFn(v) {
+        if (this.onCreatedFn !== v) {
+            this._properties.onCreatedFn.value = v;
+        }
+    }
+    set onUpdatedFn(v) {
+        if (this.onUpdatedFn !== v) {
+            this._properties.onUpdatedFn.value = v;
+        }
+    }
 }

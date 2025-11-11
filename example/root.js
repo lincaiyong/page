@@ -9,9 +9,9 @@ function compute(container, idx, prev) {
     }
 }
 
-function onUpdated(ele, k, v) {
+function onUpdated(k, v) {
     if (k === 'data') {
-        ele.children[0].children[0].text = v.text;
+        this.children[0].children[0].text = v.text;
     }
 }
 

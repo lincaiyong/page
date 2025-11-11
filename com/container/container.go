@@ -3,17 +3,19 @@ package container
 import (
 	"fmt"
 	"github.com/lincaiyong/page/com"
+	"github.com/lincaiyong/page/com/containeritem"
 	"github.com/lincaiyong/page/com/scrollbar"
 	"strconv"
 )
 
-func Container() *Component {
+func Container(item *containeritem.Component) *Component {
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
 		scrollbar.HScrollbar().NameAs("hBarEle"),
 		scrollbar.VScrollbar().NameAs("vBarEle"),
 	)
 	ret.ScrollLeft("0").ScrollTop("0")
+	ret.Contains(item)
 	return ret
 }
 

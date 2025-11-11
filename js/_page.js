@@ -19,12 +19,20 @@ const page = {
     },
     createElement(model, parent) {
         const ele = new model.Component(null, model);
-        if (parent instanceof Component || parent instanceof Element) {
+        if (parent instanceof Component) {
             ele._create(parent);
         } else {
             page.log.error("invalid argument")
         }
         return ele;
+    },
+    createRootElement(parent) {
+        page.root = new page.model.Component(null, page.model);
+        if (parent instanceof Element) {
+            page.root._create(parent);
+        } else {
+            page.log.error("invalid argument")
+        }
     },
     _autoLayout() {
         const resize = () => [page.root.w, page.root.h] = [window.innerWidth, window.innerHeight];
@@ -32,7 +40,7 @@ const page = {
         resize();
     },
     _create() {
-        page.root = page.createElement(page.model, document.body);
+        page.createRootElement(document.body);
         page._autoLayout();
         page.root.v = 1;
         page.root._checkLoop();
