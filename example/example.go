@@ -122,6 +122,8 @@ function test() {
 }
 `))
 			})
+			r.GET("/goland", goland)
+			r.GET("/larkbase", larkbase)
 			return nil
 		},
 	)
