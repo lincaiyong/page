@@ -30,7 +30,7 @@ func TestBar(t *testing.T) {
 					div.Div().X("prev.x2").Y("prev.y2").W("40").H("40").BackgroundColor("'green'"),
 					button.Button().Icon("'svg/el/folder.svg'").X("prev.x2").Y("prev.y2 + 100").W("40").H("40"),
 				))
-				page.MakePage(c, "debug", comp, baseUrl, nil)
+				page.MakePage(c, "debug", comp, baseUrl)
 			})
 			return nil
 		},

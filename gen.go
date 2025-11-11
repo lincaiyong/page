@@ -53,14 +53,14 @@ func getAllInstances(comp com.Component, comps []com.Component, thisComp com.Com
 	return comps
 }
 
-func readFunction(name, code string) string {
+func readFunction(name, code string) (string, error) {
 	if !strings.HasPrefix(code, fmt.Sprintf("function %s(", name)) {
-		log.FatalLog("invalid function code: %s", code)
+		return "", fmt.Errorf("invalid function code: %s", code)
 	}
-	return code[9:]
+	return code[9:], nil
 }
 
-func genClassCode(info *com.ExtraInfo, namedChildren map[string]map[string][]int, pr *printer.Printer) {
+func genClassCode(info *com.ExtraInfo, namedChildren map[string]map[string][]int, pr *printer.Printer) error {
 	pr.Put("class %s extends Component {", info.Name()).Push()
 	{
 		pr.Put("constructor(parent, model) {").Push()
@@ -78,11 +78,17 @@ func genClassCode(info *com.ExtraInfo, namedChildren map[string]map[string][]int
 		}
 		pr.Pop().Put("}")
 		for _, method := range info.Methods() {
-			code := readFunction(method, info.GetBindJs(method))
+			code, err := readFunction(method, info.GetBindJs(method))
+			if err != nil {
+				return err
+			}
 			pr.Put(code)
 		}
 		for _, method := range info.StaticMethods() {
-			code := readFunction(method, info.GetBindJs(method))
+			code, err := readFunction(method, info.GetBindJs(method))
+			if err != nil {
+				return err
+			}
 			pr.Put("static " + code)
 		}
 		for _, property := range info.Properties() {
@@ -119,44 +125,49 @@ func genClassCode(info *com.ExtraInfo, namedChildren map[string]map[string][]int
 		}
 	}
 	pr.Pop().Put("}")
+	return nil
 }
 
-func defaultValue(type_, default_ string) string {
+func defaultValue(type_, default_ string) (string, error) {
 	if default_ != "" {
-		return default_
+		return default_, nil
 	}
 	switch type_ {
 	case "bool":
-		return "false"
+		return "false", nil
 	case "number":
-		return "0"
+		return "0", nil
 	case "string":
-		return "''"
+		return "''", nil
 	case "array", "element":
-		return "undefined"
+		return "undefined", nil
 	case "object":
-		return "{}"
+		return "{}", nil
 	default:
-		log.FatalLog("invalid property type: %s", type_)
-		return ""
+		return "", fmt.Errorf("invalid property type: %s", type_)
 	}
 }
 
-func buildClasses(page com.Component, mm map[string]string) string {
+func buildClasses(page com.Component) (string, error) {
 	comps := getAllInstances(page, nil, nil, nil)
 	namedChildren := make(map[string]map[string][]int)
 	for _, comp := range comps {
-		if strings.HasSuffix(comp.Name(), "Ele") {
-			thisComp := comp.ExtraInfo().ThisComponent()
-			if thisComp != comp {
-				thisCompName := thisComp.ExtraInfo().Name()
-				if m, ok := namedChildren[thisCompName]; ok {
-					m[comp.Name()] = comp.ExtraInfo().SelfIndex()
-				} else {
-					m = make(map[string][]int)
-					m[comp.Name()] = comp.ExtraInfo().SelfIndex()
-					namedChildren[thisCompName] = m
-				}
+		name := comp.Name()
+		if name == "" {
+			continue
+		}
+		if !strings.HasSuffix(name, "Ele") {
+			return "", fmt.Errorf("invalid element name: %s", name)
+		}
+		thisComp := comp.ExtraInfo().ThisComponent()
+		if thisComp != comp {
+			thisCompName := thisComp.ExtraInfo().Name()
+			if m, ok := namedChildren[thisCompName]; ok {
+				m[comp.Name()] = comp.ExtraInfo().SelfIndex()
+			} else {
+				m = make(map[string][]int)
+				m[comp.Name()] = comp.ExtraInfo().SelfIndex()
+				namedChildren[thisCompName] = m
 			}
 		}
 	}
@@ -179,29 +190,27 @@ func buildClasses(page com.Component, mm map[string]string) string {
 				switch tn {
 				case "Property":
 					info.SetProperties(append(info.Properties(), field.Name))
-					info.SetDefaultValue(field.Name, defaultValue(field.Tag.Get("type"), field.Tag.Get("default")))
+					v, err := defaultValue(field.Tag.Get("type"), field.Tag.Get("default"))
+					if err != nil {
+						return "", err
+					}
+					info.SetDefaultValue(field.Name, v)
 				case "Method":
 					info.SetMethods(append(info.Methods(), field.Name))
-					code := mm[fmt.Sprintf("%s_%s", n, field.Name)]
+					code := js.Get(n, field.Name)
 					if code == "" {
-						code = js.Get(n, field.Name)
-						if code == "" {
-							log.FatalLog("fail to get js code: %s %s", n, field.Name)
-						}
+						return "", fmt.Errorf("fail to bind method: %s", field.Name)
 					}
 					info.SetBindJs(field.Name, code)
 				case "StaticMethod":
 					info.SetStaticMethods(append(info.StaticMethods(), field.Name))
-					code := mm[fmt.Sprintf("%s_%s", n, field.Name)]
+					code := js.Get(n, field.Name)
 					if code == "" {
-						code = js.Get(n, field.Name)
-						if code == "" {
-							log.FatalLog("fail to get js code: %s %s", n, field.Name)
-						}
+						return "", fmt.Errorf("fail to bind method: %s", field.Name)
 					}
 					info.SetBindJs(field.Name, code)
 				default:
-					log.FatalLog("invalid field type: %s", tn)
+					return "", fmt.Errorf("invalid field type: %s", tn)
 				}
 			}
 		}
@@ -209,29 +218,31 @@ func buildClasses(page com.Component, mm map[string]string) string {
 	sort.Strings(keys)
 	pr := printer.NewPrinter()
 	for _, k := range keys {
-		genClassCode(compMap[k].ExtraInfo(), namedChildren, pr)
+		err := genClassCode(compMap[k].ExtraInfo(), namedChildren, pr)
+		if err != nil {
+			return "", err
+		}
 	}
-	return pr.Code()
+	return pr.Code(), nil
 }
 
-func convertExpr(s string) (string, string) {
+func convertExpr(s string) (string, string, error) {
 	tokens, err := parser.Tokenize(s)
 	if err != nil {
-		log.WarnLog("invalid expr: %s, %v", s, err)
-		return s, "[]"
+		return "", "", err
 	}
 	node, err := parser.Parse(tokens)
 	if err != nil {
-		log.FatalLog("invalid expr: %s, %v", s, err)
+		return "", "", err
 	}
 	s1, s2, err := visit.Visit(node)
 	if err != nil {
-		log.FatalLog("invalid expr: %s, %v", s, err)
+		return "", "", err
 	}
-	return s1, s2
+	return s1, s2, nil
 }
 
-func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) {
+func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) error {
 	t := reflect.ValueOf(comp).Type().Elem()
 	pr.Put("{").Push()
 	{
@@ -263,7 +274,10 @@ func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) 
 		} else {
 			pr.Put("properties: {").Push()
 			for _, k := range sortedKeys(props) {
-				v1, v2 := convertExpr(props[k])
+				v1, v2, err := convertExpr(props[k])
+				if err != nil {
+					return err
+				}
 				pr.Put("%s: [e => %s, %s],", k, v1, v2)
 			}
 			pr.Pop().Put("},")
@@ -279,7 +293,10 @@ func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) 
 		} else {
 			pr.Put("children: [").Push()
 			for _, tmp := range children {
-				buildModel(tmp, depth+1, modelDepth+1, pr)
+				err := buildModel(tmp, depth+1, modelDepth+1, pr)
+				if err != nil {
+					return err
+				}
 			}
 			pr.Pop().Put("],")
 		}
@@ -288,12 +305,16 @@ func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) 
 		} else {
 			pr.Put("slot: [").Push()
 			for _, tmp := range slots {
-				buildModel(tmp, depth+1, modelDepth+1, pr)
+				err := buildModel(tmp, depth+1, modelDepth+1, pr)
+				if err != nil {
+					return err
+				}
 			}
 			pr.Pop().Put("],")
 		}
 	}
 	pr.Pop().Put("},")
+	return nil
 }
 
 func buildPageModel(page com.Component) string {
@@ -307,16 +328,18 @@ func buildPageModel(page com.Component) string {
 //go:embed js/*.js
 var jsEmbed embed.FS
 
-func MakePage(c *gin.Context, title string, page *root.Component, baseUrl string, mm map[string]string) {
-	if mm == nil {
-		mm = make(map[string]string)
-	}
+func MakePage(c *gin.Context, title string, page *root.Component, baseUrl string) {
 	eventJs, _ := jsEmbed.ReadFile("js/_event.js")
 	propertyJs, _ := jsEmbed.ReadFile("js/_property.js")
 	scrollbarJs, _ := jsEmbed.ReadFile("js/_scrollbar.js")
 	componentJs, _ := jsEmbed.ReadFile("js/_component.js")
 	pageJs, _ := jsEmbed.ReadFile("js/_page.js")
-	classes := buildClasses(page, mm)
+	classes, err := buildClasses(page)
+	if err != nil {
+		log.ErrorLog("fail to make page: %v", err)
+		c.String(http.StatusInternalServerError, fmt.Sprintf("fail to make page: %v", err))
+		return
+	}
 	model := buildPageModel(page)
 	s := []string{string(eventJs), string(propertyJs), string(scrollbarJs), string(componentJs), string(pageJs), classes, model}
 	ss := strings.Join(strings.Split(strings.Join(s, "\n"), "\n"), "\n        ")
@@ -347,14 +370,12 @@ func MakePage(c *gin.Context, title string, page *root.Component, baseUrl string
     <script>
         <xxx>
         page.create();
-		<xxx2>
     </script>
 </body>
 </html>`
 	}
 	template = strings.ReplaceAll(template, "<ttt>", title)
 	ss = strings.ReplaceAll(template, "<xxx>", ss)
-	ss = strings.ReplaceAll(ss, "<xxx2>", mm[""])
 	html := strings.ReplaceAll(ss, "<base_url>", baseUrl)
 	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(html))
 }

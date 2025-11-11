@@ -31,7 +31,7 @@ func TestContainer(t *testing.T) {
 						Virtual(true).
 						Scrollable(true).Contains().BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"),
 				).OnCreated("Root.onCreated")
-				page.MakePage(c, "debug5", comp, baseUrl, map[string]string{})
+				page.MakePage(c, "debug5", comp, baseUrl)
 			})
 			//r.GET("/2", func(c *gin.Context) {
 			//	comp := root.Root("", container.Container().Scrollable(true).Contains(

@@ -1,10 +1,5 @@
 package com
 
-import (
-	"github.com/lincaiyong/log"
-	"strings"
-)
-
 func NewBaseComponent[T any](tag string, self *T, children ...Component) *BaseComponent[T] {
 	return &BaseComponent[T]{
 		extraInfo: ExtraInfo{
@@ -35,10 +30,7 @@ type BaseComponent[T any] struct {
 }
 
 func (b *BaseComponent[T]) Name() string {
-	if b.name != "" {
-		return b.name
-	}
-	return b.tag
+	return b.name
 }
 
 func (b *BaseComponent[T]) ExtraInfo() *ExtraInfo {
@@ -66,9 +58,6 @@ func (b *BaseComponent[T]) SetProp(k, v string) {
 }
 
 func (b *BaseComponent[T]) NameAs(name string) *T {
-	if !strings.HasSuffix(name, "Ele") {
-		log.FatalLog("invalid element name: %s", name)
-	}
 	b.name = name
 	return b.self
 }

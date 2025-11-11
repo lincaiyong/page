@@ -19,7 +19,7 @@ func TestHello(t *testing.T) {
 					"",
 					text.Text("'hello world'").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"),
 				)
-				page.MakePage(c, "debug", comp, baseUrl, nil)
+				page.MakePage(c, "debug", comp, baseUrl)
 			})
 			r.GET("/2", func(c *gin.Context) {
 				comp := root.Root(
@@ -35,7 +35,7 @@ function handleClick() {
 						OnUpdated("() => Root.test('onUpdated')").
 						OnClick("Root.handleClick"),
 				)
-				page.MakePage(c, "debug", comp, baseUrl, nil)
+				page.MakePage(c, "debug", comp, baseUrl)
 			})
 			return nil
 		},

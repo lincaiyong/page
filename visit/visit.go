@@ -2,7 +2,6 @@ package visit
 
 import (
 	"fmt"
-	"github.com/lincaiyong/log"
 	"github.com/lincaiyong/page/parser"
 	"sort"
 	"strings"
@@ -22,6 +21,9 @@ func Visit(node *parser.Node) (string, string, error) {
 		m: map[string]struct{}{},
 	}
 	expr := v.visit(node)
+	if v.err != nil {
+		return "", "", v.err
+	}
 	var s []string
 	for k := range v.m {
 		s = append(s, k)
@@ -31,7 +33,8 @@ func Visit(node *parser.Node) (string, string, error) {
 }
 
 type Visitor struct {
-	m map[string]struct{}
+	m   map[string]struct{}
+	err error
 }
 
 func (v *Visitor) visit(node *parser.Node) string {
@@ -93,7 +96,7 @@ func (v *Visitor) visit(node *parser.Node) string {
 		}
 		return i
 	default:
-		log.FatalLog("visit: %v", node.Type())
+		v.err = fmt.Errorf("fail to visit unknown node type: %s", node.Type())
 		return ""
 	}
 }
