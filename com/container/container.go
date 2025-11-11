@@ -8,14 +8,14 @@ import (
 	"strconv"
 )
 
-func Container(item *containeritem.Component) *Component {
+func Container(compute, update string, children ...com.Component) *Component {
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
 		scrollbar.HScrollbar().NameAs("hBarEle"),
 		scrollbar.VScrollbar().NameAs("vBarEle"),
 	)
 	ret.ScrollLeft("0").ScrollTop("0")
-	ret.Contains(item)
+	ret.Contains(containeritem.ContainerItem(compute, update, children...))
 	return ret
 }
 

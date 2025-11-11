@@ -6,7 +6,6 @@ import (
 	"github.com/lincaiyong/daemon/common"
 	"github.com/lincaiyong/page"
 	"github.com/lincaiyong/page/com/container"
-	"github.com/lincaiyong/page/com/containeritem"
 	"github.com/lincaiyong/page/com/div"
 	"github.com/lincaiyong/page/com/root"
 	"github.com/lincaiyong/page/com/text"
@@ -23,11 +22,9 @@ func TestContainer(t *testing.T) {
 			r.GET("/res/*filepath", page.HandleRes(baseUrl))
 			r.GET("/1", func(c *gin.Context) {
 				comp := root.Root(rootJs,
-					container.Container(
-						containeritem.ContainerItem("Root.computeItem", "Root.updateItem",
-							div.Div().OnHover("Root.onHover").Contains(
-								text.Text("''").NameAs("textEle"),
-							),
+					container.Container("Root.computeItem", "Root.updateItem",
+						div.Div().OnHover("Root.onHover").Contains(
+							text.Text("''").NameAs("textEle"),
 						),
 					).NameAs("containerEle").
 						List(true).

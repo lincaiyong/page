@@ -272,7 +272,7 @@ func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) 
 		}
 		children := comp.Children()
 		slots := comp.Slots()
-		if comp.SlotsAsChildren() {
+		if s == "Div" {
 			children = slots
 			slots = nil
 		}

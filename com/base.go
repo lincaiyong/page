@@ -21,22 +21,13 @@ func NewBaseComponent[T any](tag string, self *T, children ...Component) *BaseCo
 }
 
 type BaseComponent[T any] struct {
-	extraInfo       ExtraInfo
-	self            *T
-	name            string
-	tag             string
-	children        []Component
-	slots           []Component
-	props           map[string]string
-	slotsAsChildren bool
-}
-
-func (b *BaseComponent[T]) SetSlotsAsChildren() {
-	b.slotsAsChildren = true
-}
-
-func (b *BaseComponent[T]) SlotsAsChildren() bool {
-	return b.slotsAsChildren
+	extraInfo ExtraInfo
+	self      *T
+	name      string
+	tag       string
+	children  []Component
+	slots     []Component
+	props     map[string]string
 }
 
 func (b *BaseComponent[T]) Name() string {

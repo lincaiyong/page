@@ -7,7 +7,6 @@ type Component interface {
 	Props() map[string]string
 	Children() []Component
 	Slots() []Component
-	SlotsAsChildren() bool
 }
 
 type ExtraInfo struct {
