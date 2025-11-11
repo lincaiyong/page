@@ -11,8 +11,7 @@ import (
 func main() {
 	com.BaseUrl = ""
 	comp := Root(
-		Div().NameAs("headerEle").H("34").BgColor(ColorBlack),
-		Div().Y("prev.y2").H("parent.h-prev.h-next.h").SetSlots(
+		Div().H("parent.h-next.h").SetSlots(
 			Div().NameAs("leftSideEle").W("32").SetSlots(
 				Button().OnClick("Root.handleClick"),
 			),
