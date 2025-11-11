@@ -26,12 +26,19 @@ func goland(c *gin.Context) {
 				Div().NameAs("rightSideEle").X("parent.w-.w").W("32").BgColor(ColorCyan).Opacity("0.1"),
 			),
 			Div().NameAs("footerEle").Y("parent.h-.h").H("24").BgColor(ColorYellow).Opacity("0.1"),
-			Img("'img/goland.png'").NameAs("imgEle").Opacity("0.4"),
+			Img("'img/goland.png'").NameAs("imgEle"),
 		),
 		Button().OnClick("Root.handleClick").Y("prev.y2").X("parent.w/2-.w/2"),
+		Button().OnClick("Root.handleClick2").Y("prev.y2").X("parent.w/2-.w/2"),
 	).Code(`
 function handleClick() {
-	page.root.imgEle.v = !page.root.imgEle.v; 
+	const img = page.root.imgEle;
+	img.v = !img.v;
+}
+
+function handleClick2() {
+	const img = page.root.imgEle;
+	img.opacity = img.opacity >= 1 ? 0.4 : img.opacity + 0.3;
 }`)
 	page.MakePage(c, "goland", comp)
 }
