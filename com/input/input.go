@@ -4,13 +4,13 @@ import "github.com/lincaiyong/page/com"
 
 func Input() *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent("input", ret)
+	ret.BaseComponent = com.NewBaseComponent[Component]("input", ret)
 	ret.LineHeight(".h").FontSize("Math.floor(.h * 2 / 3)")
 	return ret
 }
 
 type Component struct {
-	*com.BaseComponent
+	*com.BaseComponent[Component]
 	placeholder com.Property
 	onUpdated   com.Method
 }

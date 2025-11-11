@@ -6,7 +6,7 @@ import (
 
 func create() *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent("div", ret)
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret)
 	ret.OnMouseDown("e.handleMouseDown").ZIndex("1")
 	return ret
 }
@@ -26,7 +26,7 @@ func HBar() *Component {
 }
 
 type Component struct {
-	*com.BaseComponent
+	*com.BaseComponent[Component]
 	leftRight       com.Property `default:"[undefined, undefined]"`
 	topBottom       com.Property `default:"[undefined, undefined]"`
 	onUpdated       com.Method

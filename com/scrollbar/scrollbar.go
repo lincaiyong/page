@@ -7,7 +7,7 @@ import (
 
 func create() *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent("div", ret)
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret)
 	ret.ZIndex("1").
 		BackgroundColor("page.theme.scrollbarBgColor").
 		Opacity("0.5").
@@ -34,7 +34,7 @@ func HScrollbar() *Component {
 }
 
 type Component struct {
-	*com.BaseComponent
+	*com.BaseComponent[Component]
 	showLeft com.Property `type:"bool"`
 	showTop  com.Property `type:"bool"`
 	vertical com.Property `type:"bool"`

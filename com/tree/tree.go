@@ -7,7 +7,7 @@ import (
 	"github.com/lincaiyong/page/com/div"
 )
 
-func Tree() *TreeComponent {
+func Tree() *Component {
 	/*
 	   selectedEle:div(x=10, y=this.selectedChildTop-next.scrollTop, w=parent.w-20, h=this.itemHeight, borderRadius=4,
 	       backgroundColor=this.focus ? webapp.theme.treeFocusSelectedBgColor : webapp.theme.treeSelectedBgColor,
@@ -20,8 +20,8 @@ func Tree() *TreeComponent {
 	       }
 	   }
 	*/
-	ret := &TreeComponent{}
-	ret.BaseComponent = com.NewBaseComponent("div", ret,
+	ret := &Component{}
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
 		div.Div().X("10").Y("this.selectedChildTop-next.scrollTop").W("parent.w-20").H("this.itemHeight").BorderRadius("4").
 			BackgroundColor("this.focus ? page.theme.treeFocusSelectedBgColor : page.theme.treeSelectedBgColor"),
 		container.Container().List(true).Virtual(true).Align("'fill'").X("10").W("parent.w - .x").Contains(
@@ -31,8 +31,8 @@ func Tree() *TreeComponent {
 	return ret
 }
 
-type TreeComponent struct {
-	*com.BaseComponent
+type Component struct {
+	*com.BaseComponent[Component]
 	focus            com.Property `type:"bool"`
 	items            com.Property `type:"array"`
 	nodeMap          com.Property `type:"object"`
@@ -48,17 +48,17 @@ type TreeComponent struct {
 	//sortChildren     com.StaticMethod
 }
 
-func (b *TreeComponent) Focus(v bool) *TreeComponent {
+func (b *Component) Focus(v bool) *Component {
 	b.Props()["focus"] = fmt.Sprintf("%v", v)
 	return b
 }
 
-func (b *TreeComponent) Items(s string) *TreeComponent {
+func (b *Component) Items(s string) *Component {
 	b.Props()["items"] = s
 	return b
 }
 
-func (b *TreeComponent) NodeMap(s string) *TreeComponent {
+func (b *Component) NodeMap(s string) *Component {
 	b.Props()["nodeMap"] = s
 	return b
 }

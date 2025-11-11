@@ -6,7 +6,7 @@ import (
 
 func ContainerItem(compute, onUpdated string) *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent("div", ret)
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret)
 	ret.BaseComponent.SetSlotsAsChildren()
 	ret.Y("0").X("0")
 	ret.Props()["computeFn"] = compute
@@ -15,7 +15,7 @@ func ContainerItem(compute, onUpdated string) *Component {
 }
 
 type Component struct {
-	*com.BaseComponent
+	*com.BaseComponent[Component]
 	data      com.Property `type:"object"`
 	onUpdated com.Method
 }

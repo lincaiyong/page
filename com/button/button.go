@@ -9,7 +9,7 @@ import (
 
 func Button() *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent("div", ret,
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
 		img.Svg().Src("parent.icon").X("4").Y(".x").W("parent.w - 2 * .x").H(".w").Color("parent.color"),
 		div.Div().X("prev.x2 - .w + 1").Y("prev.y - 1").W("6").H(".w").V("0").BorderRadius("3"),
 	)
@@ -22,7 +22,7 @@ func Button() *Component {
 }
 
 type Component struct {
-	*com.BaseComponent
+	*com.BaseComponent[Component]
 	flag         com.Property `type:"string"`
 	icon         com.Property `default:"'svg/el/folder.svg'"`
 	selected     com.Property `type:"bool"`

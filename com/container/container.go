@@ -9,7 +9,7 @@ import (
 
 func Container() *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent("div", ret,
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
 		scrollbar.HScrollbar().NameAs("hBarEle"),
 		scrollbar.VScrollbar().NameAs("vBarEle"),
 	)
@@ -18,7 +18,7 @@ func Container() *Component {
 }
 
 type Component struct {
-	*com.BaseComponent
+	*com.BaseComponent[Component]
 	align              com.Property `default:"'none'"`
 	childHeight        com.Property `type:"number"`
 	childWidth         com.Property `type:"number"`

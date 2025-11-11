@@ -4,18 +4,18 @@ import "github.com/lincaiyong/page/com"
 
 func Img() *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent("img", ret)
+	ret.BaseComponent = com.NewBaseComponent[Component]("img", ret)
 	return ret
 }
 
 func Svg() *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent("svg", ret)
+	ret.BaseComponent = com.NewBaseComponent[Component]("svg", ret)
 	return ret
 }
 
 type Component struct {
-	*com.BaseComponent
+	*com.BaseComponent[Component]
 	src       com.Property `type:"string"`
 	onUpdated com.Method
 }
