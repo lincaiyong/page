@@ -13,6 +13,7 @@ func main() {
 	comp := Root(
 		//Editor().NameAs("editorEle"),
 		Button().OnClick("Root.handleClick"),
+		Tree().Y("prev.y2").H("parent.h-.y").NameAs("treeEle"),
 	).OnCreated("Root.test").
 		Code(`
 function test() {
@@ -23,8 +24,14 @@ function test() {
 	//});
 }
 function handleClick() {
-	go.main.App.SelectFolder();
-	go.main.App.Log('hello world!');
+	go.main.App.SelectFolder().then(s => {
+		const obj = JSON.parse(s)
+		Root.log(obj);
+		page.root.treeEle.items = obj.files;
+	});
+}
+function log(v) {
+	go.main.App.Log(v);
 }
 `)
 	html, err := page.MakeHtml("CodeEdge", comp)

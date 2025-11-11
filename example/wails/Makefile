@@ -7,7 +7,7 @@ rebuild: clean all
 .PHONY: target
 target: build/bin/CodeEdge.app/Contents/MacOS/codeedge
 
-build/bin/CodeEdge.app/Contents/MacOS/codeedge: main.go
+build/bin/CodeEdge.app/Contents/MacOS/codeedge: $(shell ls *.go)
 	rm -rf build/bin/demo.app/Contents/MacOS/demo
 	wails build
 

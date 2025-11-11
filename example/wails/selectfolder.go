@@ -2,44 +2,43 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/lincaiyong/log"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"io/fs"
-	"os"
 	"path/filepath"
+	"strings"
 )
 
 func (a *App) SelectFolder() string {
-	//logOutput(a.ctx, "select folder")
+	log.DebugLog("select folder...")
 	opts := runtime.OpenDialogOptions{
 		Title: "选择项目",
 	}
-	entry, err := runtime.OpenDirectoryDialog(a.ctx, opts)
+	folder, err := runtime.OpenDirectoryDialog(a.ctx, opts)
 	if err != nil {
-		//logOutput(a.ctx, fmt.Sprintf("OpenDirectoryDialog error: %v", err))
+		log.ErrorLog("fail to OpenDirectoryDialog: %v", err)
 		return ""
 	}
-	//logOutput(a.ctx, entry)
-	files := map[string]string{}
-	err = filepath.WalkDir(entry, func(path string, d fs.DirEntry, err error) error {
+	log.DebugLog("folder: %s", folder)
+	var files []string
+	err = filepath.WalkDir(folder, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
+		if d.IsDir() && strings.HasPrefix(d.Name(), ".") {
+			return fs.SkipDir
+		}
 		if !d.IsDir() {
-			var b []byte
-			b, err = os.ReadFile(path)
-			if err != nil {
-				return err
-			}
-			files[path] = string(b)
+			relPath, _ := filepath.Rel(folder, path)
+			files = append(files, relPath)
 		}
 		return nil
 	})
 	data := map[string]any{
-		"folder": entry,
+		"folder": folder,
 		"files":  files,
 	}
 	ret, _ := json.Marshal(data)
-	//logOutput(a.ctx, string(ret))
-
+	log.DebugLog("result: %s", string(ret))
 	return string(ret)
 }

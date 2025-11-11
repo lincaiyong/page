@@ -18,7 +18,7 @@ func Tree() *Component {
 		container.VListContainer(
 			img.Img("parent.data.collapsed ? 'svg/el/arrow-right.svg' : 'svg/el/arrow-down.svg'").X("parent.data.depth * 20 + 4").Y("5").W("11").H(".w").V("parent.data.leaf ? 0 : 1"),
 			img.Img("parent.data.leaf ? 'svg/x/file.svg' : 'svg/x/folder.svg'").X("next.x-18").Y("4").W("14").H(".w"),
-			text.Text("parent.data.text").X("parent.data.depth * 20 + 40").Y("2").H("this.itemHeight - 2 * .y"),
+			text.Text("parent.data.text").X("parent.data.depth * 20 + 40").Y("2").H("this.itemHeight - 2 * .y").Cursor("'default'"),
 		).Align("'fill'").X("10").W("parent.w - .x").
 			NameAs("containerEle").
 			ItemCompute("Tree.computeItem").

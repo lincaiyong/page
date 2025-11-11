@@ -881,6 +881,8 @@ class Component {
         if (this.userSelect !== v) {
             this._properties.userSelect.value = v;
             this.ref.style.userSelect = v;
+            this.ref.style['-webkit-user-select'] = v;
+            this.ref.style['-ms-user-select'] = v;
         }
     }
 

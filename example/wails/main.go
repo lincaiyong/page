@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"github.com/lincaiyong/log"
 	"github.com/wailsapp/wails/v2"
@@ -37,8 +38,10 @@ func main() {
 				Icon:    icon,
 			},
 		},
-		OnStartup: Startup,
-		Bind:      []any{&app},
+		OnStartup: func(ctx context.Context) {
+			app.ctx = ctx
+		},
+		Bind: []any{&app},
 	})
 	if err != nil {
 		log.ErrorLog("fail to start: %v", err)
