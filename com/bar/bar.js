@@ -1,10 +1,12 @@
 function handleMouseDown(ele, mouseDownEvent) {
-    const [left, right] = ele.leftRight;
-    const [top, bottom] = ele.topBottom;
+    const prevEle = ele._('prev');
+    const nextEle = ele._('next');
+    const [left, right] = [prevEle, nextEle];
+    const [top, bottom] = [prevEle, nextEle];
     const state = {prevX: mouseDownEvent.clientX, prevY: mouseDownEvent.clientY};
     const cancelMouseMoveListener = page.event.addListener(window, 'mousemove', ev => {
         const safeDist = 80;
-        if (left && right) {
+        if (ele.cursor === 'col-resize') {
             const newX = ele.x + ev.clientX - state.prevX;
             state.prevX = ev.clientX;
             if (newX < left.x + safeDist) {
@@ -14,7 +16,7 @@ function handleMouseDown(ele, mouseDownEvent) {
             } else {
                 ele.x = newX;
             }
-        } else if (top && bottom) {
+        } else {
             const newY = ele.y + ev.clientY - state.prevY;
             state.prevY = ev.clientY;
             if (newY < top.y + safeDist) {
