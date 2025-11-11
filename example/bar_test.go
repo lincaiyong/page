@@ -21,14 +21,20 @@ func TestBar(t *testing.T) {
 			r.GET("/res/*filepath", page.HandleRes(baseUrl))
 			r.GET("/", func(c *gin.Context) {
 				comp := root.Root("", div.Div().Contains(
-					editor.Editor().X("20").Y("20").W("800").H("next.y - .y").BackgroundColor("'blue'"),
-					bar.HBar().Y("200").W("parent.w").H("20").Opacity("0.1"),
-					div.Div().X("20").Y("prev.y2").W("800").H("400").BackgroundColor("'yellow'").Contains(
-						text.Text("'hello world!'").H("200"),
+					div.Div().W("next.x").Contains(
+						editor.Editor().X("20").Y("0").W("800").H("next.y - .y").BackgroundColor("'blue'"),
+						bar.HBar().BackgroundColor("'blue'").Opacity("0.1").Y("parent.h/2").W("parent.w"),
+						div.Div().X("20").Y("prev.y2").W("800").H("parent.h-prev.y2").BackgroundColor("'yellow'").Contains(
+							text.Text("'hello world!'").H("200"),
+						),
 					),
-					compare.Compare().X("800").Y("20").W("400").H("400").BackgroundColor("'red'"),
-					div.Div().X("prev.x2").Y("prev.y2").W("40").H("40").BackgroundColor("'green'"),
-					button.Button().Icon("'svg/el/folder.svg'").X("prev.x2").Y("prev.y2 + 100").W("40").H("40"),
+					bar.VBar().X("parent.w/2").BackgroundColor("'blue'").Opacity("0.1"),
+					div.Div().X("prev.x2").W("parent.w-prev.x2").Contains(
+						compare.Compare().Y("0").H("next.y").BackgroundColor("'red'"),
+						bar.HBar().BackgroundColor("'blue'").Opacity("0.1").Y("parent.h/2").W("parent.w"),
+						div.Div().Y("prev.y2").W("40").H("40").BackgroundColor("'green'"),
+						button.Button().Icon("'svg/el/folder.svg'").X("prev.x2").Y("prev.y2 + 100").W("40").H("40"),
+					),
 				))
 				page.MakePage(c, "debug", comp, baseUrl)
 			})

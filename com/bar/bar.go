@@ -25,6 +25,5 @@ func HBar() *Component {
 
 type Component struct {
 	*com.BaseComponent[Component]
-	onUpdated       com.Method
 	handleMouseDown com.Method
 }
