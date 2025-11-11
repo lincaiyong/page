@@ -23,16 +23,10 @@ func Button() *Component {
 
 type Component struct {
 	*com.BaseComponent[Component]
-	flag         com.Property `type:"string"`
 	icon         com.Property `default:"'svg/el/folder.svg'"`
-	selected     com.Property `type:"bool"`
+	selected     com.Property `default:"false"`
 	handleHover  com.Method
 	handleActive com.Method
-}
-
-func (b *Component) Flag(s string) *Component {
-	b.SetProp("flag", s)
-	return b
 }
 
 func (b *Component) Icon(s string) *Component {

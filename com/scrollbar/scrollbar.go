@@ -35,9 +35,9 @@ func HScrollbar() *Component {
 
 type Component struct {
 	*com.BaseComponent[Component]
-	showLeft com.Property `type:"bool"`
-	showTop  com.Property `type:"bool"`
-	vertical com.Property `type:"bool"`
+	showLeft com.Property `default:"false"`
+	showTop  com.Property `default:"false"`
+	vertical com.Property `default:"false"`
 }
 
 func (b *Component) ShowLeft(v bool) *Component {

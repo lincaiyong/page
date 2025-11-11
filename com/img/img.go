@@ -16,7 +16,7 @@ func Svg() *Component {
 
 type Component struct {
 	*com.BaseComponent[Component]
-	src       com.Property `type:"string"`
+	src       com.Property `default:"''"`
 	onUpdated com.Method
 }
 

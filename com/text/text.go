@@ -15,7 +15,7 @@ func Text(text string) *Component {
 type Component struct {
 	*com.BaseComponent[Component]
 	align     com.Property `default:"'left'"`
-	text      com.Property `type:"string"`
+	text      com.Property `default:"''"`
 	onUpdated com.Method
 }
 

@@ -190,9 +190,9 @@ func buildClasses(page com.Component) (string, error) {
 				switch tn {
 				case "Property":
 					info.SetProperties(append(info.Properties(), field.Name))
-					v, err := defaultValue(field.Tag.Get("type"), field.Tag.Get("default"))
-					if err != nil {
-						return "", err
+					v := field.Tag.Get("default")
+					if v == "" {
+						return "", fmt.Errorf("default value is required: %s", field.Name)
 					}
 					info.SetDefaultValue(field.Name, v)
 				case "Method":

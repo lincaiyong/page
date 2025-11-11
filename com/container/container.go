@@ -47,18 +47,18 @@ func Container(child com.Component) *Component {
 type Component struct {
 	*com.BaseComponent[Component]
 	align              com.Property `default:"'none'"`
-	childHeight        com.Property `type:"number"`
-	childWidth         com.Property `type:"number"`
-	items              com.Property `type:"array"`
-	list               com.Property `type:"bool"`
-	minWidth           com.Property `type:"number"`
-	reuseItem          com.Property `type:"bool"`
+	childHeight        com.Property `default:"0"`
+	childWidth         com.Property `default:"0"`
+	items              com.Property `default:"[]"`
+	list               com.Property `default:"false"`
+	minWidth           com.Property `default:"0"`
+	reuseItem          com.Property `default:"false"`
 	scrollBarFadeTime  com.Property `default:"500"`
 	scrollBarMinLength com.Property `default:"20"`
 	scrollBarWidth     com.Property `default:"6"`
-	scrollBarMargin    com.Property `type:"number"`
+	scrollBarMargin    com.Property `default:"0"`
 	scrollable         com.Property `default:"true"`
-	virtual            com.Property `type:"bool"`
+	virtual            com.Property `default:"false"`
 	onCreated          com.Method
 	_updateList        com.Method
 	onUpdated          com.Method

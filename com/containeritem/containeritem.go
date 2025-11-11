@@ -19,7 +19,7 @@ func ContainerItem(compute, update string, children ...com.Component) *Component
 
 type Component struct {
 	*com.BaseComponent[Component]
-	data      com.Property `type:"object"`
+	data      com.Property `default:"undefined"`
 	compute   com.Property `default:"null"`
 	update    com.Property `default:"null"`
 	onUpdated com.Method

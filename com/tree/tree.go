@@ -28,12 +28,12 @@ func Tree() *Component {
 
 type Component struct {
 	*com.BaseComponent[Component]
-	focus            com.Property `type:"bool"`
-	items            com.Property `type:"array"`
-	nodeMap          com.Property `type:"object"`
-	onClickItem      com.Property `type:"element"`
-	selectedChildTop com.Property `type:"number"`
-	itemHeight       com.Property `type:"number"`
+	focus            com.Property `default:"false"`
+	items            com.Property `default:"[]"`
+	nodeMap          com.Property `default:"undefined"`
+	onClickItem      com.Property `default:"undefined"`
+	selectedChildTop com.Property `default:"0"`
+	itemHeight       com.Property `default:"0"`
 	onCreated        com.Method
 	onUpdated        com.Method
 	makeNodeMap      com.Method
