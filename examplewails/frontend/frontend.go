@@ -20,7 +20,7 @@ func main() {
 					Tree().NameAs("treeEle").OnClickItem("Root.clickTreeItem"),
 				),
 				VBar().X("parent.w/3").BgColor(ColorYellow).Opacity("0.1"),
-				Div().NameAs("mainEle").X("prev.x2").W("parent.w-.x2").SetSlots(
+				Div().NameAs("mainEle").X("prev.x2").W("parent.w-prev.x2").SetSlots(
 					Editor().NameAs("editorEle"),
 				),
 			),

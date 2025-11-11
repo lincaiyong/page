@@ -6,6 +6,6 @@ function sortChildren(node) {
             }
             return a.children.length > 0 ? -1 : 1;
         });
-        node.children.forEach(TreeComponent.sortChildren);
+        node.children.forEach(Tree.sortChildren);
     }
 }
