@@ -1,4 +1,4 @@
-function compute(container, idx, prev) {
+function computeItem(container, idx, prev) {
     return {
         key: ''+idx,
         x: 0,
@@ -9,9 +9,9 @@ function compute(container, idx, prev) {
     }
 }
 
-function onUpdated(k, v) {
+function updateItem(itemEle, k, v) {
     if (k === 'data') {
-        this.children[0].children[0].text = v.text;
+        itemEle.textEle.text = v.text;
     }
 }
 

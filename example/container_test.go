@@ -24,9 +24,9 @@ func TestContainer(t *testing.T) {
 			r.GET("/1", func(c *gin.Context) {
 				comp := root.Root(rootJs,
 					container.Container(
-						containeritem.ContainerItem("Root.compute").OnUpdated("Root.onUpdated").Contains(
+						containeritem.ContainerItem("Root.computeItem", "Root.updateItem",
 							div.Div().OnHover("Root.onHover").Contains(
-								text.Text("''"),
+								text.Text("''").NameAs("textEle"),
 							),
 						),
 					).NameAs("containerEle").
