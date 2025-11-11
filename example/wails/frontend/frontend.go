@@ -10,14 +10,20 @@ import (
 
 func main() {
 	com.BaseUrl = ""
-	comp := Root(Editor().NameAs("editorEle")).OnCreated("Root.test").
+	comp := Root(
+		//Editor().NameAs("editorEle"),
+		Button().OnClick("Root.handleClick"),
+	).OnCreated("Root.test").
 		Code(`
 function test() {
-	setTimeout(function() {
-		const editor = page.root.editorEle;
-		editor.setValue('package main\n\nfunc main() {\n\n}');
-		editor.setLanguage('go');
-	});
+	//setTimeout(function() {
+	//	const editor = page.root.editorEle;
+	//	editor.setValue('package main\n\nfunc main() {\n\n}');
+	//	editor.setLanguage('go');
+	//});
+}
+function handleClick() {
+	go.main.App.SelectFolder();
 }
 `)
 	html, err := page.MakeHtml("CodeEdge", comp)
