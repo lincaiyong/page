@@ -16,6 +16,6 @@ type Component struct {
 }
 
 func (b *Component) Placeholder(s string) *Component {
-	b.Props()["placeholder"] = s
+	b.SetProp("placeholder", s)
 	return b
 }

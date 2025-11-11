@@ -52,20 +52,20 @@ func (e *ExtraInfo) SetStaticMethods(staticMethods []string) {
 	e.staticMethods = staticMethods
 }
 
-func (e *ExtraInfo) BindJs() map[string]string {
-	return e.bindJs
+func (e *ExtraInfo) GetBindJs(k string) string {
+	return e.bindJs[k]
 }
 
-func (e *ExtraInfo) SetBindJs(bindJs map[string]string) {
-	e.bindJs = bindJs
+func (e *ExtraInfo) SetBindJs(k, v string) {
+	e.bindJs[k] = v
 }
 
-func (e *ExtraInfo) DefaultValue() map[string]string {
-	return e.defaultValue
+func (e *ExtraInfo) GetDefaultValue(k string) string {
+	return e.defaultValue[k]
 }
 
-func (e *ExtraInfo) SetDefaultValue(defaultValue map[string]string) {
-	e.defaultValue = defaultValue
+func (e *ExtraInfo) SetDefaultValue(k, v string) {
+	e.defaultValue[k] = v
 }
 
 func (e *ExtraInfo) ThisComponent() Component {

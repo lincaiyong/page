@@ -70,7 +70,7 @@ func genClassCode(info *com.ExtraInfo, namedChildren map[string]map[string][]int
 			} else {
 				pr.Put("model.properties = Object.assign({").Push()
 				for _, property := range info.Properties() {
-					pr.Put("%s: [e => %s, []],", property, info.DefaultValue()[property])
+					pr.Put("%s: [e => %s, []],", property, info.GetDefaultValue(property))
 				}
 				pr.Pop().Put("}, model.properties);")
 			}
@@ -78,11 +78,11 @@ func genClassCode(info *com.ExtraInfo, namedChildren map[string]map[string][]int
 		}
 		pr.Pop().Put("}")
 		for _, method := range info.Methods() {
-			code := readFunction(method, info.BindJs()[method])
+			code := readFunction(method, info.GetBindJs(method))
 			pr.Put(code)
 		}
 		for _, method := range info.StaticMethods() {
-			code := readFunction(method, info.BindJs()[method])
+			code := readFunction(method, info.GetBindJs(method))
 			pr.Put("static " + code)
 		}
 		for _, property := range info.Properties() {
@@ -171,8 +171,6 @@ func buildClasses(page com.Component, mm map[string]string) string {
 	for n, comp := range compMap {
 		keys = append(keys, n)
 		info := comp.ExtraInfo()
-		info.SetBindJs(map[string]string{})
-		info.SetDefaultValue(map[string]string{})
 		struct_ := reflect.TypeOf(comp).Elem()
 		for i := 0; i < struct_.NumField(); i++ {
 			field := struct_.Field(i)
@@ -181,7 +179,7 @@ func buildClasses(page com.Component, mm map[string]string) string {
 				switch tn {
 				case "Property":
 					info.SetProperties(append(info.Properties(), field.Name))
-					info.DefaultValue()[field.Name] = defaultValue(field.Tag.Get("type"), field.Tag.Get("default"))
+					info.SetDefaultValue(field.Name, defaultValue(field.Tag.Get("type"), field.Tag.Get("default")))
 				case "Method":
 					info.SetMethods(append(info.Methods(), field.Name))
 					code := mm[fmt.Sprintf("%s_%s", n, field.Name)]
@@ -191,7 +189,7 @@ func buildClasses(page com.Component, mm map[string]string) string {
 							log.FatalLog("fail to get js code: %s %s", n, field.Name)
 						}
 					}
-					info.BindJs()[field.Name] = code
+					info.SetBindJs(field.Name, code)
 				case "StaticMethod":
 					info.SetStaticMethods(append(info.StaticMethods(), field.Name))
 					code := mm[fmt.Sprintf("%s_%s", n, field.Name)]
@@ -201,7 +199,7 @@ func buildClasses(page com.Component, mm map[string]string) string {
 							log.FatalLog("fail to get js code: %s %s", n, field.Name)
 						}
 					}
-					info.BindJs()[field.Name] = code
+					info.SetBindJs(field.Name, code)
 				default:
 					log.FatalLog("invalid field type: %s", tn)
 				}

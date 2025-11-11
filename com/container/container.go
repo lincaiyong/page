@@ -40,56 +40,56 @@ type Component struct {
 }
 
 func (b *Component) Align(s string) *Component {
-	b.Props()["align"] = s
+	b.SetProp("align", s)
 	return b
 }
 
 func (b *Component) ChildHeight(v int) *Component {
-	b.Props()["childHeight"] = strconv.Itoa(v)
+	b.SetProp("childHeight", strconv.Itoa(v))
 	return b
 }
 
 func (b *Component) ChildWidth(v int) *Component {
-	b.Props()["childWidth"] = strconv.Itoa(v)
+	b.SetProp("childWidth", strconv.Itoa(v))
 	return b
 }
 
 func (b *Component) List(v bool) *Component {
-	b.Props()["list"] = fmt.Sprintf("%v", v)
+	b.SetProp("list", fmt.Sprintf("%v", v))
 	return b
 }
 
 func (b *Component) MinWidth(v int) *Component {
-	b.Props()["minWidth"] = strconv.Itoa(v)
+	b.SetProp("minWidth", strconv.Itoa(v))
 	return b
 }
 
 func (b *Component) ReuseItem(v bool) *Component {
-	b.Props()["reuseItem"] = fmt.Sprintf("%v", v)
+	b.SetProp("reuseItem", fmt.Sprintf("%v", v))
 	return b
 }
 
 func (b *Component) ScrollBarFadeTime(v int) *Component {
-	b.Props()["scrollBarFadeTime"] = strconv.Itoa(v)
+	b.SetProp("scrollBarFadeTime", strconv.Itoa(v))
 	return b
 }
 
 func (b *Component) ScrollBarMinLength(v int) *Component {
-	b.Props()["scrollBarMinLength"] = strconv.Itoa(v)
+	b.SetProp("scrollBarMinLength", strconv.Itoa(v))
 	return b
 }
 
 func (b *Component) ScrollBarWidth(v int) *Component {
-	b.Props()["scrollBarWidth"] = strconv.Itoa(v)
+	b.SetProp("scrollBarWidth", strconv.Itoa(v))
 	return b
 }
 
 func (b *Component) Scrollable(v bool) *Component {
-	b.Props()["scrollable"] = fmt.Sprintf("%v", v)
+	b.SetProp("scrollable", fmt.Sprintf("%v", v))
 	return b
 }
 
 func (b *Component) Virtual(v bool) *Component {
-	b.Props()["virtual"] = fmt.Sprintf("%v", v)
+	b.SetProp("virtual", fmt.Sprintf("%v", v))
 	return b
 }

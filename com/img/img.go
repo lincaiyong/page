@@ -21,6 +21,6 @@ type Component struct {
 }
 
 func (b *Component) Src(s string) *Component {
-	b.Props()["src"] = s
+	b.SetProp("src", s)
 	return b
 }

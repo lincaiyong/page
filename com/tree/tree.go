@@ -19,7 +19,7 @@ func Tree() *Component {
 	   }
 	*/
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret)//div.Div().X("10").Y("this.selectedChildTop-next.scrollTop").W("parent.w-20").H("this.itemHeight").BorderRadius("4").
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret) //div.Div().X("10").Y("this.selectedChildTop-next.scrollTop").W("parent.w-20").H("this.itemHeight").BorderRadius("4").
 	//	BackgroundColor("this.focus ? page.theme.treeFocusSelectedBgColor : page.theme.treeSelectedBgColor"),
 	//container.Container(treeItem()).List(true).Virtual(true).Align("'fill'").X("10").W("parent.w - .x")
 
@@ -44,16 +44,16 @@ type Component struct {
 }
 
 func (b *Component) Focus(v bool) *Component {
-	b.Props()["focus"] = fmt.Sprintf("%v", v)
+	b.SetProp("focus", fmt.Sprintf("%v", v))
 	return b
 }
 
 func (b *Component) Items(s string) *Component {
-	b.Props()["items"] = s
+	b.SetProp("items", s)
 	return b
 }
 
 func (b *Component) NodeMap(s string) *Component {
-	b.Props()["nodeMap"] = s
+	b.SetProp("nodeMap", s)
 	return b
 }

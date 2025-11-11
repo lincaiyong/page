@@ -7,6 +7,10 @@ import (
 
 func NewBaseComponent[T any](tag string, self *T, children ...Component) *BaseComponent[T] {
 	return &BaseComponent[T]{
+		extraInfo: ExtraInfo{
+			bindJs:       make(map[string]string),
+			defaultValue: make(map[string]string),
+		},
 		self:     self,
 		tag:      tag,
 		children: children,
@@ -75,301 +79,301 @@ func (b *BaseComponent[T]) Contains(s ...Component) *T {
 }
 
 func (b *BaseComponent[T]) OnCreated(fn string) *T {
-	b.Props()["onCreatedFn"] = fn
+	b.SetProp("onCreatedFn", fn)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnUpdated(fn string) *T {
-	b.Props()["onUpdated"] = fn
+	b.SetProp("onUpdated", fn)
 	return b.self
 }
 
 func (b *BaseComponent[T]) Position(s string) *T {
-	b.Props()["position"] = s
+	b.SetProp("position", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) X(s string) *T {
-	b.Props()["x"] = s
+	b.SetProp("x", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) Y(s string) *T {
-	b.Props()["y"] = s
+	b.SetProp("y", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) W(s string) *T {
-	b.Props()["w"] = s
+	b.SetProp("w", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) H(s string) *T {
-	b.Props()["h"] = s
+	b.SetProp("h", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) V(s string) *T {
-	b.Props()["v"] = s
+	b.SetProp("v", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) X2(s string) *T {
-	b.Props()["x2"] = s
+	b.SetProp("x2", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) Y2(s string) *T {
-	b.Props()["y2"] = s
+	b.SetProp("y2", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) Cw(s string) *T {
-	b.Props()["cw"] = s
+	b.SetProp("cw", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) Ch(s string) *T {
-	b.Props()["ch"] = s
+	b.SetProp("ch", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) BorderRadius(s string) *T {
-	b.Props()["borderRadius"] = s
+	b.SetProp("borderRadius", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) Color(s string) *T {
-	b.Props()["color"] = s
+	b.SetProp("color", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) BackgroundColor(s string) *T {
-	b.Props()["backgroundColor"] = s
+	b.SetProp("backgroundColor", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) BorderColor(s string) *T {
-	b.Props()["borderColor"] = s
+	b.SetProp("borderColor", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) BoxShadow(s string) *T {
-	b.Props()["boxShadow"] = s
+	b.SetProp("boxShadow", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) Background(s string) *T {
-	b.Props()["background"] = s
+	b.SetProp("background", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) CaretColor(s string) *T {
-	b.Props()["caretColor"] = s
+	b.SetProp("caretColor", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) UserSelect(s string) *T {
-	b.Props()["userSelect"] = s
+	b.SetProp("userSelect", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) Cursor(s string) *T {
-	b.Props()["cursor"] = s
+	b.SetProp("cursor", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) ZIndex(s string) *T {
-	b.Props()["zIndex"] = s
+	b.SetProp("zIndex", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) Opacity(s string) *T {
-	b.Props()["opacity"] = s
+	b.SetProp("opacity", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) BorderStyle(s string) *T {
-	b.Props()["borderStyle"] = s
+	b.SetProp("borderStyle", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) FontFamily(s string) *T {
-	b.Props()["fontFamily"] = s
+	b.SetProp("fontFamily", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) FontSize(s string) *T {
-	b.Props()["fontSize"] = s
+	b.SetProp("fontSize", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) Outline(s string) *T {
-	b.Props()["outline"] = s
+	b.SetProp("outline", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) LineHeight(s string) *T {
-	b.Props()["lineHeight"] = s
+	b.SetProp("lineHeight", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) FontVariantLigatures(s string) *T {
-	b.Props()["fontVariantLigatures"] = s
+	b.SetProp("fontVariantLigatures", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) InnerText(s string) *T {
-	b.Props()["innerText"] = s
+	b.SetProp("innerText", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) ScrollTop(s string) *T {
-	b.Props()["scrollTop"] = s
+	b.SetProp("scrollTop", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) ScrollLeft(s string) *T {
-	b.Props()["scrollLeft"] = s
+	b.SetProp("scrollLeft", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) BorderLeft(s string) *T {
-	b.Props()["borderLeft"] = s
+	b.SetProp("borderLeft", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) BorderRight(s string) *T {
-	b.Props()["borderRight"] = s
+	b.SetProp("borderRight", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) BorderTop(s string) *T {
-	b.Props()["borderTop"] = s
+	b.SetProp("borderTop", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) BorderBottom(s string) *T {
-	b.Props()["borderBottom"] = s
+	b.SetProp("borderBottom", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) Hovered(s string) *T {
-	b.Props()["hovered"] = s
+	b.SetProp("hovered", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) HoveredByMouse(s string) *T {
-	b.Props()["hoveredByMouse"] = s
+	b.SetProp("hoveredByMouse", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnClick(s string) *T {
-	b.Props()["onClick"] = s
+	b.SetProp("onClick", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnDoubleClick(s string) *T {
-	b.Props()["onDoubleClick"] = s
+	b.SetProp("onDoubleClick", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnContextMenu(s string) *T {
-	b.Props()["onContextMenu"] = s
+	b.SetProp("onContextMenu", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnMouseDown(s string) *T {
-	b.Props()["onMouseDown"] = s
+	b.SetProp("onMouseDown", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnMouseMove(s string) *T {
-	b.Props()["onMouseMove"] = s
+	b.SetProp("onMouseMove", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnMouseUp(s string) *T {
-	b.Props()["onMouseUp"] = s
+	b.SetProp("onMouseUp", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnWheel(s string) *T {
-	b.Props()["onWheel"] = s
+	b.SetProp("onWheel", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnInput(s string) *T {
-	b.Props()["onInput"] = s
+	b.SetProp("onInput", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnKeyUp(s string) *T {
-	b.Props()["onKeyUp"] = s
+	b.SetProp("onKeyUp", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnKeyDown(s string) *T {
-	b.Props()["onKeyDown"] = s
+	b.SetProp("onKeyDown", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnCompositionStart(s string) *T {
-	b.Props()["onCompositionStart"] = s
+	b.SetProp("onCompositionStart", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnCompositionUpdate(s string) *T {
-	b.Props()["onCompositionUpdate"] = s
+	b.SetProp("onCompositionUpdate", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnCompositionEnd(s string) *T {
-	b.Props()["onCompositionEnd"] = s
+	b.SetProp("onCompositionEnd", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnPaste(s string) *T {
-	b.Props()["onPaste"] = s
+	b.SetProp("onPaste", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnCopy(s string) *T {
-	b.Props()["onCopy"] = s
+	b.SetProp("onCopy", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnCut(s string) *T {
-	b.Props()["onCut"] = s
+	b.SetProp("onCut", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnActive(s string) *T {
-	b.Props()["onActive"] = s
+	b.SetProp("onActive", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnFocus(s string) *T {
-	b.Props()["onFocus"] = s
+	b.SetProp("onFocus", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnHover(s string) *T {
-	b.Props()["onHover"] = s
+	b.SetProp("onHover", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnClickOutside(s string) *T {
-	b.Props()["onClickOutside"] = s
+	b.SetProp("onClickOutside", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnScrollTop(s string) *T {
-	b.Props()["onScrollTop"] = s
+	b.SetProp("onScrollTop", s)
 	return b.self
 }
 
 func (b *BaseComponent[T]) OnScrollLeft(s string) *T {
-	b.Props()["onScrollLeft"] = s
+	b.SetProp("onScrollLeft", s)
 	return b.self
 }

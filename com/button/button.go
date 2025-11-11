@@ -31,16 +31,16 @@ type Component struct {
 }
 
 func (b *Component) Flag(s string) *Component {
-	b.Props()["flag"] = s
+	b.SetProp("flag", s)
 	return b
 }
 
 func (b *Component) Icon(s string) *Component {
-	b.Props()["icon"] = s
+	b.SetProp("icon", s)
 	return b
 }
 
 func (b *Component) Selected(v bool) *Component {
-	b.Props()["selected"] = fmt.Sprintf("%v", v)
+	b.SetProp("selected", fmt.Sprintf("%v", v))
 	return b
 }

@@ -5,7 +5,7 @@ import "github.com/lincaiyong/page/com"
 func Text(text string) *Component {
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent[Component]("span", ret)
-	ret.Props()["text"] = text
+	ret.SetProp("text", text)
 	ret.FontSize("Math.floor(.h * 2 / 3)").
 		LineHeight(".h").
 		W("page.util.textWidth(.text, .fontFamily, .fontSize)")
@@ -20,6 +20,6 @@ type Component struct {
 }
 
 func (b *Component) Align(s string) *Component {
-	b.Props()["align"] = s
+	b.SetProp("align", s)
 	return b
 }

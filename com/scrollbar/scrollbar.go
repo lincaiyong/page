@@ -23,13 +23,13 @@ func create() *Component {
 
 func VScrollbar() *Component {
 	ret := create()
-	ret.Props()["vertical"] = "true"
+	ret.SetProp("vertical", "true")
 	return ret
 }
 
 func HScrollbar() *Component {
 	ret := create()
-	ret.Props()["vertical"] = "false"
+	ret.SetProp("vertical", "false")
 	return ret
 }
 
@@ -41,11 +41,11 @@ type Component struct {
 }
 
 func (b *Component) ShowLeft(v bool) *Component {
-	b.Props()["showLeft"] = fmt.Sprintf("%v", v)
+	b.SetProp("showLeft", fmt.Sprintf("%v", v))
 	return b
 }
 
 func (b *Component) ShowTop(v bool) *Component {
-	b.Props()["showTop"] = fmt.Sprintf("%v", v)
+	b.SetProp("showTop", fmt.Sprintf("%v", v))
 	return b
 }
