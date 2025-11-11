@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"github.com/gin-gonic/gin"
 	"github.com/lincaiyong/daemon/common"
 	"github.com/lincaiyong/page"
@@ -8,19 +9,45 @@ import (
 	"github.com/lincaiyong/page/com/bar"
 	"github.com/lincaiyong/page/com/button"
 	"github.com/lincaiyong/page/com/compare"
+	"github.com/lincaiyong/page/com/container"
 	"github.com/lincaiyong/page/com/div"
 	"github.com/lincaiyong/page/com/editor"
 	"github.com/lincaiyong/page/com/root"
 	"github.com/lincaiyong/page/com/text"
-	"testing"
 )
 
-func TestBar(t *testing.T) {
+//go:embed example.js
+var exampleJs string
+
+func main() {
 	common.StartServer("page", "v1.0.1", "",
 		func(_ []string, r *gin.RouterGroup) error {
 			baseUrl := "http://127.0.0.1:9123"
 			r.GET("/res/*filepath", page.HandleRes(baseUrl))
-			r.GET("/", func(c *gin.Context) {
+			r.GET("/hello", func(c *gin.Context) {
+				comp := root.Root(
+					"",
+					text.Text("'hello world'").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"),
+				)
+				page.MakePage(c, "debug", comp, baseUrl)
+			})
+			r.GET("/click", func(c *gin.Context) {
+				comp := root.Root(
+					`
+function test(msg) {
+	console.log("test: " + msg);
+}
+function handleClick() {
+	console.log(...arguments);
+}`,
+					text.Text("'hello world'").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2").
+						OnCreated("() => Root.test('onCreated')").
+						OnUpdated("() => Root.test('onUpdated')").
+						OnClick("Root.handleClick"),
+				)
+				page.MakePage(c, "debug", comp, baseUrl)
+			})
+			r.GET("/bar", func(c *gin.Context) {
 				comp := root.Root("", div.Div().SetSlots(
 					div.Div().W("next.x").SetSlots(
 						editor.Editor().X("20").Y("0").W("800").H("next.y - .y").BackgroundColor(com.ColorBlue),
@@ -38,6 +65,22 @@ func TestBar(t *testing.T) {
 					),
 				))
 				page.MakePage(c, "debug", comp, baseUrl)
+			})
+			r.GET("/vlist", func(c *gin.Context) {
+				comp := root.Root(exampleJs,
+					div.Div().BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2").SetSlots(
+						container.VListContainer("Root.computeItem", "Root.updateItem",
+							div.Div().OnHover("Root.hoverItem").SetSlots(
+								text.Text("''").NameAs("textEle"),
+							),
+						).NameAs("containerEle"),
+					),
+				).OnCreated("Root.onCreated")
+				page.MakePage(c, "debug5", comp, baseUrl)
+			})
+			r.GET("/container", func(c *gin.Context) {
+				comp := root.Root("", container.Container(text.Text("'hello world!'").H("400")).Scrollable(true).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"))
+				page.MakePage(c, "debug4", comp, baseUrl)
 			})
 			return nil
 		},
