@@ -4,7 +4,7 @@ import "github.com/lincaiyong/page/com"
 
 func Iframe() *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret)
+	ret.BaseComponent = com.NewBaseComponent[Component]("iframe", ret)
 	return ret
 }
 

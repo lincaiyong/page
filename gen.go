@@ -232,10 +232,14 @@ func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) 
 			s = s[:strings.Index(s, ".")]
 			s = utils.PascalCase(s)
 		}
+		compName := comp.Name()
+		if compName == "" {
+			compName = comp.Tag()
+		}
 		pr.Put("Component: %s,", s)
 		pr.Put("tag: '%s',", comp.Tag())
 		pr.Put("overflow: 'hidden',")
-		pr.Put("name: '%s',", comp.Name())
+		pr.Put("name: '%s',", compName)
 		pr.Put("depth: %d,", depth)
 		props := make(map[string]string)
 		if modelDepth > 0 {

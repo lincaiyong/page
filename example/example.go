@@ -11,7 +11,9 @@ import (
 	"github.com/lincaiyong/page/com/compare"
 	"github.com/lincaiyong/page/com/container"
 	"github.com/lincaiyong/page/com/div"
+	"github.com/lincaiyong/page/com/divider"
 	"github.com/lincaiyong/page/com/editor"
+	"github.com/lincaiyong/page/com/iframe"
 	"github.com/lincaiyong/page/com/root"
 	"github.com/lincaiyong/page/com/text"
 )
@@ -26,7 +28,9 @@ func main() {
 			r.GET("/hello", func(c *gin.Context) {
 				comp := root.Root(
 					"",
-					text.Text("'hello world'").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"),
+					text.Text("'hello world'").H("200").X("parent.w/2-.w/2").Y("100"),
+					divider.HDivider().Y("prev.y2"),
+					text.Text("'hello world'").H("200").X("parent.w/2-.w/2").Y("prev.y2"),
 				)
 				page.MakePage(c, "debug", comp)
 			})
@@ -92,6 +96,23 @@ function test() {
 }
 `, editor.Editor().NameAs("editorEle")).OnCreated("Root.test")
 				page.MakePage(c, "editor", comp)
+			})
+			r.GET("/iframe", func(c *gin.Context) {
+				comp := root.Root(`
+function test() {
+	setTimeout(function() {
+		const iframe = page.root.iframeEle;
+		const url = 'http://127.0.0.1:9123/editor';
+		page.util.fetch(url).then(html => {
+			iframe.setHtml(html);
+		}).catch(e => {
+			page.log.error(e);
+		});
+	}, 1000);
+}`,
+					iframe.Iframe().NameAs("iframeEle"),
+				).OnCreated("Root.test")
+				page.MakePage(c, "iframe", comp)
 			})
 			return nil
 		},
