@@ -53,6 +53,7 @@ const page = {
         level: 'debug',
         error() {
             console.error('[ERROR] ', ...arguments);
+            document.body.innerText = [...arguments].join('\n');
         },
         info() {
             if (['info', 'debug', 'trace'].indexOf(page.log.level) !== -1) {
