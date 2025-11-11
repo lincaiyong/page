@@ -30,6 +30,6 @@ func init() {
 		return nil
 	})
 	if err != nil {
-		log.FatalLog("fail to walk all js: %v", err)
+		log.FatalLog("fail to walk: %v", err)
 	}
 }

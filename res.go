@@ -1,47 +1,43 @@
 package page
 
 import (
-	"archive/zip"
-	"bytes"
+	"embed"
 	_ "embed"
 	"github.com/gin-gonic/gin"
 	"github.com/lincaiyong/log"
-	"io"
+	"io/fs"
 	"net/http"
 	"os"
 	"path"
 	"strings"
 )
 
-//go:embed res.zip
-var resZip []byte
-
-func readZip(b []byte) (map[string][]byte, error) {
-	ret := make(map[string][]byte)
-	zipr, err := zip.NewReader(bytes.NewReader(b), int64(len(b)))
-	if err != nil {
-		return nil, err
-	}
-
-	for _, z := range zipr.File {
-		rr, openErr := z.Open()
-		if openErr != nil {
-			return nil, openErr
-		}
-
-		b, readErr := io.ReadAll(rr)
-		if readErr != nil {
-			return nil, readErr
-		}
-		_ = rr.Close()
-		if !strings.HasSuffix(z.Name, "/") {
-			ret[z.Name] = b
-		}
-	}
-	return ret, nil
-}
+//go:embed res/**/*
+var resFs embed.FS
 
 var resFileMap map[string][]byte
+
+func init() {
+	resFileMap = make(map[string][]byte)
+	err := fs.WalkDir(resFs, ".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+		b, err := resFs.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		path = path[4:]
+		resFileMap[path] = b
+		return nil
+	})
+	if err != nil {
+		log.FatalLog("fail to walk: %v", err)
+	}
+}
 
 func HandleRes(baseUrl string) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -60,9 +56,6 @@ func HandleRes(baseUrl string) gin.HandlerFunc {
 				c.Data(http.StatusOK, "application/javascript", []byte(content))
 			}
 			return
-		}
-		if resFileMap == nil {
-			resFileMap, _ = readZip(resZip)
 		}
 		b, ok := resFileMap[filePath]
 		if !ok {
