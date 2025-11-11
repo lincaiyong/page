@@ -1,6 +1,6 @@
 .idea
 .vscode
 *.log
-/example/wails/frontend/dist/
-/example/wails/frontend/wailsjs/
-/example/wails/build/bin
+/examplewails/frontend/dist/
+/examplewails/frontend/wailsjs/
+/examplewails/build/bin
