@@ -1,4 +1,4 @@
-package com
+package all
 
 const (
 	SvgElAddLocation         = "'svg/el/add-location.svg'"

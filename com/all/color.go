@@ -1,10 +1,4 @@
-package com
-
-import "fmt"
-
-func Color(r, g, b int) string {
-	return fmt.Sprintf("'#%02x%02x%02x'", r, g, b)
-}
+package all
 
 const (
 	ColorBlack   = "'black'"   // 黑色
