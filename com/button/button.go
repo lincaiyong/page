@@ -14,7 +14,7 @@ func Button() *Component {
 		div.Div().X("prev.x2 - .w + 1").Y("prev.y - 1").W("6").H(".w").V("0").BorderRadius("3"),
 	)
 	ret.W("24").H(".w").BorderRadius("6").
-		BackgroundColor(".selected ? page.theme.ComponentSelectedBgColor : page.theme.ComponentBgColor").
+		BgColor(".selected ? page.theme.ComponentSelectedBgColor : page.theme.ComponentBgColor").
 		Color(".selected ? page.theme.ComponentSelectedColor : page.theme.ComponentColor").
 		OnHover("e.handleHover").
 		OnActive("e.handleActive")

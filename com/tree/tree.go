@@ -13,7 +13,7 @@ func Tree() *Component {
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
 		div.Div().X("10").Y("this.selectedChildTop-next.scrollTop").W("parent.w-20").H("this.itemHeight").
-			BorderRadius("4").BackgroundColor("this.focus ? page.theme.treeFocusSelectedBgColor : page.theme.treeSelectedBgColor").
+			BorderRadius("4").BgColor("this.focus ? page.theme.treeFocusSelectedBgColor : page.theme.treeSelectedBgColor").
 			NameAs("selectedEle"),
 		container.VListContainer(
 			img.Img("parent.data.collapsed ? 'svg/el/arrow-right.svg' : 'svg/el/arrow-down.svg'").X("parent.data.depth * 20 + 4").Y("5").W("11").H(".w").V("parent.data.leaf ? 0 : 1"),

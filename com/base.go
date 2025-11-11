@@ -137,7 +137,7 @@ func (b *BaseComponent[T]) Color(s string) *T {
 	return b.self
 }
 
-func (b *BaseComponent[T]) BackgroundColor(s string) *T {
+func (b *BaseComponent[T]) BgColor(s string) *T {
 	b.SetProp("backgroundColor", s)
 	return b.self
 }

@@ -41,17 +41,17 @@ function handleClick() {
 			r.GET("/bar", func(c *gin.Context) {
 				comp := Root(Div().SetSlots(
 					Div().W("next.x").SetSlots(
-						Editor().X("20").Y("0").W("800").H("next.y - .y").BackgroundColor(ColorBlue),
-						HBar().BackgroundColor(ColorBlue).Opacity("0.1").Y("parent.h/2").W("parent.w"),
-						Div().X("20").Y("prev.y2").W("800").H("parent.h-prev.y2").BackgroundColor(ColorYellow).SetSlots(
+						Editor().X("20").Y("0").W("800").H("next.y - .y").BgColor(ColorBlue),
+						HBar().BgColor(ColorBlue).Opacity("0.1").Y("parent.h/2").W("parent.w"),
+						Div().X("20").Y("prev.y2").W("800").H("parent.h-prev.y2").BgColor(ColorYellow).SetSlots(
 							Text("'hello world!'").H("200"),
 						),
 					),
-					VBar().X("parent.w/2").BackgroundColor(ColorBlue).Opacity("0.1"),
+					VBar().X("parent.w/2").BgColor(ColorBlue).Opacity("0.1"),
 					Div().X("prev.x2").W("parent.w-prev.x2").SetSlots(
-						Compare().Y("0").H("next.y").BackgroundColor(ColorRed),
-						HBar().BackgroundColor(ColorBlue).Opacity("0.1").Y("parent.h/2").W("parent.w"),
-						Div().Y("prev.y2").W("40").H("40").BackgroundColor(ColorGreen),
+						Compare().Y("0").H("next.y").BgColor(ColorRed),
+						HBar().BgColor(ColorBlue).Opacity("0.1").Y("parent.h/2").W("parent.w"),
+						Div().Y("prev.y2").W("40").H("40").BgColor(ColorGreen),
 						Button().Icon(SvgElAddLocation).X("prev.x2").Y("prev.y2 + 100").W("40").H("40"),
 					),
 				))
@@ -59,7 +59,7 @@ function handleClick() {
 			})
 			r.GET("/vlist", func(c *gin.Context) {
 				comp := Root(
-					Div().BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2").SetSlots(
+					Div().BgColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2").SetSlots(
 						VListContainer(
 							Div().OnHover("Root.hoverItem").SetSlots(
 								Text("''").NameAs("textEle"),
@@ -70,7 +70,7 @@ function handleClick() {
 				page.MakePage(c, "debug5", comp)
 			})
 			r.GET("/container", func(c *gin.Context) {
-				comp := Root(Container(Text("'hello world!'").H("400")).Scrollable(true).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"))
+				comp := Root(Container(Text("'hello world!'").H("400")).Scrollable(true).BgColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"))
 				page.MakePage(c, "debug4", comp)
 			})
 			r.GET("/editor", func(c *gin.Context) {

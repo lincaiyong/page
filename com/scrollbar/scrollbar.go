@@ -9,7 +9,7 @@ func create() *Component {
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret)
 	ret.ZIndex("1").
-		BackgroundColor("page.theme.scrollbarBgColor").
+		BgColor("page.theme.scrollbarBgColor").
 		Opacity("0.5").
 		BorderRadius(".w / 2").
 		Cursor("'default'").
