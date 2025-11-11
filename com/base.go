@@ -5,8 +5,8 @@ import (
 	"strings"
 )
 
-func NewBaseComponent(tag string, self Component, children ...Component) *BaseComponent {
-	return &BaseComponent{
+func NewBaseComponent[T any](tag string, self *T, children ...Component) *BaseComponent[T] {
+	return &BaseComponent[T]{
 		self:     self,
 		tag:      tag,
 		children: children,
@@ -20,9 +20,9 @@ func NewBaseComponent(tag string, self Component, children ...Component) *BaseCo
 	}
 }
 
-type BaseComponent struct {
+type BaseComponent[T any] struct {
 	extraInfo       ExtraInfo
-	self            Component
+	self            *T
 	name            string
 	tag             string
 	children        []Component
@@ -31,42 +31,42 @@ type BaseComponent struct {
 	slotsAsChildren bool
 }
 
-func (b *BaseComponent) SetSlotsAsChildren() {
+func (b *BaseComponent[T]) SetSlotsAsChildren() {
 	b.slotsAsChildren = true
 }
 
-func (b *BaseComponent) SlotsAsChildren() bool {
+func (b *BaseComponent[T]) SlotsAsChildren() bool {
 	return b.slotsAsChildren
 }
 
-func (b *BaseComponent) Name() string {
+func (b *BaseComponent[T]) Name() string {
 	if b.name != "" {
 		return b.name
 	}
 	return b.tag
 }
 
-func (b *BaseComponent) ExtraInfo() *ExtraInfo {
+func (b *BaseComponent[T]) ExtraInfo() *ExtraInfo {
 	return &b.extraInfo
 }
 
-func (b *BaseComponent) Tag() string {
+func (b *BaseComponent[T]) Tag() string {
 	return b.tag
 }
 
-func (b *BaseComponent) Children() []Component {
+func (b *BaseComponent[T]) Children() []Component {
 	return b.children
 }
 
-func (b *BaseComponent) Slots() []Component {
+func (b *BaseComponent[T]) Slots() []Component {
 	return b.slots
 }
 
-func (b *BaseComponent) Props() map[string]string {
+func (b *BaseComponent[T]) Props() map[string]string {
 	return b.props
 }
 
-func (b *BaseComponent) NameAs(name string) Component {
+func (b *BaseComponent[T]) NameAs(name string) *T {
 	if !strings.HasSuffix(name, "Ele") {
 		log.FatalLog("invalid element name: %s", name)
 	}
@@ -74,297 +74,297 @@ func (b *BaseComponent) NameAs(name string) Component {
 	return b.self
 }
 
-func (b *BaseComponent) Contains(s ...Component) Component {
+func (b *BaseComponent[T]) Contains(s ...Component) *T {
 	b.slots = append(b.slots, s...)
 	return b.self
 }
 
-func (b *BaseComponent) Position(s string) Component {
+func (b *BaseComponent[T]) Position(s string) *T {
 	b.Props()["position"] = s
 	return b.self
 }
 
-func (b *BaseComponent) X(s string) Component {
+func (b *BaseComponent[T]) X(s string) *T {
 	b.Props()["x"] = s
 	return b.self
 }
 
-func (b *BaseComponent) Y(s string) Component {
+func (b *BaseComponent[T]) Y(s string) *T {
 	b.Props()["y"] = s
 	return b.self
 }
 
-func (b *BaseComponent) W(s string) Component {
+func (b *BaseComponent[T]) W(s string) *T {
 	b.Props()["w"] = s
 	return b.self
 }
 
-func (b *BaseComponent) H(s string) Component {
+func (b *BaseComponent[T]) H(s string) *T {
 	b.Props()["h"] = s
 	return b.self
 }
 
-func (b *BaseComponent) V(s string) Component {
+func (b *BaseComponent[T]) V(s string) *T {
 	b.Props()["v"] = s
 	return b.self
 }
 
-func (b *BaseComponent) X2(s string) Component {
+func (b *BaseComponent[T]) X2(s string) *T {
 	b.Props()["x2"] = s
 	return b.self
 }
 
-func (b *BaseComponent) Y2(s string) Component {
+func (b *BaseComponent[T]) Y2(s string) *T {
 	b.Props()["y2"] = s
 	return b.self
 }
 
-func (b *BaseComponent) Cw(s string) Component {
+func (b *BaseComponent[T]) Cw(s string) *T {
 	b.Props()["cw"] = s
 	return b.self
 }
 
-func (b *BaseComponent) Ch(s string) Component {
+func (b *BaseComponent[T]) Ch(s string) *T {
 	b.Props()["ch"] = s
 	return b.self
 }
 
-func (b *BaseComponent) BorderRadius(s string) Component {
+func (b *BaseComponent[T]) BorderRadius(s string) *T {
 	b.Props()["borderRadius"] = s
 	return b.self
 }
 
-func (b *BaseComponent) Color(s string) Component {
+func (b *BaseComponent[T]) Color(s string) *T {
 	b.Props()["color"] = s
 	return b.self
 }
 
-func (b *BaseComponent) BackgroundColor(s string) Component {
+func (b *BaseComponent[T]) BackgroundColor(s string) *T {
 	b.Props()["backgroundColor"] = s
 	return b.self
 }
 
-func (b *BaseComponent) BorderColor(s string) Component {
+func (b *BaseComponent[T]) BorderColor(s string) *T {
 	b.Props()["borderColor"] = s
 	return b.self
 }
 
-func (b *BaseComponent) BoxShadow(s string) Component {
+func (b *BaseComponent[T]) BoxShadow(s string) *T {
 	b.Props()["boxShadow"] = s
 	return b.self
 }
 
-func (b *BaseComponent) Background(s string) Component {
+func (b *BaseComponent[T]) Background(s string) *T {
 	b.Props()["background"] = s
 	return b.self
 }
 
-func (b *BaseComponent) CaretColor(s string) Component {
+func (b *BaseComponent[T]) CaretColor(s string) *T {
 	b.Props()["caretColor"] = s
 	return b.self
 }
 
-func (b *BaseComponent) UserSelect(s string) Component {
+func (b *BaseComponent[T]) UserSelect(s string) *T {
 	b.Props()["userSelect"] = s
 	return b.self
 }
 
-func (b *BaseComponent) Cursor(s string) Component {
+func (b *BaseComponent[T]) Cursor(s string) *T {
 	b.Props()["cursor"] = s
 	return b.self
 }
 
-func (b *BaseComponent) ZIndex(s string) Component {
+func (b *BaseComponent[T]) ZIndex(s string) *T {
 	b.Props()["zIndex"] = s
 	return b.self
 }
 
-func (b *BaseComponent) Opacity(s string) Component {
+func (b *BaseComponent[T]) Opacity(s string) *T {
 	b.Props()["opacity"] = s
 	return b.self
 }
 
-func (b *BaseComponent) BorderStyle(s string) Component {
+func (b *BaseComponent[T]) BorderStyle(s string) *T {
 	b.Props()["borderStyle"] = s
 	return b.self
 }
 
-func (b *BaseComponent) FontFamily(s string) Component {
+func (b *BaseComponent[T]) FontFamily(s string) *T {
 	b.Props()["fontFamily"] = s
 	return b.self
 }
 
-func (b *BaseComponent) FontSize(s string) Component {
+func (b *BaseComponent[T]) FontSize(s string) *T {
 	b.Props()["fontSize"] = s
 	return b.self
 }
 
-func (b *BaseComponent) Outline(s string) Component {
+func (b *BaseComponent[T]) Outline(s string) *T {
 	b.Props()["outline"] = s
 	return b.self
 }
 
-func (b *BaseComponent) LineHeight(s string) Component {
+func (b *BaseComponent[T]) LineHeight(s string) *T {
 	b.Props()["lineHeight"] = s
 	return b.self
 }
 
-func (b *BaseComponent) FontVariantLigatures(s string) Component {
+func (b *BaseComponent[T]) FontVariantLigatures(s string) *T {
 	b.Props()["fontVariantLigatures"] = s
 	return b.self
 }
 
-func (b *BaseComponent) InnerText(s string) Component {
+func (b *BaseComponent[T]) InnerText(s string) *T {
 	b.Props()["innerText"] = s
 	return b.self
 }
 
-func (b *BaseComponent) ScrollTop(s string) Component {
+func (b *BaseComponent[T]) ScrollTop(s string) *T {
 	b.Props()["scrollTop"] = s
 	return b.self
 }
 
-func (b *BaseComponent) ScrollLeft(s string) Component {
+func (b *BaseComponent[T]) ScrollLeft(s string) *T {
 	b.Props()["scrollLeft"] = s
 	return b.self
 }
 
-func (b *BaseComponent) BorderLeft(s string) Component {
+func (b *BaseComponent[T]) BorderLeft(s string) *T {
 	b.Props()["borderLeft"] = s
 	return b.self
 }
 
-func (b *BaseComponent) BorderRight(s string) Component {
+func (b *BaseComponent[T]) BorderRight(s string) *T {
 	b.Props()["borderRight"] = s
 	return b.self
 }
 
-func (b *BaseComponent) BorderTop(s string) Component {
+func (b *BaseComponent[T]) BorderTop(s string) *T {
 	b.Props()["borderTop"] = s
 	return b.self
 }
 
-func (b *BaseComponent) BorderBottom(s string) Component {
+func (b *BaseComponent[T]) BorderBottom(s string) *T {
 	b.Props()["borderBottom"] = s
 	return b.self
 }
 
-func (b *BaseComponent) Hovered(s string) Component {
+func (b *BaseComponent[T]) Hovered(s string) *T {
 	b.Props()["hovered"] = s
 	return b.self
 }
 
-func (b *BaseComponent) HoveredByMouse(s string) Component {
+func (b *BaseComponent[T]) HoveredByMouse(s string) *T {
 	b.Props()["hoveredByMouse"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnClick(s string) Component {
+func (b *BaseComponent[T]) OnClick(s string) *T {
 	b.Props()["onClick"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnDoubleClick(s string) Component {
+func (b *BaseComponent[T]) OnDoubleClick(s string) *T {
 	b.Props()["onDoubleClick"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnContextMenu(s string) Component {
+func (b *BaseComponent[T]) OnContextMenu(s string) *T {
 	b.Props()["onContextMenu"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnMouseDown(s string) Component {
+func (b *BaseComponent[T]) OnMouseDown(s string) *T {
 	b.Props()["onMouseDown"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnMouseMove(s string) Component {
+func (b *BaseComponent[T]) OnMouseMove(s string) *T {
 	b.Props()["onMouseMove"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnMouseUp(s string) Component {
+func (b *BaseComponent[T]) OnMouseUp(s string) *T {
 	b.Props()["onMouseUp"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnWheel(s string) Component {
+func (b *BaseComponent[T]) OnWheel(s string) *T {
 	b.Props()["onWheel"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnInput(s string) Component {
+func (b *BaseComponent[T]) OnInput(s string) *T {
 	b.Props()["onInput"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnKeyUp(s string) Component {
+func (b *BaseComponent[T]) OnKeyUp(s string) *T {
 	b.Props()["onKeyUp"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnKeyDown(s string) Component {
+func (b *BaseComponent[T]) OnKeyDown(s string) *T {
 	b.Props()["onKeyDown"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnCompositionStart(s string) Component {
+func (b *BaseComponent[T]) OnCompositionStart(s string) *T {
 	b.Props()["onCompositionStart"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnCompositionUpdate(s string) Component {
+func (b *BaseComponent[T]) OnCompositionUpdate(s string) *T {
 	b.Props()["onCompositionUpdate"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnCompositionEnd(s string) Component {
+func (b *BaseComponent[T]) OnCompositionEnd(s string) *T {
 	b.Props()["onCompositionEnd"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnPaste(s string) Component {
+func (b *BaseComponent[T]) OnPaste(s string) *T {
 	b.Props()["onPaste"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnCopy(s string) Component {
+func (b *BaseComponent[T]) OnCopy(s string) *T {
 	b.Props()["onCopy"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnCut(s string) Component {
+func (b *BaseComponent[T]) OnCut(s string) *T {
 	b.Props()["onCut"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnActive(s string) Component {
+func (b *BaseComponent[T]) OnActive(s string) *T {
 	b.Props()["onActive"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnFocus(s string) Component {
+func (b *BaseComponent[T]) OnFocus(s string) *T {
 	b.Props()["onFocus"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnHover(s string) Component {
+func (b *BaseComponent[T]) OnHover(s string) *T {
 	b.Props()["onHover"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnClickOutside(s string) Component {
+func (b *BaseComponent[T]) OnClickOutside(s string) *T {
 	b.Props()["onClickOutside"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnScrollTop(s string) Component {
+func (b *BaseComponent[T]) OnScrollTop(s string) *T {
 	b.Props()["onScrollTop"] = s
 	return b.self
 }
 
-func (b *BaseComponent) OnScrollLeft(s string) Component {
+func (b *BaseComponent[T]) OnScrollLeft(s string) *T {
 	b.Props()["onScrollLeft"] = s
 	return b.self
 }

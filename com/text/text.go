@@ -4,7 +4,7 @@ import "github.com/lincaiyong/page/com"
 
 func Text(text string) *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent("span", ret)
+	ret.BaseComponent = com.NewBaseComponent[Component]("span", ret)
 	ret.Props()["text"] = text
 	ret.FontSize("Math.floor(.h * 2 / 3)").
 		LineHeight(".h").
@@ -13,7 +13,7 @@ func Text(text string) *Component {
 }
 
 type Component struct {
-	*com.BaseComponent
+	*com.BaseComponent[Component]
 	align     com.Property `default:"'left'"`
 	text      com.Property `type:"string"`
 	onUpdated com.Method
