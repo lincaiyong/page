@@ -58,9 +58,9 @@ package main
 //}
 //
 //func debug3Page(c *gin.Context) {
-//	comp := div.Div().Contains(
+//	comp := div.Div().SetSlots(
 //		div.Div().H("34").BackgroundColor("'black'"),
-//		div.Div().Y("prev.y2").H("parent.h - prev.h - next.h").Contains(
+//		div.Div().Y("prev.y2").H("parent.h - prev.h - next.h").SetSlots(
 //			ExplorerPane().W("next.x").BackgroundColor("page.theme.grayPaneColor"),
 //			bar.VBar().X("prev.v ? 200 : - .w").BackgroundColor("'red'").Opacity("0.1"),
 //			editor.Editor().X("prev.x2").W("parent.w - prev.x2"),
@@ -106,7 +106,7 @@ package main
 //
 
 //func debug6Page(c *gin.Context) {
-//	comp := tree.Tree().Contains().BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2")
+//	comp := tree.Tree().SetSlots().BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2")
 //	page.MakePage(c, "debug6", comp, baseUrl, map[string]string{
 //		"": `setTimeout(function() {
 //	const tree = page.root.children[0];

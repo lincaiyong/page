@@ -62,7 +62,7 @@ func (b *BaseComponent[T]) NameAs(name string) *T {
 	return b.self
 }
 
-func (b *BaseComponent[T]) Contains(s ...Component) *T {
+func (b *BaseComponent[T]) SetSlots(s ...Component) *T {
 	b.slots = append(b.slots, s...)
 	return b.self
 }

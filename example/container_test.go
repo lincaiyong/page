@@ -24,7 +24,7 @@ func TestContainer(t *testing.T) {
 				comp := root.Root(rootJs,
 					container.VListContainer(
 						"Root.computeItem", "Root.updateItem",
-						div.Div().OnHover("Root.hoverItem").Contains(
+						div.Div().OnHover("Root.hoverItem").SetSlots(
 							text.Text("''").NameAs("textEle"),
 						),
 					).NameAs("containerEle").BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"),

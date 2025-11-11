@@ -21,16 +21,16 @@ func TestBar(t *testing.T) {
 			baseUrl := "http://127.0.0.1:9123"
 			r.GET("/res/*filepath", page.HandleRes(baseUrl))
 			r.GET("/", func(c *gin.Context) {
-				comp := root.Root("", div.Div().Contains(
-					div.Div().W("next.x").Contains(
+				comp := root.Root("", div.Div().SetSlots(
+					div.Div().W("next.x").SetSlots(
 						editor.Editor().X("20").Y("0").W("800").H("next.y - .y").BackgroundColor(com.ColorBlue),
 						bar.HBar().BackgroundColor(com.ColorBlue).Opacity("0.1").Y("parent.h/2").W("parent.w"),
-						div.Div().X("20").Y("prev.y2").W("800").H("parent.h-prev.y2").BackgroundColor(com.ColorYellow).Contains(
+						div.Div().X("20").Y("prev.y2").W("800").H("parent.h-prev.y2").BackgroundColor(com.ColorYellow).SetSlots(
 							text.Text("'hello world!'").H("200"),
 						),
 					),
 					bar.VBar().X("parent.w/2").BackgroundColor(com.ColorBlue).Opacity("0.1"),
-					div.Div().X("prev.x2").W("parent.w-prev.x2").Contains(
+					div.Div().X("prev.x2").W("parent.w-prev.x2").SetSlots(
 						compare.Compare().Y("0").H("next.y").BackgroundColor(com.ColorRed),
 						bar.HBar().BackgroundColor(com.ColorBlue).Opacity("0.1").Y("parent.h/2").W("parent.w"),
 						div.Div().Y("prev.y2").W("40").H("40").BackgroundColor(com.ColorGreen),

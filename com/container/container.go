@@ -15,7 +15,7 @@ func VListContainer(compute, update string, children ...com.Component) *Componen
 		scrollbar.VScrollbar().NameAs("vBarEle"),
 	)
 	ret.ScrollLeft("0").ScrollTop("0")
-	ret.Contains(containeritem.ContainerItem(compute, update, children...))
+	ret.SetSlots(containeritem.ContainerItem(compute, update, children...))
 	ret.List(true).Virtual(true).Scrollable(true)
 	return ret
 }
@@ -27,7 +27,7 @@ func ListContainer(compute, update string, children ...com.Component) *Component
 		scrollbar.VScrollbar().NameAs("vBarEle"),
 	)
 	ret.ScrollLeft("0").ScrollTop("0")
-	ret.Contains(containeritem.ContainerItem(compute, update, children...))
+	ret.SetSlots(containeritem.ContainerItem(compute, update, children...))
 	ret.List(true).Virtual(false).Scrollable(true)
 	return ret
 }
@@ -39,7 +39,7 @@ func Container(child com.Component) *Component {
 		scrollbar.VScrollbar().NameAs("vBarEle"),
 	)
 	ret.ScrollLeft("0").ScrollTop("0")
-	ret.Contains(child)
+	ret.SetSlots(child)
 	ret.List(false).Virtual(false).Scrollable(false)
 	return ret
 }
