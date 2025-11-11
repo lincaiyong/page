@@ -7,9 +7,7 @@ import (
 	"github.com/lincaiyong/log"
 	"io/fs"
 	"net/http"
-	"os"
 	"path"
-	"strings"
 )
 
 //go:embed res/**/*
@@ -39,24 +37,9 @@ func init() {
 	}
 }
 
-func HandleRes(baseUrl string) gin.HandlerFunc {
+func HandleRes() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		filePath := c.Param("filepath")[1:]
-		if !strings.HasPrefix(filePath, "svg/") && !strings.HasPrefix(filePath, "vs/") {
-			b, err := os.ReadFile(path.Join("res/", path.Base(filePath)))
-			if err != nil {
-				log.ErrorLog("fail to read index.js: %v", err)
-				c.String(http.StatusNotFound, "file not found")
-				return
-			}
-			content := strings.ReplaceAll(string(b), "<base_url>", baseUrl)
-			if strings.HasSuffix(filePath, ".html") {
-				c.Data(http.StatusOK, "text/html", []byte(content))
-			} else {
-				c.Data(http.StatusOK, "application/javascript", []byte(content))
-			}
-			return
-		}
 		b, ok := resFileMap[filePath]
 		if !ok {
 			c.String(http.StatusNotFound, "resource not found")
@@ -69,6 +52,10 @@ func HandleRes(baseUrl string) gin.HandlerFunc {
 			contentType = "application/javascript"
 		} else if ext == ".svg" {
 			contentType = "image/svg+xml"
+		} else if ext == ".png" {
+			contentType = "image/png"
+		} else if ext == ".jpg" {
+			contentType = "image/jpeg"
 		}
 		c.Data(http.StatusOK, contentType, b)
 	}

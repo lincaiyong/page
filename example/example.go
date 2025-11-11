@@ -14,6 +14,7 @@ import (
 	"github.com/lincaiyong/page/com/divider"
 	"github.com/lincaiyong/page/com/editor"
 	"github.com/lincaiyong/page/com/iframe"
+	"github.com/lincaiyong/page/com/img"
 	"github.com/lincaiyong/page/com/root"
 	"github.com/lincaiyong/page/com/text"
 )
@@ -24,7 +25,7 @@ var exampleJs string
 func main() {
 	common.StartServer("page", "v1.0.1", "",
 		func(_ []string, r *gin.RouterGroup) error {
-			r.GET("/res/*filepath", page.HandleRes(com.BaseUrl))
+			r.GET("/res/*filepath", page.HandleRes())
 			r.GET("/hello", func(c *gin.Context) {
 				comp := root.Root(
 					"",
@@ -113,6 +114,9 @@ function test() {
 					iframe.Iframe().NameAs("iframeEle"),
 				).OnCreated("Root.test")
 				page.MakePage(c, "iframe", comp)
+			})
+			r.GET("/img", func(c *gin.Context) {
+				page.MakePage(c, "img", root.Root("", img.Img("'img/bot.png'")))
 			})
 			return nil
 		},
