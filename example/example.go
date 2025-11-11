@@ -29,7 +29,6 @@ func main() {
 			r.GET("/res/*filepath", page.HandleRes())
 			r.GET("/hello", func(c *gin.Context) {
 				comp := root.Root(
-					"",
 					text.Text("'hello world'").H("200").X("parent.w/2-.w/2").Y("100"),
 					divider.HDivider().Y("prev.y2"),
 					text.Text("'hello world'").H("200").X("parent.w/2-.w/2").Y("prev.y2"),
@@ -38,22 +37,21 @@ func main() {
 			})
 			r.GET("/click", func(c *gin.Context) {
 				comp := root.Root(
-					`
+					text.Text("'hello world'").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2").
+						OnCreated("() => Root.test('onCreated')").
+						OnUpdated("() => Root.test('onUpdated')").
+						OnClick("Root.handleClick"),
+				).Code(`
 function test(msg) {
 	console.log("test: " + msg);
 }
 function handleClick() {
 	console.log(...arguments);
-}`,
-					text.Text("'hello world'").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2").
-						OnCreated("() => Root.test('onCreated')").
-						OnUpdated("() => Root.test('onUpdated')").
-						OnClick("Root.handleClick"),
-				)
+}`)
 				page.MakePage(c, "debug", comp)
 			})
 			r.GET("/bar", func(c *gin.Context) {
-				comp := root.Root("", div.Div().SetSlots(
+				comp := root.Root(div.Div().SetSlots(
 					div.Div().W("next.x").SetSlots(
 						editor.Editor().X("20").Y("0").W("800").H("next.y - .y").BackgroundColor(com.ColorBlue),
 						bar.HBar().BackgroundColor(com.ColorBlue).Opacity("0.1").Y("parent.h/2").W("parent.w"),
@@ -72,7 +70,7 @@ function handleClick() {
 				page.MakePage(c, "debug", comp)
 			})
 			r.GET("/vlist", func(c *gin.Context) {
-				comp := root.Root(exampleJs,
+				comp := root.Root(
 					div.Div().BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2").SetSlots(
 						container.VListContainer("Root.computeItem", "Root.updateItem",
 							div.Div().OnHover("Root.hoverItem").SetSlots(
@@ -80,15 +78,16 @@ function handleClick() {
 							),
 						).NameAs("containerEle"),
 					),
-				).OnCreated("Root.onCreated")
+				).OnCreated("Root.onCreated").Code(exampleJs)
 				page.MakePage(c, "debug5", comp)
 			})
 			r.GET("/container", func(c *gin.Context) {
-				comp := root.Root("", container.Container(text.Text("'hello world!'").H("400")).Scrollable(true).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"))
+				comp := root.Root(container.Container(text.Text("'hello world!'").H("400")).Scrollable(true).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"))
 				page.MakePage(c, "debug4", comp)
 			})
 			r.GET("/editor", func(c *gin.Context) {
-				comp := root.Root(`
+				comp := root.Root(editor.Editor().NameAs("editorEle")).OnCreated("Root.test").
+					Code(`
 function test() {
 	setTimeout(function() {
 		const editor = page.root.editorEle;
@@ -96,11 +95,13 @@ function test() {
 		editor.setLanguage('go');
 	}, 1000);
 }
-`, editor.Editor().NameAs("editorEle")).OnCreated("Root.test")
+`)
 				page.MakePage(c, "editor", comp)
 			})
 			r.GET("/iframe", func(c *gin.Context) {
-				comp := root.Root(`
+				comp := root.Root(
+					iframe.Iframe().NameAs("iframeEle"),
+				).OnCreated("Root.test").Code(`
 function test() {
 	setTimeout(function() {
 		const iframe = page.root.iframeEle;
@@ -111,16 +112,14 @@ function test() {
 			page.log.error(e);
 		});
 	}, 1000);
-}`,
-					iframe.Iframe().NameAs("iframeEle"),
-				).OnCreated("Root.test")
+}`)
 				page.MakePage(c, "iframe", comp)
 			})
 			r.GET("/img", func(c *gin.Context) {
-				page.MakePage(c, "img", root.Root("", img.Img("'img/bot.png'")))
+				page.MakePage(c, "img", root.Root(img.Img("'img/bot.png'")))
 			})
 			r.GET("/input", func(c *gin.Context) {
-				page.MakePage(c, "input", root.Root("",
+				page.MakePage(c, "input", root.Root(
 					input.Input().H("30").W("400").X("parent.w/2-.w/2").Y("parent.h/2-.h/2").
 						BorderTop("1").BorderBottom("1"),
 				))

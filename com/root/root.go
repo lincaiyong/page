@@ -5,8 +5,7 @@ import (
 	"github.com/lincaiyong/page/js"
 )
 
-func Root(code string, children ...com.Component) *Component {
-	js.Set("Root", code)
+func Root(children ...com.Component) *Component {
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret, children...)
 	return ret
@@ -14,4 +13,9 @@ func Root(code string, children ...com.Component) *Component {
 
 type Component struct {
 	*com.BaseComponent[Component]
+}
+
+func (c *Component) Code(code string) *Component {
+	js.Set("Root", code)
+	return c
 }
