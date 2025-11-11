@@ -8,26 +8,28 @@ import (
 	"strconv"
 )
 
-func VListContainer(compute, update string, children ...com.Component) *Component {
+func VListContainer(children ...com.Component) *Component {
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
 		scrollbar.HScrollbar().NameAs("hBarEle"),
 		scrollbar.VScrollbar().NameAs("vBarEle"),
 	)
 	ret.ScrollLeft("0").ScrollTop("0")
-	ret.SetSlots(containeritem.ContainerItem(compute, update, children...))
+	ret.itemComp = containeritem.ContainerItem(children...)
+	ret.SetSlots(ret.itemComp)
 	ret.List(true).Virtual(true).Scrollable(true)
 	return ret
 }
 
-func ListContainer(compute, update string, children ...com.Component) *Component {
+func ListContainer(children ...com.Component) *Component {
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
 		scrollbar.HScrollbar().NameAs("hBarEle"),
 		scrollbar.VScrollbar().NameAs("vBarEle"),
 	)
 	ret.ScrollLeft("0").ScrollTop("0")
-	ret.SetSlots(containeritem.ContainerItem(compute, update, children...))
+	ret.itemComp = containeritem.ContainerItem(children...)
+	ret.SetSlots(ret.itemComp)
 	ret.List(true).Virtual(false).Scrollable(true)
 	return ret
 }
@@ -62,6 +64,29 @@ type Component struct {
 	onCreated          com.Method
 	_updateList        com.Method
 	onUpdated          com.Method
+
+	itemComp *containeritem.Component
+}
+
+func (b *Component) ItemCompute(s string) *Component {
+	if b.itemComp != nil {
+		b.itemComp.Compute(s)
+	}
+	return b
+}
+
+func (b *Component) ItemOnUpdated(s string) *Component {
+	if b.itemComp != nil {
+		b.itemComp.Update(s)
+	}
+	return b
+}
+
+func (b *Component) ItemOnClick(s string) *Component {
+	if b.itemComp != nil {
+		b.itemComp.OnClick(s)
+	}
+	return b
 }
 
 func (b *Component) Align(s string) *Component {

@@ -73,11 +73,11 @@ function handleClick() {
 			r.GET("/vlist", func(c *gin.Context) {
 				comp := root.Root(
 					div.Div().BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2").SetSlots(
-						container.VListContainer("Root.computeItem", "Root.updateItem",
+						container.VListContainer(
 							div.Div().OnHover("Root.hoverItem").SetSlots(
 								text.Text("''").NameAs("textEle"),
 							),
-						).NameAs("containerEle"),
+						).NameAs("containerEle").ItemCompute("Root.computeItem").ItemOnUpdated("Root.updateItem"),
 					),
 				).OnCreated("Root.onCreated").Code(exampleJs)
 				page.MakePage(c, "debug5", comp)

@@ -28,23 +28,47 @@ class Component {
         }
     }
 
-    get parent() { return this._parent; }
-    get children() { return this._children; }
-    get model() { return this._model; }
-    get id() { return this._id; }
-    get tag() { return this.model.tag; }
-    get ref() { return this._ref; }
-    get root() { return [...Array(this.model.depth).keys()].reduce(prev => prev?.parent, this); }
+    get parent() {
+        return this._parent;
+    }
+
+    get children() {
+        return this._children;
+    }
+
+    get model() {
+        return this._model;
+    }
+
+    get id() {
+        return this._id;
+    }
+
+    get tag() {
+        return this.model.tag;
+    }
+
+    get ref() {
+        return this._ref;
+    }
+
+    get root() {
+        return [...Array(this.model.depth).keys()].reduce(prev => prev?.parent, this);
+    }
 
 
-    onCreated() {}
-    onUpdated(k, v) {}
+    onCreated() {
+    }
+
+    onUpdated(k, v) {
+    }
 
     _defaultOnCreated() {
         if (this.onCreatedFn instanceof Function) {
             this.onCreatedFn();
         }
     }
+
     _defaultOnUpdated(k, v) {
         if (k === 'hovered') {
             this.onHover?.(this, v);
@@ -112,7 +136,7 @@ class Component {
         const visited = {};
         let total = properties.length;
         let count = 0;
-        for (;;) {
+        for (; ;) {
             for (const prop of properties) {
                 if (prop.id in visited) {
                     continue;
@@ -135,7 +159,7 @@ class Component {
             }
             if (count === newCount) {
                 const tmp = properties.filter(prop => !(prop.id in visited)).map(prop => `${prop.id}: ${prop._sources.join(', ')}`);
-                page.log.error("loop detected", '\n\t'+ tmp.join('\n\t'));
+                page.log.error("loop detected", '\n\t' + tmp.join('\n\t'));
                 return;
             }
             count = newCount;
@@ -151,7 +175,7 @@ class Component {
     }
 
     _(source) {
-        page.util.assert(typeof(source) === 'string' && this instanceof Component);
+        page.util.assert(typeof (source) === 'string' && this instanceof Component);
         const ret = this._resolve(source);
         page.util.assert(ret);
         return ret;
@@ -251,65 +275,241 @@ class Component {
     };
 
     // builtin properties
-    get background() { return this._properties.background.value; }
-    get backgroundColor() { return this._properties.backgroundColor.value; }
-    get borderBottom() { return this._properties.borderBottom.value; }
-    get borderColor() { return this._properties.borderColor.value; }
-    get borderLeft() { return this._properties.borderLeft.value; }
-    get borderRadius() { return this._properties.borderRadius.value; }
-    get borderRight() { return this._properties.borderRight.value; }
-    get borderStyle() { return this._properties.borderStyle.value; }
-    get borderTop() { return this._properties.borderTop.value; }
-    get boxShadow() { return this._properties.boxShadow.value; }
-    get caretColor() { return this._properties.caretColor.value; }
-    get ch() { return this._properties.ch.value; }
-    get color() { return this._properties.color.value; }
-    get cursor() { return this._properties.cursor.value; }
-    get cw() { return this._properties.cw.value; }
-    get fontFamily() { return this._properties.fontFamily.value; }
-    get fontSize() { return this._properties.fontSize.value; }
-    get fontVariantLigatures() { return this._properties.fontVariantLigatures.value; }
-    get h() { return this._properties.h.value; }
-    get hovered() { return this._properties.hovered.value; }
-    get hoveredByMouse() { return this._properties.hoveredByMouse.value; }
-    get innerText() { return this._properties.innerText.value; }
-    get lineHeight() { return this._properties.lineHeight.value; }
-    get onActive() { return this._properties.onActive.value; }
-    get onClick() { return this._properties.onClick.value; }
-    get onClickOutside() { return this._properties.onClickOutside.value; }
-    get onCompositionEnd() { return this._properties.onCompositionEnd.value; }
-    get onCompositionStart() { return this._properties.onCompositionStart.value; }
-    get onCompositionUpdate() { return this._properties.onCompositionUpdate.value; }
-    get onCopy() { return this._properties.onCopy.value; }
-    get onCut() { return this._properties.onCut.value; }
-    get onDoubleClick() { return this._properties.onDoubleClick.value; }
-    get onFocus() { return this._properties.onFocus.value; }
-    get onHover() { return this._properties.onHover.value; }
-    get onInput() { return this._properties.onInput.value; }
-    get onKeyDown() { return this._properties.onKeyDown.value; }
-    get onKeyUp() { return this._properties.onKeyUp.value; }
-    get onMouseDown() { return this._properties.onMouseDown.value; }
-    get onMouseMove() { return this._properties.onMouseMove.value; }
-    get onMouseUp() { return this._properties.onMouseUp.value; }
-    get onPaste() { return this._properties.onPaste.value; }
-    get onScrollLeft() { return this._properties.onScrollLeft.value; }
-    get onScrollTop() { return this._properties.onScrollTop.value; }
-    get onWheel() { return this._properties.onWheel.value; }
-    get opacity() { return this._properties.opacity.value; }
-    get outline() { return this._properties.outline.value; }
-    get position() { return this._properties.position.value; }
-    get scrollLeft() { return this._properties.scrollLeft.value; }
-    get scrollTop() { return this._properties.scrollTop.value; }
-    get userSelect() { return this._properties.userSelect.value; }
-    get v() { return this._properties.v.value; }
-    get w() { return this._properties.w.value; }
-    get x() { return this._properties.x.value; }
-    get x2() { return this._properties.x2.value; }
-    get y() { return this._properties.y.value; }
-    get y2() { return this._properties.y2.value; }
-    get zIndex() { return this._properties.zIndex.value; }
-    get onCreatedFn() { return this._properties.onCreatedFn.value; }
-    get onUpdatedFn() { return this._properties.onUpdatedFn.value; }
+    get background() {
+        return this._properties.background.value;
+    }
+
+    get backgroundColor() {
+        return this._properties.backgroundColor.value;
+    }
+
+    get borderBottom() {
+        return this._properties.borderBottom.value;
+    }
+
+    get borderColor() {
+        return this._properties.borderColor.value;
+    }
+
+    get borderLeft() {
+        return this._properties.borderLeft.value;
+    }
+
+    get borderRadius() {
+        return this._properties.borderRadius.value;
+    }
+
+    get borderRight() {
+        return this._properties.borderRight.value;
+    }
+
+    get borderStyle() {
+        return this._properties.borderStyle.value;
+    }
+
+    get borderTop() {
+        return this._properties.borderTop.value;
+    }
+
+    get boxShadow() {
+        return this._properties.boxShadow.value;
+    }
+
+    get caretColor() {
+        return this._properties.caretColor.value;
+    }
+
+    get ch() {
+        return this._properties.ch.value;
+    }
+
+    get color() {
+        return this._properties.color.value;
+    }
+
+    get cursor() {
+        return this._properties.cursor.value;
+    }
+
+    get cw() {
+        return this._properties.cw.value;
+    }
+
+    get fontFamily() {
+        return this._properties.fontFamily.value;
+    }
+
+    get fontSize() {
+        return this._properties.fontSize.value;
+    }
+
+    get fontVariantLigatures() {
+        return this._properties.fontVariantLigatures.value;
+    }
+
+    get h() {
+        return this._properties.h.value;
+    }
+
+    get hovered() {
+        return this._properties.hovered.value;
+    }
+
+    get hoveredByMouse() {
+        return this._properties.hoveredByMouse.value;
+    }
+
+    get innerText() {
+        return this._properties.innerText.value;
+    }
+
+    get lineHeight() {
+        return this._properties.lineHeight.value;
+    }
+
+    get onActive() {
+        return this._properties.onActive.value;
+    }
+
+    get onClick() {
+        return this._properties.onClick.value;
+    }
+
+    get onClickOutside() {
+        return this._properties.onClickOutside.value;
+    }
+
+    get onCompositionEnd() {
+        return this._properties.onCompositionEnd.value;
+    }
+
+    get onCompositionStart() {
+        return this._properties.onCompositionStart.value;
+    }
+
+    get onCompositionUpdate() {
+        return this._properties.onCompositionUpdate.value;
+    }
+
+    get onCopy() {
+        return this._properties.onCopy.value;
+    }
+
+    get onCut() {
+        return this._properties.onCut.value;
+    }
+
+    get onDoubleClick() {
+        return this._properties.onDoubleClick.value;
+    }
+
+    get onFocus() {
+        return this._properties.onFocus.value;
+    }
+
+    get onHover() {
+        return this._properties.onHover.value;
+    }
+
+    get onInput() {
+        return this._properties.onInput.value;
+    }
+
+    get onKeyDown() {
+        return this._properties.onKeyDown.value;
+    }
+
+    get onKeyUp() {
+        return this._properties.onKeyUp.value;
+    }
+
+    get onMouseDown() {
+        return this._properties.onMouseDown.value;
+    }
+
+    get onMouseMove() {
+        return this._properties.onMouseMove.value;
+    }
+
+    get onMouseUp() {
+        return this._properties.onMouseUp.value;
+    }
+
+    get onPaste() {
+        return this._properties.onPaste.value;
+    }
+
+    get onScrollLeft() {
+        return this._properties.onScrollLeft.value;
+    }
+
+    get onScrollTop() {
+        return this._properties.onScrollTop.value;
+    }
+
+    get onWheel() {
+        return this._properties.onWheel.value;
+    }
+
+    get opacity() {
+        return this._properties.opacity.value;
+    }
+
+    get outline() {
+        return this._properties.outline.value;
+    }
+
+    get position() {
+        return this._properties.position.value;
+    }
+
+    get scrollLeft() {
+        return this._properties.scrollLeft.value;
+    }
+
+    get scrollTop() {
+        return this._properties.scrollTop.value;
+    }
+
+    get userSelect() {
+        return this._properties.userSelect.value;
+    }
+
+    get v() {
+        return this._properties.v.value;
+    }
+
+    get w() {
+        return this._properties.w.value;
+    }
+
+    get x() {
+        return this._properties.x.value;
+    }
+
+    get x2() {
+        return this._properties.x2.value;
+    }
+
+    get y() {
+        return this._properties.y.value;
+    }
+
+    get y2() {
+        return this._properties.y2.value;
+    }
+
+    get zIndex() {
+        return this._properties.zIndex.value;
+    }
+
+    get onCreatedFn() {
+        return this._properties.onCreatedFn.value;
+    }
+
+    get onUpdatedFn() {
+        return this._properties.onUpdatedFn.value;
+    }
 
     set background(v) {
         if (this.background !== v) {
@@ -317,144 +517,174 @@ class Component {
             this.ref.style.background = v;
         }
     }
+
     set backgroundColor(v) {
         if (this.backgroundColor !== v) {
             this._properties.backgroundColor.value = v;
             this.ref.style.backgroundColor = v;
         }
     }
+
     set borderBottom(v) {
         if (this.borderBottom !== v) {
             this._properties.borderBottom.value = v;
             this.ref.style.borderBottomWidth = v + 'px';
         }
     }
+
     set borderColor(v) {
         if (this.borderColor !== v) {
             this._properties.borderColor.value = v;
             this.ref.style.borderColor = v;
         }
     }
+
     set borderLeft(v) {
         if (this.borderLeft !== v) {
             this._properties.borderLeft.value = v;
             this.ref.style.borderLeftWidth = v + 'px';
         }
     }
+
     set borderRadius(v) {
         if (this.borderRadius !== v) {
             this._properties.borderRadius.value = v;
             this.ref.style.borderRadius = v + 'px';
         }
     }
+
     set borderRight(v) {
         if (this.borderRight !== v) {
             this._properties.borderRight.value = v;
             this.ref.style.borderRightWidth = v + 'px';
         }
     }
+
     set borderStyle(v) {
         if (this.borderStyle !== v) {
             this._properties.borderStyle.value = v;
             this.ref.style.borderStyle = v;
         }
     }
+
     set borderTop(v) {
         if (this.borderTop !== v) {
             this._properties.borderTop.value = v;
             this.ref.style.borderTopWidth = v + 'px';
         }
     }
+
     set boxShadow(v) {
         if (this.boxShadow !== v) {
             this._properties.boxShadow.value = v;
             this.ref.style.boxShadow = v;
         }
     }
+
     set caretColor(v) {
         if (this.caretColor !== v) {
             this._properties.caretColor.value = v;
             this.ref.style.caretColor = v;
         }
     }
+
     set ch(v) {
         if (this.ch !== v) {
             this._properties.ch.value = v;
         }
     }
+
     set color(v) {
         if (this.color !== v) {
             this._properties.color.value = v;
             this.ref.style.color = v;
         }
     }
+
     set cursor(v) {
         if (this.cursor !== v) {
             this._properties.cursor.value = v;
             this.ref.style.cursor = v;
         }
     }
+
     set cw(v) {
         if (this.cw !== v) {
             this._properties.cw.value = v;
         }
     }
+
     set fontFamily(v) {
         if (this.fontFamily !== v) {
             this._properties.fontFamily.value = v;
             this.ref.style.fontFamily = v;
         }
     }
+
     set fontSize(v) {
         if (this.fontSize !== v) {
             this._properties.fontSize.value = v;
             this.ref.style.fontSize = v + 'px';
         }
     }
+
     set fontVariantLigatures(v) {
         if (this.fontVariantLigatures !== v) {
             this._properties.fontVariantLigatures.value = v;
             this.ref.style.fontVariantLigatures = v;
         }
     }
+
     set h(v) {
         if (this.h !== v) {
             this._properties.h.value = v;
             this.ref.style.height = v + 'px';
         }
     }
+
     set hovered(v) {
         if (this.hovered !== v) {
             this._properties.hovered.value = v;
         }
     }
+
     set hoveredByMouse(v) {
         if (this.hoveredByMouse !== v) {
             this._properties.hoveredByMouse.value = v;
         }
     }
+
     set innerText(v) {
-        if (typeof(v) === 'string' && this.tag === 'span') {
+        if (typeof (v) === 'string' && this.tag === 'span') {
             this._properties.innerText.value = v;
             this.ref.innerText = v;
         }
     }
+
     set lineHeight(v) {
         if (this.lineHeight !== v) {
             this._properties.lineHeight.value = v;
             this.ref.style.lineHeight = v + 'px';
         }
     }
+
     set onActive(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onActive', page.event.addListener(this.ref, 'mousedown', ev => { const fun = v(this, ev); page.event.onceListener(this.ref, 'mouseup', ev => fun?.(this, ev)); }));
+            this._addSideEffect('onActive', page.event.addListener(this.ref, 'mousedown', ev => {
+                const fun = v(this, ev);
+                page.event.onceListener(this.ref, 'mouseup', ev => fun?.(this, ev));
+            }));
         }
     }
+
     set onClick(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onClick', page.event.addListener(this.ref, 'click', ev => v(this, ev)));
+            this._addSideEffect('onClick', page.event.addListener(this.ref, 'click', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onClickOutside(v) {
         if (v instanceof Function) {
             this._addSideEffect('onClickOutside', page.event.addListener(document, 'click', ev => {
@@ -468,41 +698,64 @@ class Component {
             }));
         }
     }
+
     set onCompositionEnd(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onCompositionEnd', page.event.addListener(this.ref, 'compositionend', ev => v(this, ev)));
+            this._addSideEffect('onCompositionEnd', page.event.addListener(this.ref, 'compositionend', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onCompositionStart(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onCompositionStart', page.event.addListener(this.ref, 'compositionstart', ev => v(this, ev)));
+            this._addSideEffect('onCompositionStart', page.event.addListener(this.ref, 'compositionstart', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onCompositionUpdate(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onCompositionUpdate', page.event.addListener(this.ref, 'compositionupdate', ev => v(this, ev)));
+            this._addSideEffect('onCompositionUpdate', page.event.addListener(this.ref, 'compositionupdate', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onCopy(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onCopy', page.event.addListener(this.ref, 'copy', ev => v(this, ev)));
+            this._addSideEffect('onCopy', page.event.addListener(this.ref, 'copy', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onCut(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onCut', page.event.addListener(this.ref, 'cut', ev => v(this, ev)));
+            this._addSideEffect('onCut', page.event.addListener(this.ref, 'cut', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onDoubleClick(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onDoubleClick', page.event.addListener(this.ref, 'dblclick', ev => v(this, ev)));
+            this._addSideEffect('onDoubleClick', page.event.addListener(this.ref, 'dblclick', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onFocus(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onFocus', page.event.addListener(this.ref, 'focus', ev => { const fun = v(this, ev); page.event.onceListener(this.ref, 'blur', ev => fun?.(this, ev)); }));
+            this._addSideEffect('onFocus', page.event.addListener(this.ref, 'focus', ev => {
+                const fun = v(this, ev);
+                page.event.onceListener(this.ref, 'blur', ev => fun?.(this, ev));
+            }));
         }
     }
+
     set onHover(v) {
         if (v instanceof Function) {
             this._properties.onHover.value = v;
@@ -512,137 +765,178 @@ class Component {
             }));
         }
     }
+
     set onInput(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onInput', page.event.addListener(this.ref, 'input', ev => v(this, ev)));
+            this._addSideEffect('onInput', page.event.addListener(this.ref, 'input', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onKeyDown(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onKeyDown', page.event.addListener(this.ref, 'keydown', ev => v(this, ev)));
+            this._addSideEffect('onKeyDown', page.event.addListener(this.ref, 'keydown', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onKeyUp(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onKeyUp', page.event.addListener(this.ref, 'keyup', ev => v(this, ev)));
+            this._addSideEffect('onKeyUp', page.event.addListener(this.ref, 'keyup', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onMouseDown(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onMouseDown', page.event.addListener(this.ref, 'mousedown', ev => v(this, ev)));
+            this._addSideEffect('onMouseDown', page.event.addListener(this.ref, 'mousedown', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onMouseMove(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onMouseMove', page.event.addListener(this.ref, 'mousemove', ev => v(this, ev)));
+            this._addSideEffect('onMouseMove', page.event.addListener(this.ref, 'mousemove', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onMouseUp(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onMouseUp', page.event.addListener(this.ref, 'mouseup', ev => v(this, ev)));
+            this._addSideEffect('onMouseUp', page.event.addListener(this.ref, 'mouseup', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onPaste(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onPaste', page.event.addListener(this.ref, 'paste', ev => v(this, ev)));
+            this._addSideEffect('onPaste', page.event.addListener(this.ref, 'paste', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set onScrollLeft(v) {
         if (this.onScrollLeft !== v) {
             this._properties.onScrollLeft.value = v;
         }
     }
+
     set onScrollTop(v) {
         if (this.onScrollTop !== v) {
             this._properties.onScrollTop.value = v;
         }
     }
+
     set onWheel(v) {
         if (v instanceof Function) {
-            this._addSideEffect('onWheel', page.event.addListener(this.ref, 'wheel', ev => v(this, ev)));
+            this._addSideEffect('onWheel', page.event.addListener(this.ref, 'wheel', ev => {
+                v(this, ev);
+            }));
         }
     }
+
     set opacity(v) {
         if (this.opacity !== v) {
             this._properties.opacity.value = v;
             this.ref.style.opacity = v;
         }
     }
+
     set outline(v) {
         if (this.outline !== v) {
             this._properties.outline.value = v;
             this.ref.style.outline = v;
         }
     }
+
     set position(v) {
         if (this.position !== v) {
             this._properties.position.value = v;
             this.ref.style.position = v;
         }
     }
+
     set scrollLeft(v) {
         if (this.scrollLeft !== v) {
             this._properties.scrollLeft.value = v;
             this.onScrollLeft?.(this, v);
         }
     }
+
     set scrollTop(v) {
         if (this.scrollTop !== v) {
             this._properties.scrollTop.value = v;
             this.onScrollTop?.(this, v);
         }
     }
+
     set userSelect(v) {
         if (this.userSelect !== v) {
             this._properties.userSelect.value = v;
             this.ref.style.userSelect = v;
         }
     }
+
     set v(v) {
         if (this.v !== v) {
             this._properties.v.value = v;
             this.ref.style.visibility = v ? 'visible' : 'hidden';
         }
     }
+
     set w(v) {
         if (this.w !== v) {
             this._properties.w.value = v;
             this.ref.style.width = v + 'px';
         }
     }
+
     set x(v) {
         if (this.x !== v) {
             this._properties.x.value = v;
             this.ref.style.left = v + 'px';
         }
     }
+
     set x2(v) {
         if (this.x2 !== v) {
             this._properties.x2.value = v;
         }
     }
+
     set y(v) {
         if (this.y !== v) {
             this._properties.y.value = v;
             this.ref.style.top = v + 'px';
         }
     }
+
     set y2(v) {
         if (this.y2 !== v) {
             this._properties.y2.value = v;
         }
     }
+
     set zIndex(v) {
         if (this.zIndex !== v) {
             this._properties.zIndex.value = v;
             this.ref.style.zIndex = v;
         }
     }
+
     set onCreatedFn(v) {
         if (this.onCreatedFn !== v) {
             this._properties.onCreatedFn.value = v;
         }
     }
+
     set onUpdatedFn(v) {
         if (this.onUpdatedFn !== v) {
             this._properties.onUpdatedFn.value = v;

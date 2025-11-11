@@ -1,4 +1,4 @@
-function compute(container, index) {
+function computeItem(container, index) {
     const data = container.items[index];
     const h = container.root.itemHeight;
     return Object.assign(data, {

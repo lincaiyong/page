@@ -4,16 +4,10 @@ import (
 	"github.com/lincaiyong/page/com"
 )
 
-func ContainerItem(compute, update string, children ...com.Component) *Component {
+func ContainerItem(children ...com.Component) *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret, children...)
-	ret.Y("0").X("0")
-	if compute != "" {
-		ret.SetProp("compute", compute)
-	}
-	if update != "" {
-		ret.SetProp("update", update)
-	}
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret)
+	ret.SetSlots(children...).Y("0").X("0")
 	return ret
 }
 
@@ -22,5 +16,16 @@ type Component struct {
 	data      com.Property `default:"undefined"`
 	compute   com.Property `default:"null"`
 	update    com.Property `default:"null"`
+	click     com.Property `default:"null"`
 	onUpdated com.Method
+}
+
+func (b *Component) Compute(s string) *Component {
+	b.SetProp("compute", s)
+	return b
+}
+
+func (b *Component) Update(s string) *Component {
+	b.SetProp("update", s)
+	return b
 }

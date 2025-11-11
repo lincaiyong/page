@@ -176,21 +176,16 @@ func buildClasses(page com.Component) (string, error) {
 					}
 					info.SetDefaultValue(field.Name, v)
 				case "Method":
-					info.SetMethods(append(info.Methods(), field.Name))
+					if field.Tag.Get("static") == "true" {
+						info.AddStaticMethod(field.Name)
+					} else {
+						info.AddMethod(field.Name)
+					}
 					code := js.Get(n, field.Name)
 					if code == "" {
 						return "", fmt.Errorf("fail to bind method: %s", field.Name)
 					}
 					info.SetBindJs(field.Name, code)
-				case "StaticMethod":
-					info.SetStaticMethods(append(info.StaticMethods(), field.Name))
-					code := js.Get(n, field.Name)
-					if code == "" {
-						return "", fmt.Errorf("fail to bind method: %s", field.Name)
-					}
-					info.SetBindJs(field.Name, code)
-				default:
-					return "", fmt.Errorf("invalid field type: %s", tn)
 				}
 			}
 		}
@@ -269,7 +264,7 @@ func buildModel(comp com.Component, depth int, pr *printer.Printer) error {
 		children := comp.Children()
 		slots := comp.Slots()
 		var childrenDepth int
-		if s == "Div" {
+		if s == "Div" || s == "Containeritem" {
 			children = slots
 			slots = nil
 			childrenDepth = depth + 1

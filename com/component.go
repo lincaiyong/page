@@ -40,16 +40,16 @@ func (e *ExtraInfo) Methods() []string {
 	return e.methods
 }
 
-func (e *ExtraInfo) SetMethods(methods []string) {
-	e.methods = methods
+func (e *ExtraInfo) AddMethod(method string) {
+	e.methods = append(e.methods, method)
 }
 
 func (e *ExtraInfo) StaticMethods() []string {
 	return e.staticMethods
 }
 
-func (e *ExtraInfo) SetStaticMethods(staticMethods []string) {
-	e.staticMethods = staticMethods
+func (e *ExtraInfo) AddStaticMethod(method string) {
+	e.staticMethods = append(e.staticMethods, method)
 }
 
 func (e *ExtraInfo) GetBindJs(k string) string {
