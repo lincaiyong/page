@@ -18,10 +18,10 @@ func main() {
 			),
 			Div().X("prev.x2").W("parent.w-prev.w-next.w").BgColor("page.theme.grayPaneColor").SetSlots(
 				Div().NameAs("navEle").W("next.x").SetSlots(
-					Tree().NameAs("treeEle"),
+					Tree().NameAs("treeEle").OnClickItem("Root.clickTreeItem"),
 				),
 				VBar().X("parent.w/3").BgColor(ColorYellow).Opacity("0.1"),
-				Div().NameAs("mainEle").X("prev.x2").W("parent.w-.x2").SetSlots(
+				Div().NameAs("mainEle").X("prev.x2").W("parent.w-prev.x2").SetSlots(
 					Editor().NameAs("editorEle"),
 				),
 			),
@@ -30,22 +30,29 @@ func main() {
 		Div().NameAs("footerEle").Y("parent.h-.h").H("24").BgColor("page.theme.grayPaneColor"),
 	).OnCreated("Root.test").
 		Code(`
-function test() {
-	//setTimeout(function() {
-	//	const editor = page.root.editorEle;
-	//	editor.setValue('package main\n\nfunc main() {\n\n}');
-	//	editor.setLanguage('go');
-	//});
+function clickTreeItem(itemEle) {
+	Root.log('click: ' + JSON.stringify(itemEle.data));
+	const relPath = itemEle.data.key;
+	Root.readFile(page.state.folder + '/' + relPath).then(v => {
+		page.root.editorEle.setValue(v);
+	});
 }
 function handleClick() {
-	go.main.App.SelectFolder().then(s => {
+	Root.selectFolder().then(s => {
 		const obj = JSON.parse(s)
 		Root.log(obj);
+		page.state.folder = obj.folder; 
 		page.root.treeEle.items = obj.files;
 	});
 }
 function log(v) {
 	go.main.App.Log(v);
+}
+function selectFolder() {
+	return go.main.App.SelectFolder();
+}
+function readFile(path) {
+	return go.main.App.ReadFile(path);
 }
 `)
 	html, err := page.MakeHtml("CodeEdge", comp)

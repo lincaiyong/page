@@ -1,6 +1,7 @@
 const page = {
     model: null,
     root: null,
+    state: {},
     create() {
         page.log.info('create app.')
         document.documentElement.style.overflow = 'hidden';
@@ -70,7 +71,7 @@ const page = {
         },
     },
     util: {
-        assert(condition, failMsg='') {
+        assert(condition, failMsg = '') {
             if (!condition) {
                 page.log.error(failMsg || 'assertion fail');
             }
@@ -120,11 +121,13 @@ const page = {
         onceListener(ref, name, handler) {
             if (handler instanceof Function) {
                 page.log.trace('add once event listener', name);
+
                 function handlerWrapper(ev) {
                     page.log.trace('once event listener removed', ref, name);
                     handler(ev);
                     ref.removeEventListener(name, handlerWrapper);
                 }
+
                 ref.addEventListener(name, handlerWrapper);
             }
         }

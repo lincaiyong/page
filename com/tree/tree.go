@@ -1,7 +1,6 @@
 package tree
 
 import (
-	"fmt"
 	"github.com/lincaiyong/page/com"
 	"github.com/lincaiyong/page/com/container"
 	"github.com/lincaiyong/page/com/div"
@@ -43,17 +42,7 @@ type Component struct {
 	selectChild      com.Method
 }
 
-func (b *Component) Focus(v bool) *Component {
-	b.SetProp("focus", fmt.Sprintf("%v", v))
-	return b
-}
-
-func (b *Component) Items(s string) *Component {
-	b.SetProp("items", s)
-	return b
-}
-
-func (b *Component) NodeMap(s string) *Component {
-	b.SetProp("nodeMap", s)
+func (b *Component) OnClickItem(s string) *Component {
+	b.SetProp("onClickItem", s)
 	return b
 }
