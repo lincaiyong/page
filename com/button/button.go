@@ -23,7 +23,7 @@ func Button() *Component {
 
 type Component struct {
 	*com.BaseComponent[Component]
-	icon         com.Property `default:"'svg/el/folder.svg'"`
+	icon         com.Property `default:"'svg/project.svg'"`
 	selected     com.Property `default:"false"`
 	handleHover  com.Method
 	handleActive com.Method

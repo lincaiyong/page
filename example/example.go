@@ -52,7 +52,7 @@ function handleClick() {
 						Compare().Y("0").H("next.y").BgColor(ColorRed),
 						HBar().BgColor(ColorBlue).Opacity("0.1").Y("parent.h/2").W("parent.w"),
 						Div().Y("prev.y2").W("40").H("40").BgColor(ColorGreen),
-						Button().Icon(SvgElAddLocation).X("prev.x2").Y("prev.y2 + 100").W("40").H("40"),
+						Button().Icon("'svg/project.svg'").X("prev.x2").Y("prev.y2 + 100").W("40").H("40"),
 					),
 				))
 				page.MakePage(c, "debug", comp)
