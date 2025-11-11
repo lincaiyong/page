@@ -1,0 +1,9 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "demo",
+  "outputfilename": "demo",
+  "author": {
+    "name": "lincaiyong",
+    "email": "lincaiyong@codeedge.com"
+  }
+}

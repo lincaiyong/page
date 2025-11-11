@@ -1,3 +1,5 @@
 .idea
 .vscode
 *.log
+/example/wails/frontend/dist/
+/example/wails/build/

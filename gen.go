@@ -317,6 +317,16 @@ func buildPageModel(page com.Component) (string, error) {
 var jsEmbed embed.FS
 
 func MakePage(c *gin.Context, title string, page *root.Component) {
+	html, err := MakeHtml(title, page)
+	if err != nil {
+		log.ErrorLog("fail to make page: %v", err)
+		c.String(http.StatusInternalServerError, fmt.Sprintf("fail to make page: %v", err))
+		return
+	}
+	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(html))
+}
+
+func MakeHtml(title string, page *root.Component) (string, error) {
 	eventJs, _ := jsEmbed.ReadFile("js/_event.js")
 	propertyJs, _ := jsEmbed.ReadFile("js/_property.js")
 	scrollbarJs, _ := jsEmbed.ReadFile("js/_scrollbar.js")
@@ -324,15 +334,11 @@ func MakePage(c *gin.Context, title string, page *root.Component) {
 	pageJs, _ := jsEmbed.ReadFile("js/_page.js")
 	classes, err := buildClasses(page)
 	if err != nil {
-		log.ErrorLog("fail to make page: %v", err)
-		c.String(http.StatusInternalServerError, fmt.Sprintf("fail to make page: %v", err))
-		return
+		return "", err
 	}
 	model, err := buildPageModel(page)
 	if err != nil {
-		log.ErrorLog("fail to make page: %v", err)
-		c.String(http.StatusInternalServerError, fmt.Sprintf("fail to make page: %v", err))
-		return
+		return "", err
 	}
 	s := []string{string(eventJs), string(propertyJs), string(scrollbarJs), string(componentJs), string(pageJs), classes, model}
 	ss := strings.Join(strings.Split(strings.Join(s, "\n"), "\n"), "\n        ")
@@ -370,5 +376,5 @@ func MakePage(c *gin.Context, title string, page *root.Component) {
 	template = strings.ReplaceAll(template, "<ttt>", title)
 	ss = strings.ReplaceAll(template, "<xxx>", ss)
 	html := strings.ReplaceAll(ss, "<base_url>", com.BaseUrl)
-	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(html))
+	return html, nil
 }
