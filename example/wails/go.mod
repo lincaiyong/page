@@ -5,6 +5,7 @@ go 1.25.0
 replace github.com/lincaiyong/page v1.0.2 => ../..
 
 require (
+	github.com/lincaiyong/log v1.0.4
 	github.com/lincaiyong/page v1.0.2
 	github.com/wailsapp/wails/v2 v2.11.0
 )
@@ -37,7 +38,6 @@ require (
 	github.com/leaanthony/slicer v1.6.0 // indirect
 	github.com/leaanthony/u v1.1.1 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
-	github.com/lincaiyong/log v1.0.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180228061459-e0a39a4cb421 // indirect

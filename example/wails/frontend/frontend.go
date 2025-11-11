@@ -1,23 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"github.com/lincaiyong/log"
 	"github.com/lincaiyong/page"
 	"github.com/lincaiyong/page/com"
 	. "github.com/lincaiyong/page/com/all"
 	"os"
-	"testing"
 )
 
-func TestPage(t *testing.T) {
+func main() {
 	com.BaseUrl = ""
 	html, err := page.MakeHtml("demo", Root(Text("'hello'")))
 	if err != nil {
-		t.Fatal(err)
+		log.ErrorLog("%v", err)
+		return
 	}
-	err = os.WriteFile("frontend/dist/index.html", []byte(html), 0644)
+	err = os.WriteFile("./dist/index.html", []byte(html), 0644)
 	if err != nil {
-		t.Fatal(err)
+		log.ErrorLog("%v", err)
+		return
 	}
-	fmt.Println("done")
+	log.InfoLog("done")
 }

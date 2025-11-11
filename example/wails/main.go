@@ -12,19 +12,16 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options"
 )
 
-//go:embed bot.png
+//go:embed build/appicon.png
 var icon []byte
 
 //go:embed all:frontend/dist
 var assets embed.FS
 
 func main() {
-	// Create an instance of the app structure
 	app := NewApp()
-
-	// Create application with options
 	err := wails.Run(&options.App{
-		Title:  "playground",
+		Title:  "demo",
 		Width:  1024,
 		Height: 768,
 		AssetServer: &assetserver.Options{
@@ -37,15 +34,13 @@ func main() {
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{
-				Title:   "Playground",
-				Message: "© 2023 Andy Lin <andy0x@foxmail.com>",
+				Title:   "demo",
+				Message: "©2025 lincaiyong <lincaiyong@codeedge.cc>",
 				Icon:    icon,
 			},
 		},
 		OnStartup: app.startup,
-		Bind: []interface{}{
-			app,
-		},
+		Bind:      []any{app},
 	})
 
 	if err != nil {
