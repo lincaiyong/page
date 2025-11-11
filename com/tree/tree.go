@@ -3,6 +3,10 @@ package tree
 import (
 	"fmt"
 	"github.com/lincaiyong/page/com"
+	"github.com/lincaiyong/page/com/container"
+	"github.com/lincaiyong/page/com/div"
+	"github.com/lincaiyong/page/com/img"
+	"github.com/lincaiyong/page/com/text"
 )
 
 func Tree() *Component {
@@ -19,10 +23,15 @@ func Tree() *Component {
 	   }
 	*/
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret) //div.Div().X("10").Y("this.selectedChildTop-next.scrollTop").W("parent.w-20").H("this.itemHeight").BorderRadius("4").
-	//	BackgroundColor("this.focus ? page.theme.treeFocusSelectedBgColor : page.theme.treeSelectedBgColor"),
-	//container.Container(treeItem()).List(true).Virtual(true).Align("'fill'").X("10").W("parent.w - .x")
-
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
+		div.Div().X("10").Y("this.selectedChildTop-next.scrollTop").W("parent.w-20").H("this.itemHeight").BorderRadius("4").
+			BackgroundColor("this.focus ? page.theme.treeFocusSelectedBgColor : page.theme.treeSelectedBgColor"),
+		container.VListContainer("", "",
+			img.Img("parent.data.collapsed ? 'svg/el/arrow-right.svg' : 'svg/el/arrow-down.svg'").X("parent.data.depth * 20 + 4").Y("5").W("11").H(".w").V("parent.data.leaf ? 0 : 1"),
+			img.Img("parent.data.leaf ? 'svg/mantis/file.svg' : 'svg/mantis/folder.svg'").X("next.x-18").Y("4").W("14").H(".w"),
+			text.Text("parent.data.text").X("parent.data.depth * 20 + 40").Y("2").H("this.itemHeight - 2 * .y"),
+		).Align("'fill'").X("10").W("parent.w - .x"),
+	)
 	return ret
 }
 
@@ -40,7 +49,6 @@ type Component struct {
 	nodeToItems      com.Method
 	selectChild      com.Method
 	handleClick      com.Method
-	//sortChildren     com.StaticMethod
 }
 
 func (b *Component) Focus(v bool) *Component {

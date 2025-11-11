@@ -18,6 +18,7 @@ import (
 	"github.com/lincaiyong/page/com/input"
 	"github.com/lincaiyong/page/com/root"
 	"github.com/lincaiyong/page/com/text"
+	"github.com/lincaiyong/page/com/tree"
 )
 
 //go:embed example.js
@@ -123,6 +124,18 @@ function test() {
 					input.Input().H("30").W("400").X("parent.w/2-.w/2").Y("parent.h/2-.h/2").
 						BorderTop("1").BorderBottom("1"),
 				))
+			})
+			r.GET("/tree", func(c *gin.Context) {
+				page.MakePage(c, "tree", root.Root(
+					tree.Tree().NameAs("treeEle"),
+				).OnCreated("Root.test").Code(`
+function test() {
+	setTimeout(function() {
+		const treeEle = page.root.treeEle;
+		treeEle.items = ['test/test.go'];
+	}, 1000);
+}
+`))
 			})
 			return nil
 		},
