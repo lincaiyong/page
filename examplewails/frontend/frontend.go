@@ -31,10 +31,12 @@ func main() {
 		Code(`
 function clickTreeItem(itemEle) {
 	Root.log('click: ' + JSON.stringify(itemEle.data));
-	const relPath = itemEle.data.key;
-	Root.readFile(page.state.folder + '/' + relPath).then(v => {
-		page.root.editorEle.setValue(v);
-	});
+	if (itemEle.data.leaf) {
+		const relPath = itemEle.data.key;
+		Root.readFile(page.state.folder + '/' + relPath).then(v => {
+			page.root.editorEle.setValue(v);
+		});
+	}
 }
 function handleClick() {
 	Root.selectFolder().then(s => {
@@ -59,6 +61,7 @@ function readFile(path) {
 		log.ErrorLog("%v", err)
 		return
 	}
+	_ = os.Mkdir("./dist", os.ModePerm)
 	err = os.WriteFile("./dist/index.html", []byte(html), 0644)
 	if err != nil {
 		log.ErrorLog("%v", err)
