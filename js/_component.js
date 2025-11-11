@@ -193,7 +193,7 @@ class Component {
             background: [() => '', []],
             backgroundColor: [() => '', []],
             borderBottom: [() => 0, []],
-            borderColor: [() => '', []],
+            borderColor: [() => 'black', []],
             borderLeft: [() => 0, []],
             borderRadius: [() => 0, []],
             borderRight: [() => 0, []],

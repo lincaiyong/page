@@ -11,7 +11,7 @@ func Input() *Component {
 
 type Component struct {
 	*com.BaseComponent[Component]
-	placeholder com.Property
+	placeholder com.Property `default:"''"`
 	onUpdated   com.Method
 }
 

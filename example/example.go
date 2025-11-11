@@ -15,6 +15,7 @@ import (
 	"github.com/lincaiyong/page/com/editor"
 	"github.com/lincaiyong/page/com/iframe"
 	"github.com/lincaiyong/page/com/img"
+	"github.com/lincaiyong/page/com/input"
 	"github.com/lincaiyong/page/com/root"
 	"github.com/lincaiyong/page/com/text"
 )
@@ -117,6 +118,12 @@ function test() {
 			})
 			r.GET("/img", func(c *gin.Context) {
 				page.MakePage(c, "img", root.Root("", img.Img("'img/bot.png'")))
+			})
+			r.GET("/input", func(c *gin.Context) {
+				page.MakePage(c, "input", root.Root("",
+					input.Input().H("30").W("400").X("parent.w/2-.w/2").Y("parent.h/2-.h/2").
+						BorderTop("1").BorderBottom("1"),
+				))
 			})
 			return nil
 		},
