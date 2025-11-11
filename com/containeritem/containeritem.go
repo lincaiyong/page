@@ -6,8 +6,8 @@ import (
 
 func ContainerItem(children ...com.Component) *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret)
-	ret.SetSlots(children...).Y("0").X("0")
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret, children...)
+	ret.Y("0").X("0")
 	return ret
 }
 

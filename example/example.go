@@ -60,11 +60,9 @@ function handleClick() {
 			r.GET("/vlist", func(c *gin.Context) {
 				comp := Root(
 					Div().BgColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2").SetSlots(
-						VListContainer(
-							Div().OnHover("Root.hoverItem").SetSlots(
-								Text("''").NameAs("textEle"),
-							),
-						).NameAs("containerEle").ItemCompute("Root.computeItem").ItemOnUpdated("Root.updateItem"),
+						VListContainer(Div().OnHover("Root.hoverItem").SetSlots(
+							Text("''").NameAs("textEle"),
+						)).NameAs("containerEle").ItemCompute("Root.computeItem").ItemOnUpdated("Root.updateItem"),
 					),
 				).OnCreated("Root.onCreated").Code(exampleJs)
 				page.MakePage(c, "debug5", comp)

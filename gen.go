@@ -264,9 +264,11 @@ func buildModel(comp com.Component, depth int, pr *printer.Printer) error {
 		children := comp.Children()
 		slots := comp.Slots()
 		var childrenDepth int
-		if s == "Div" || s == "Containeritem" {
+		if s == "Div" {
 			children = slots
 			slots = nil
+			childrenDepth = depth + 1
+		} else if s == "Containeritem" { // 允许child通过this访问祖先
 			childrenDepth = depth + 1
 		} else {
 			childrenDepth = 1
