@@ -1,10 +1,26 @@
 package toyeditor
 
-import "github.com/lincaiyong/page/com"
+import (
+	"github.com/lincaiyong/page/com"
+	"github.com/lincaiyong/page/com/container"
+	"github.com/lincaiyong/page/com/div"
+	"github.com/lincaiyong/page/com/input"
+)
 
 func ToyEditor() *Component {
 	ret := &Component{}
-	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret)
+	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
+		div.Div(),
+		container.VListContainer(),
+		div.Div().SetSlots(
+			container.VListContainer(),
+			container.VListContainer(),
+			div.Div().SetSlots(
+				input.Input(),
+			),
+			container.VListContainer(),
+		),
+	)
 	return ret
 }
 

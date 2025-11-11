@@ -16,6 +16,7 @@ import (
 	"github.com/lincaiyong/page/com/scrollbar"
 	"github.com/lincaiyong/page/com/table"
 	"github.com/lincaiyong/page/com/text"
+	"github.com/lincaiyong/page/com/toyeditor"
 	"github.com/lincaiyong/page/com/tree"
 )
 
@@ -97,6 +98,10 @@ func Table() *table.Component {
 
 func Text(t string) *text.Component {
 	return text.Text(t)
+}
+
+func ToyEditor() *toyeditor.Component {
+	return toyeditor.ToyEditor()
 }
 
 func Tree() *tree.Component {

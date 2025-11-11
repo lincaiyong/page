@@ -122,6 +122,9 @@ function test() {
 }
 `))
 			})
+			r.GET("/toyeditor", func(c *gin.Context) {
+				page.MakePage(c, "toyeditor", Root(ToyEditor()))
+			})
 			r.GET("/goland", goland)
 			r.GET("/larkbase", larkbase)
 			return nil
