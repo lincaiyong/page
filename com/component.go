@@ -5,6 +5,7 @@ type Component interface {
 	Tag() string
 	Name() string
 	Props() map[string]string
+	Methods() map[string]string
 	Children() []Component
 	Slots() []Component
 	SlotsAsChildren() bool

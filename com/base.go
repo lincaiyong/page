@@ -17,6 +17,7 @@ func NewBaseComponent[T any](tag string, self *T, children ...Component) *BaseCo
 			"x2":      ".x + .w",
 			"y2":      ".y + .h",
 		},
+		methods: map[string]string{},
 	}
 }
 
@@ -28,6 +29,7 @@ type BaseComponent[T any] struct {
 	children        []Component
 	slots           []Component
 	props           map[string]string
+	methods         map[string]string
 	slotsAsChildren bool
 }
 
@@ -64,6 +66,18 @@ func (b *BaseComponent[T]) Slots() []Component {
 
 func (b *BaseComponent[T]) Props() map[string]string {
 	return b.props
+}
+
+func (b *BaseComponent[T]) SetProp(k, v string) {
+	b.props[k] = v
+}
+
+func (b *BaseComponent[T]) Methods() map[string]string {
+	return b.methods
+}
+
+func (b *BaseComponent[T]) SetMethod(k, v string) {
+	b.methods[k] = v
 }
 
 func (b *BaseComponent[T]) NameAs(name string) *T {

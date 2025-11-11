@@ -23,8 +23,8 @@ func TestContainer(t *testing.T) {
 			r.GET("/res/*filepath", page.HandleRes(baseUrl))
 			r.GET("/1", func(c *gin.Context) {
 				comp := root.Root(rootJs,
-					container.Container().List(true).Virtual(true).Scrollable(true).NameAs("containerEle").Contains(
-						containeritem.ContainerItem("Root.compute", "Root.onUpdated").Contains(
+					container.Container().NameAs("containerEle").List(true).Virtual(true).Scrollable(true).Contains(
+						containeritem.ContainerItem("Root.compute").OnUpdated("Root.onUpdated").Contains(
 							div.Div().OnHover("Root.onHover").Contains(
 								text.Text("''"),
 							),
