@@ -1,6 +1,9 @@
 .PHONY: all
 all: frontend/dist/index.html build/bin/demo.app/Contents/MacOS/demo
 
+.PHONY: rebuild
+rebuild: clean all
+
 build/bin/demo.app/Contents/MacOS/demo: main.go
 	rm -rf build/bin/demo.app/Contents/MacOS/demo
 	wails build

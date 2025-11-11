@@ -10,7 +10,17 @@ import (
 
 func main() {
 	com.BaseUrl = ""
-	html, err := page.MakeHtml("demo", Root(Text("'hello'")))
+	comp := Root(Editor().NameAs("editorEle")).OnCreated("Root.test").
+		Code(`
+function test() {
+	setTimeout(function() {
+		const editor = page.root.editorEle;
+		editor.setValue('package main\n\nfunc main() {\n\n}');
+		editor.setLanguage('go');
+	});
+}
+`)
+	html, err := page.MakeHtml("CodeEdge", comp)
 	if err != nil {
 		log.ErrorLog("%v", err)
 		return

@@ -21,7 +21,7 @@ var assets embed.FS
 func main() {
 	app := NewApp()
 	err := wails.Run(&options.App{
-		Title:  "demo",
+		Title:  "CodeEdge",
 		Width:  1024,
 		Height: 768,
 		AssetServer: &assetserver.Options{
@@ -34,8 +34,8 @@ func main() {
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  true,
 			About: &mac.AboutInfo{
-				Title:   "demo",
-				Message: "©2025 lincaiyong <lincaiyong@codeedge.cc>",
+				Title:   "CodeEdge",
+				Message: "©2025 lincaiyong@codeedge.cc",
 				Icon:    icon,
 			},
 		},
