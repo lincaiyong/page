@@ -222,7 +222,7 @@ func convertExpr(s string) (string, string, error) {
 	return s1, s2, nil
 }
 
-func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) error {
+func buildModel(comp com.Component, depth int, pr *printer.Printer) error {
 	t := reflect.ValueOf(comp).Type().Elem()
 	pr.Put("{").Push()
 	{
@@ -242,7 +242,7 @@ func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) 
 		pr.Put("name: '%s',", compName)
 		pr.Put("depth: %d,", depth)
 		props := make(map[string]string)
-		if modelDepth > 0 {
+		if depth > 0 {
 			props["h"] = "parent.ch"
 			props["v"] = "parent.v"
 			props["w"] = "parent.cw"
@@ -268,16 +268,20 @@ func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) 
 		}
 		children := comp.Children()
 		slots := comp.Slots()
+		var childrenDepth int
 		if s == "Div" {
 			children = slots
 			slots = nil
+			childrenDepth = depth + 1
+		} else {
+			childrenDepth = 1
 		}
 		if len(children) == 0 {
 			pr.Put("children: [],")
 		} else {
 			pr.Put("children: [").Push()
 			for _, tmp := range children {
-				err := buildModel(tmp, depth+1, modelDepth+1, pr)
+				err := buildModel(tmp, childrenDepth, pr)
 				if err != nil {
 					return err
 				}
@@ -289,7 +293,7 @@ func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) 
 		} else {
 			pr.Put("slot: [").Push()
 			for _, tmp := range slots {
-				err := buildModel(tmp, depth+1, modelDepth+1, pr)
+				err := buildModel(tmp, depth+1, pr)
 				if err != nil {
 					return err
 				}
@@ -303,7 +307,7 @@ func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) 
 
 func buildPageModel(page com.Component) (string, error) {
 	pr := printer.NewPrinter()
-	err := buildModel(page, 0, 0, pr)
+	err := buildModel(page, 0, pr)
 	if err != nil {
 		return "", err
 	}

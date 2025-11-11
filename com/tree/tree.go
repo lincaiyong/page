@@ -24,13 +24,15 @@ func Tree() *Component {
 	*/
 	ret := &Component{}
 	ret.BaseComponent = com.NewBaseComponent[Component]("div", ret,
-		div.Div().X("10").Y("this.selectedChildTop-next.scrollTop").W("parent.w-20").H("this.itemHeight").BorderRadius("4").
-			BackgroundColor("this.focus ? page.theme.treeFocusSelectedBgColor : page.theme.treeSelectedBgColor"),
+		div.Div().X("10").Y("this.selectedChildTop-next.scrollTop").W("parent.w-20").H("this.itemHeight").
+			BorderRadius("4").BackgroundColor("this.focus ? page.theme.treeFocusSelectedBgColor : page.theme.treeSelectedBgColor").
+			NameAs("selectedEle"),
 		container.VListContainer("", "",
 			img.Img("parent.data.collapsed ? 'svg/el/arrow-right.svg' : 'svg/el/arrow-down.svg'").X("parent.data.depth * 20 + 4").Y("5").W("11").H(".w").V("parent.data.leaf ? 0 : 1"),
 			img.Img("parent.data.leaf ? 'svg/mantis/file.svg' : 'svg/mantis/folder.svg'").X("next.x-18").Y("4").W("14").H(".w"),
 			text.Text("parent.data.text").X("parent.data.depth * 20 + 40").Y("2").H("this.itemHeight - 2 * .y"),
-		).Align("'fill'").X("10").W("parent.w - .x"),
+		).Align("'fill'").X("10").W("parent.w - .x").
+			NameAs("containerEle"),
 	)
 	return ret
 }
