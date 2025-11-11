@@ -1,10 +1,13 @@
 .PHONY: all
-all: frontend/dist/index.html build/bin/demo.app/Contents/MacOS/demo
+all: frontend target
 
 .PHONY: rebuild
 rebuild: clean all
 
-build/bin/demo.app/Contents/MacOS/demo: main.go
+.PHONY: target
+target: build/bin/CodeEdge.app/Contents/MacOS/codeedge
+
+build/bin/CodeEdge.app/Contents/MacOS/codeedge: main.go
 	rm -rf build/bin/demo.app/Contents/MacOS/demo
 	wails build
 
@@ -23,5 +26,5 @@ open:
 	open build/bin/demo.app
 
 .PHONY: debug
-debug: frontend
+debug: frontend target
 	wails dev

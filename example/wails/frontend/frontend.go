@@ -24,6 +24,7 @@ function test() {
 }
 function handleClick() {
 	go.main.App.SelectFolder();
+	go.main.App.Log('hello world!');
 }
 `)
 	html, err := page.MakeHtml("CodeEdge", comp)
