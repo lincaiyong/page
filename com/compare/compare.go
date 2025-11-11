@@ -14,5 +14,4 @@ type Component struct {
 	*com.BaseComponent[Component]
 	onCreated com.Method
 	_destroy  com.Method
-	setValue  com.Method
 }

@@ -22,14 +22,13 @@ var exampleJs string
 func main() {
 	common.StartServer("page", "v1.0.1", "",
 		func(_ []string, r *gin.RouterGroup) error {
-			baseUrl := "http://127.0.0.1:9123"
-			r.GET("/res/*filepath", page.HandleRes(baseUrl))
+			r.GET("/res/*filepath", page.HandleRes(com.BaseUrl))
 			r.GET("/hello", func(c *gin.Context) {
 				comp := root.Root(
 					"",
 					text.Text("'hello world'").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"),
 				)
-				page.MakePage(c, "debug", comp, baseUrl)
+				page.MakePage(c, "debug", comp)
 			})
 			r.GET("/click", func(c *gin.Context) {
 				comp := root.Root(
@@ -45,7 +44,7 @@ function handleClick() {
 						OnUpdated("() => Root.test('onUpdated')").
 						OnClick("Root.handleClick"),
 				)
-				page.MakePage(c, "debug", comp, baseUrl)
+				page.MakePage(c, "debug", comp)
 			})
 			r.GET("/bar", func(c *gin.Context) {
 				comp := root.Root("", div.Div().SetSlots(
@@ -64,7 +63,7 @@ function handleClick() {
 						button.Button().Icon(com.SvgElAddLocation).X("prev.x2").Y("prev.y2 + 100").W("40").H("40"),
 					),
 				))
-				page.MakePage(c, "debug", comp, baseUrl)
+				page.MakePage(c, "debug", comp)
 			})
 			r.GET("/vlist", func(c *gin.Context) {
 				comp := root.Root(exampleJs,
@@ -76,11 +75,23 @@ function handleClick() {
 						).NameAs("containerEle"),
 					),
 				).OnCreated("Root.onCreated")
-				page.MakePage(c, "debug5", comp, baseUrl)
+				page.MakePage(c, "debug5", comp)
 			})
 			r.GET("/container", func(c *gin.Context) {
 				comp := root.Root("", container.Container(text.Text("'hello world!'").H("400")).Scrollable(true).BackgroundColor("'#eee'").W("200").H("200").X("parent.w/2-.w/2").Y("parent.h/2-.h/2"))
-				page.MakePage(c, "debug4", comp, baseUrl)
+				page.MakePage(c, "debug4", comp)
+			})
+			r.GET("/editor", func(c *gin.Context) {
+				comp := root.Root(`
+function test() {
+	setTimeout(function() {
+		const editor = page.root.editorEle;
+		editor.setValue('package main\n\nfunc main() {\n\n}');
+		editor.setLanguage('go');
+	}, 1000);
+}
+`, editor.Editor().NameAs("editorEle")).OnCreated("Root.test")
+				page.MakePage(c, "editor", comp)
 			})
 			return nil
 		},

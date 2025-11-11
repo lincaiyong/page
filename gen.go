@@ -128,26 +128,6 @@ func genClassCode(info *com.ExtraInfo, namedChildren map[string]map[string][]int
 	return nil
 }
 
-func defaultValue(type_, default_ string) (string, error) {
-	if default_ != "" {
-		return default_, nil
-	}
-	switch type_ {
-	case "bool":
-		return "false", nil
-	case "number":
-		return "0", nil
-	case "string":
-		return "''", nil
-	case "array", "element":
-		return "undefined", nil
-	case "object":
-		return "{}", nil
-	default:
-		return "", fmt.Errorf("invalid property type: %s", type_)
-	}
-}
-
 func buildClasses(page com.Component) (string, error) {
 	comps := getAllInstances(page, nil, nil, nil)
 	namedChildren := make(map[string]map[string][]int)
@@ -229,7 +209,7 @@ func buildClasses(page com.Component) (string, error) {
 func convertExpr(s string) (string, string, error) {
 	tokens, err := parser.Tokenize(s)
 	if err != nil {
-		return "", "", err
+		return s, "[]", nil
 	}
 	node, err := parser.Parse(tokens)
 	if err != nil {
@@ -317,18 +297,21 @@ func buildModel(comp com.Component, depth, modelDepth int, pr *printer.Printer) 
 	return nil
 }
 
-func buildPageModel(page com.Component) string {
+func buildPageModel(page com.Component) (string, error) {
 	pr := printer.NewPrinter()
-	buildModel(page, 0, 0, pr)
+	err := buildModel(page, 0, 0, pr)
+	if err != nil {
+		return "", err
+	}
 	code := pr.Code()
 	code = strings.TrimRight(code, ",")
-	return "page.model = " + code + ";"
+	return "page.model = " + code + ";", nil
 }
 
 //go:embed js/*.js
 var jsEmbed embed.FS
 
-func MakePage(c *gin.Context, title string, page *root.Component, baseUrl string) {
+func MakePage(c *gin.Context, title string, page *root.Component) {
 	eventJs, _ := jsEmbed.ReadFile("js/_event.js")
 	propertyJs, _ := jsEmbed.ReadFile("js/_property.js")
 	scrollbarJs, _ := jsEmbed.ReadFile("js/_scrollbar.js")
@@ -340,7 +323,12 @@ func MakePage(c *gin.Context, title string, page *root.Component, baseUrl string
 		c.String(http.StatusInternalServerError, fmt.Sprintf("fail to make page: %v", err))
 		return
 	}
-	model := buildPageModel(page)
+	model, err := buildPageModel(page)
+	if err != nil {
+		log.ErrorLog("fail to make page: %v", err)
+		c.String(http.StatusInternalServerError, fmt.Sprintf("fail to make page: %v", err))
+		return
+	}
 	s := []string{string(eventJs), string(propertyJs), string(scrollbarJs), string(componentJs), string(pageJs), classes, model}
 	ss := strings.Join(strings.Split(strings.Join(s, "\n"), "\n"), "\n        ")
 	template := `<!DOCTYPE html>
@@ -376,6 +364,6 @@ func MakePage(c *gin.Context, title string, page *root.Component, baseUrl string
 	}
 	template = strings.ReplaceAll(template, "<ttt>", title)
 	ss = strings.ReplaceAll(template, "<xxx>", ss)
-	html := strings.ReplaceAll(ss, "<base_url>", baseUrl)
+	html := strings.ReplaceAll(ss, "<base_url>", com.BaseUrl)
 	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(html))
 }
